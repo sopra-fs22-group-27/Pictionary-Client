@@ -1,25 +1,11 @@
 @import 'styles/theme';
 
-.login {
+.home {
   &.center{
     text-align:center;
     font-size: 60px;
     font-weight:700;
 
-  }
-   &.link{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 60%;
-    max-width: 30em;
-    height: 30em;
-    font-size: 18px;
-    font-weight: 300;
-    padding-left: 37px;
-    padding-right: 37px;
-    border-radius: 0.75em;
-//     align-items: center;
   }
   &.container {
     margin-top: 2em;
@@ -34,7 +20,7 @@
     justify-content: center;
     width: 60%;
     max-width: 30em;
-    height: 30em;
+    height: 20em;
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -50,7 +36,6 @@
     justify-content: center;
   }
   &.input {
-    WebkitTextSecurity: 'disc';
     height: 35px;
     padding-left: 15px;
     margin-left: -4px;

@@ -7,7 +7,13 @@
   for more information visit https://sass-lang.com/guide
  */
 
-.game {
+.userlist {
+  &.center{
+    text-align:center;
+    font-size: 60px;
+    font-weight:700;
+
+  }
   &.container {
     background: $background;
     padding: 1.5em;
@@ -26,10 +32,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+//     color: $accent;
   }
   & p,h2 {
     margin: 0.5em 0;
   }
+}
+.link{
+  color: $accent;
+}
+.link:hover{
+  color: #1aff1a;
 }
 
 .player {
@@ -42,7 +55,7 @@
     align-items: center;
     background: lighten($background, 5);
   }
-  &.name {
+  &.password {
     font-weight: 300;
     margin-left: 5px;
   }

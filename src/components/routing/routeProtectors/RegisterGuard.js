@@ -10,9 +10,9 @@
 //    return props.children;
 //  }
 //  // if user is already logged in, redirects to the main /app
-//  return <Redirect to="/profile"/>;
+//  return <Redirect to="/login"/>;
 //};
 //
-//LoginGuard.propTypes = {
+//RegisterGuard.propTypes = {
 //  children: PropTypes.node
 //}

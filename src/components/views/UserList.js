@@ -3,36 +3,60 @@ import {api, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';
 import {Button} from 'components/ui/Button';
 import {useHistory} from 'react-router-dom';
+import User from 'models/User';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import "styles/views/Game.scss";
+import "styles/views/UserList.scss";
+import {Link, useLocation} from "react-router-dom";
 
-const Player = ({user}) => (
+const Player = ({user, myuser}) => (
   <div className="player container">
-    <div className="player username">{user.username}</div>
-    <div className="player name">{user.name}</div>
-    <div className="player id">id: {user.id}</div>
+    <div className="player username"><Link className="link" to={{pathname:`/profile/${user.id}`, state: {user: user, myuser: myuser}}}>User {user.username}</Link></div>
+    <div className="player id">User id: {user.id}</div>
   </div>
 );
 
-Player.propTypes = {
-  user: PropTypes.object
-};
 
-const Game = () => {
+const UserList = () => {
   // use react-router-dom's hook to access the history
   const history = useHistory();
-
   // define a state variable (using the state hook).
   // if this variable changes, the component will re-render, but the variable will
   // keep its value throughout render cycles.
   // a component can have as many state variables as you like.
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
+  const location = useLocation();
+  const myuser = location.state;
+  console.log(myuser)
+  const myid = myuser.id;
+//  alert(myid);
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    history.push('/login');
+//  alert("my id is " + myid);
+  const logout = async () => {
+    if(users != null){
+	    try{
+	          const logged_in = !(myuser.logged_in);
+	          alert(logged_in);
+	          const requestBody = JSON.stringify({logged_in});
+	          const response = await api.put(`/status/${myid}`, requestBody);
+	          console.log(response);
+	          const user = new User(response.data);
+	          alert("update logged_in status successfully");
+	          localStorage.removeItem('token');
+
+	          const number = localStorage.getItem('number');
+              localStorage.setItem('number', number - 1);
+
+	          history.push('/login');
+	        } catch(error){
+	          alert(`Something went wrong during updating the logged_in status: \n${handleError(error)}`);
+	        }
+	 }else{
+	    history.push('/login');
+	 }
+
+
   }
 
   // the effect hook can be used to react to change in your component.
@@ -70,16 +94,17 @@ const Game = () => {
     }
 
     fetchData();
+
   }, []);
 
   let content = <Spinner/>;
 
   if (users) {
     content = (
-      <div className="game">
-        <ul className="game user-list">
+      <div className="userlist">
+        <ul className="userlist user-list">
           {users.map(user => (
-            <Player user={user} key={user.id}/>
+            <Player user={user} myuser={myuser} key={user.id}/>
           ))}
         </ul>
         <Button
@@ -93,9 +118,9 @@ const Game = () => {
   }
 
   return (
-    <BaseContainer className="game container">
+    <BaseContainer className="userlist container">
       <h2>Happy Coding!</h2>
-      <p className="game paragraph">
+      <p className="userlist paragraph">
         Get all users from secure endpoint:
       </p>
       {content}
@@ -103,4 +128,4 @@ const Game = () => {
   );
 }
 
-export default Game;
+export default UserList;
