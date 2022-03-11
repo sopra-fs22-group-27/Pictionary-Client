@@ -7,7 +7,7 @@ import { isProduction } from 'helpers/isProduction';
  * @returns {string}
  */
 export const getDomain = () => {
-  const prodUrl = 'https://dashboard.heroku.com/apps/sopra-fs22-li-shaoyan-server'; // TODO: insert your groups heroku prod url for server (once deployed)
+  const prodUrl = 'https://sopra-fs22-li-shaoyan-server.herokuapp.com/'; // TODO: insert your groups heroku prod url for server (once deployed)
   const devUrl = 'http://localhost:8080';
 
   return isProduction() ? prodUrl : devUrl;
