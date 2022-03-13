@@ -38,12 +38,12 @@ const Profile = props => {
 
 	try{
 		const logged_in = !(myuser.logged_in);
-		alert(logged_in);
+
 		const requestBody = JSON.stringify({logged_in});
 		const response = await api.put(`/status/${myid}`, requestBody);
 		console.log(response);
 //		const user = new User(response.data);
-		alert("update logged_in status successfully");
+//		alert("update logged_in status successfully");
 		localStorage.removeItem('token');
 
 		const number = localStorage.getItem('number');
@@ -66,8 +66,8 @@ const Profile = props => {
   const offset1 = yourDate1.getTimezoneOffset();
   yourDate1 = new Date(yourDate1.getTime() - (offset1*60*1000));
   const creation_date = yourDate1.toISOString().split('T')[0];
-  //{new Date(user.creation_date).toLocaleDateString()}
-
+//  use userLocation to pass paras, use history.push to redirect
+  //logout function
   const [birthday, setBirthday] = useState(yourDate.toISOString().split('T')[0]);
   const [username, setUsername] = useState(user.username);
 
@@ -78,6 +78,7 @@ const Profile = props => {
 
     setBirthday(e.target.value);
   }
+  //update function
   const doUpdate = async () =>{
     try{
       const requestBody = JSON.stringify({birthday, username});

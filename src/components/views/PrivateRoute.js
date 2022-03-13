@@ -7,7 +7,7 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
-// Utils
+// you should first login, then check profile
 
 const PrivateRoutes = ({ component: Component, ...rest }) => {
   var session_token=localStorage.getItem('token');

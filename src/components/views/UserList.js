@@ -16,7 +16,7 @@ const Player = ({user, myuser}) => (
   </div>
 );
 
-
+// use useEffect to update users, use userLocation to pass paras
 const UserList = () => {
   // use react-router-dom's hook to access the history
   const history = useHistory();
@@ -37,12 +37,12 @@ const UserList = () => {
     if(users != null){
 	    try{
 	          const logged_in = !(myuser.logged_in);
-	          alert(logged_in);
+//	          alert(logged_in);
 	          const requestBody = JSON.stringify({logged_in});
 	          const response = await api.put(`/status/${myid}`, requestBody);
 	          console.log(response);
 	          const user = new User(response.data);
-	          alert("update logged_in status successfully");
+//	          alert("update logged_in status successfully");
 	          localStorage.removeItem('token');
 
 	          const number = localStorage.getItem('number');

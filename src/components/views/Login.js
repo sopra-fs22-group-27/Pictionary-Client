@@ -58,7 +58,7 @@ FormField2.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func
 };
-
+// login function
 const Login = props => {
   const history = useHistory();
   const [password, setPassword] = useState(null);
@@ -83,7 +83,7 @@ const Login = props => {
       }else{
         localStorage.setItem('number', 1);
       }
-	  alert(user.token);
+//	  alert(user.token);
       // Login successfully worked --> navigate to the route /profile in the ProfileRouter
 //      history.push({pathname:`/profile/${user.id}`, state: {user: user, myuser: user}});
 	  history.push({pathname:`/userlist`, state:user});

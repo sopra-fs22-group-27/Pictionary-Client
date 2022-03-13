@@ -67,7 +67,7 @@ const Register = props => {
   const myDate = new Date();
   const creation_date = myDate.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit' });
   const birthday = new Date(0);
-
+// registration function
   const doRegister = async () => {
     try {
 
