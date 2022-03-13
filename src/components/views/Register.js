@@ -65,12 +65,14 @@ const Register = props => {
   const [username, setUsername] = useState(null);
 //  const [birthdate, setBirthdate] = useState(null);
   const myDate = new Date();
-  const creation_date = myDate.toLocaleString()
+  const creation_date = myDate.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  const birthday = new Date(0);
+
   const doRegister = async () => {
     try {
 
 
-      const requestBody = JSON.stringify({username, password, creation_date});
+      const requestBody = JSON.stringify({username, password, creation_date, birthday});
       const response = await api.post('/users', requestBody);
       console.log(response)
       // Get the returned user and update a new object.

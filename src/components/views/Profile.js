@@ -58,13 +58,24 @@ const Profile = props => {
   }
   let content = <Spinner/>;
 
-  const [birthday, setBirthday] = useState(user.birthday);
+  var yourDate = new Date(user.birthday);
+  const offset = yourDate.getTimezoneOffset();
+  yourDate = new Date(yourDate.getTime() - (offset*60*1000));
+
+  var yourDate1 = new Date(user.creation_date);
+  const offset1 = yourDate1.getTimezoneOffset();
+  yourDate1 = new Date(yourDate1.getTime() - (offset1*60*1000));
+  const creation_date = yourDate1.toISOString().split('T')[0];
+  //{new Date(user.creation_date).toLocaleDateString()}
+
+  const [birthday, setBirthday] = useState(yourDate.toISOString().split('T')[0]);
   const [username, setUsername] = useState(user.username);
 
   const changeUsername = (e) =>{
     setUsername(e.target.value);
   }
   const changeBirthday = (e) =>{
+
     setBirthday(e.target.value);
   }
   const doUpdate = async () =>{
@@ -75,7 +86,9 @@ const Profile = props => {
 //      const user = new User(response.data);
       alert("update successfully");
       myuser.birthday = birthday;
+
       myuser.username = username;
+
       history.push({pathname:`/profile/${myid}`, state: {user: myuser, myuser: myuser}});
     } catch(error){
       alert(`Something went wrong during updating the profile: \n${handleError(error)}`);
@@ -101,11 +114,11 @@ const Profile = props => {
 
 	<div className="profile field">
 				<label className="profile label">User birthday</label>
-				<input type="text" className="profile input" value={birthday} onChange={changeBirthday} disabled={user.id !== myid}/>
+				<input type="date" className="profile input" value={birthday} onChange={changeBirthday} disabled={user.id !== myid}/>
 	</div>
 	<div className="profile field">
 						<label className="profile label">User creation_date</label>
-						<input type="text" className="profile input" value={user.creation_date} disabled/>
+						<input type="text" className="profile input" value={creation_date.replaceAll("-", "/")} disabled/>
 	</div>
 	<div className="profile field">
 		<label className="profile label">User logged_in</label>
@@ -123,7 +136,7 @@ const Profile = props => {
     <BaseContainer className="profile container">
           <h2>Happy Coding!</h2>
           <p className="profile paragraph">
-            (user != null)?`Get user {user.username} from secure endpoint`:Get user {myid} from secure endpoint
+            (user != null)?`Get user {user.username} from secure endpoint`: Get user {myid} from secure endpoint
           </p>
           {props.content}
     </BaseContainer>
