@@ -5,10 +5,11 @@ https://pictionary-client-22.herokuapp.com/login
 
 ## Current project status
 
+[![Deploy Project](https://github.com/sopra-fs22-group-27/Pictionary-Client/actions/workflows/deploy.yml/badge.svg)](https://github.com/sopra-fs22-group-27/Pictionary-Client/actions/workflows/deploy.yml)
 
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_Pictionary-Client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-27_Pictionary-Client)>
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_Pictionary-Client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-27_Pictionary-Client)
 
-![example workflow](https://github.com/sopra-fs22-group-27/Pictionary-Client/actions/workflows/<WORKFLOW_FILE>/badge.svg)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_Pictionary-Client&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-27_Pictionary-Client)
 
 
 ## Introduction: 
