@@ -1,46 +1,83 @@
-# SoPra FS22 - Client Template
+# Pictionary - Client
+## Infromation about the project
 
-## Getting started
+https://pictionary-client-22.herokuapp.com/login
 
-Read and go through these Tutorials. It will make your life easier!
+## Current project status
 
-- Read the React [Docs](https://reactjs.org/docs/getting-started.html)
-- Do this React [Getting Started](https://reactjs.org/tutorial/tutorial.html) Tutorial (it doesn’t assume any existing React knowledge)
-- Get an Understanding of [CSS](https://www.w3schools.com/Css/), [SCSS](https://sass-lang.com/documentation/syntax), and [HTML](https://www.w3schools.com/html/html_intro.asp)!
+<p align="left">
+  <a [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_Pictionary-Client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-27_Pictionary-Client)>
+  </a>
+  <br></br>
+  <a href="https://sonarcloud.io/dashboard?id=sopra-fs22-group-27_client">
+      <img src="https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_client&metric=coverage">
+  </a>
+  <br></br>
 
-Next, there are two other technologies that you should look at:
+</p>
 
-* [react-router-dom](https://reacttraining.com/react-router/web/guides/quick-start) offers declarative routing for React. It is a collection of navigational components that fit nicely with the application. 
-* [react-hooks](https://reactrouter.com/web/api/Hooks) let you access the router's state and perform navigation from inside your components.
+## Introduction: 
+We decided together that we would implement the drawing and guessing game Pictionary. The rules of this game are amazingly simple. A game consists of custom number of rounds where someone must draw an offered word and the others must guess it. If someone guesses the word correctly, the player gets one point. The player with the most points at the end wins the game.
+
+## Technologies
+Cloudinary,
+Spring,
+SonarQube,
+React,
+npm,
+JSX,
+Java,
+Java Persistence,
+heroku,
+gradle,
+GitHub Projects,
+GitHub Actions
+
+## High-level components
+
+-
+
+## Launch & Deployment
+
+-
 
 ## Prerequisites and Installation
-For your local development environment, you will need Node.js. You can download it [here](https://nodejs.org). All other dependencies, including React, get installed with:
 
-```npm install```
+For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
 
-Run this command before you start your application for the first time. Next, you can start the app with:
+### `npm install`
 
-```npm run dev```
+This has to be done before starting the application for the first time (only once).
 
-Now you can open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `npm run dev`
 
-Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use Google Chrome).
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### Testing
-Testing is optional, and you can run the tests with `npm run test`.
-This launches the test runner in an interactive watch mode. See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The page will reload if you make edits.<br>
+You will also see any lint errors in the console (use Google Chrome!).
 
-> For macOS user running into a 'fsevents' error: https://github.com/jest-community/vscode-jest/issues/423
+## Illustrations
 
-### Build
-Finally, `npm run build` builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance: the build is minified, and the filenames include hashes.<br>
+-
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Roadmap
 
-## Learn More
+-
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Acknowledgements
+
+This project was started using this template -> [Client](https://github.com/HASEL-UZH/sopra-fs22-template-client)
+
+## Team Members
+
+- [Rafael Dubach](https://github.com/radubauzh)
+- [Raphael Wäspi](https://github.com/sumsumcity)
+- [Dylan Baumgartner](https://github.com/mrspacerobot)
+- [Solveig Helland](https://github.com/hellasol)
+
+## License
+
+[MIT license](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/LICENSE)
 
 
-> Thanks to Lucas Pelloni and Kyrill Hux for working on the template.
