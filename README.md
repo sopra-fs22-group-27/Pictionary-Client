@@ -5,16 +5,11 @@ https://pictionary-client-22.herokuapp.com/login
 
 ## Current project status
 
-<p align="left">
-  <a [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_Pictionary-Client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-27_Pictionary-Client)>
-  </a>
-  <br></br>
-  <a href="https://sonarcloud.io/dashboard?id=sopra-fs22-group-27_client">
-      <img src="https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_client&metric=coverage">
-  </a>
-  <br></br>
 
-</p>
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-27_Pictionary-Client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sopra-fs22-group-27_Pictionary-Client)>
+
+![example workflow](https://github.com/sopra-fs22-group-27/Pictionary-Client/actions/workflows/<WORKFLOW_FILE>/badge.svg)
+
 
 ## Introduction: 
 We decided together that we would implement the drawing and guessing game Pictionary. The rules of this game are amazingly simple. A game consists of custom number of rounds where someone must draw an offered word and the others must guess it. If someone guesses the word correctly, the player gets one point. The player with the most points at the end wins the game.
