@@ -1,14 +1,33 @@
 import Header from "components/views/Header";
+import {ReactLogo} from "components/ui/ReactLogo";
 import AppRouter from "components/routing/routers/AppRouter";
+import 'bootstrap/dist/css/bootstrap.css'
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import * as FiIcons from 'react-icons/fi';
 
-/**
- * Happy coding!
- * React Template by Lucas Pelloni
- * Overhauled by Kyrill Hux
- */
 const App = () => {
   return (
     <div>
+      <Navbar bg="dark" variant="dark"
+        sticky="top" expand="lg" collapseOnSelect>
+        <Navbar.Brand>
+        <ReactLogo width="40px" height="40px"/>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+        <Nav>
+          <Nav.Link href="Change me">Score Board</Nav.Link>
+          <Nav.Link href="Change me">Play</Nav.Link>
+          <Nav.Link href="Change me">Sign out</Nav.Link>
+          <NavDropdown title={<FiIcons.FiSettings color="white"/>}>
+            <NavDropdown.Item href="Change me">Edit Profile</NavDropdown.Item>
+            <NavDropdown.Item href="Change me">Edit whatever</NavDropdown.Item>
+            <NavDropdown.Item href="Change me">Sign out </NavDropdown.Item>
+          </NavDropdown>
+
+        </Nav>
+        </Navbar.Collapse>
+      </Navbar>
       <Header height="100"/>
       <AppRouter/>
     </div>
@@ -16,3 +35,6 @@ const App = () => {
 };
 
 export default App;
+
+
+//<MdIcons.MdDashboard color="white" />
