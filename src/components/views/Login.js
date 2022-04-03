@@ -22,7 +22,7 @@ const FormField1 = props => {
       <input
         type="text"
         className="login input"
-        placeholder="enter here.."
+        placeholder="Enter here.."
         value={props.value}
         onChange={e => props.onChange(e.target.value)}
       />
@@ -39,7 +39,7 @@ const FormField2 = props => {
       <input
         type="password"
         className="login input"
-        placeholder="enter here.."
+        placeholder="Enter here.."
         value={props.value}
         onChange={e => props.onChange(e.target.value)}
       />
@@ -63,11 +63,9 @@ const Login = props => {
   const history = useHistory();
   const [password, setPassword] = useState(null);
   const [username, setUsername] = useState(null);
-  var myDate = new Date();
-  var creation_date = myDate.toLocaleString()
   const doLogin = async (e) => {
     try {
-      var logged_in = true;
+
       const requestBody = JSON.stringify({username, password});
 //      alert(requestBody.text)
       const response = await api.post('/login', requestBody);
@@ -110,10 +108,12 @@ const Login = props => {
             value={password}
             onChange={p => setPassword(p)}
           />
+          <Link to="/register" className="login alert">Don't have an account? Sign up here</Link>
           <div className="login button-container">
             <Button
               disabled={!username || !password}
-              width="100%"
+              width="80px"
+              height="34px"
               onClick={(e) => doLogin(e)}
             >
               Login
@@ -122,7 +122,7 @@ const Login = props => {
         </div>
         <div className="login link">
             <div><Link to="/register">Register?</Link></div>
-            <div><Link to="/home">Back To Home?</Link></div>
+            <div><Link to="/startingpage">Back To Starting Page?</Link></div>
         </div>
       </div>
     </BaseContainer>

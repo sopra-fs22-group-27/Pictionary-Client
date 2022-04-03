@@ -15,6 +15,7 @@
 
   }
   &.container {
+    margin-top: 10%;
     background: $background;
     padding: 1.5em;
     border-radius: $borderRadius;
@@ -22,7 +23,14 @@
     flex-direction: column;
     align-items: center;
     box-shadow: $dropShadow;
-    min-height: 500px;
+    // min-height: 500px;
+    flex-direction: column;
+
+    // margin-top: 20%;
+    min-height: 300px;
+    /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
+    @include center;
+
   }
   &.user-list {
     list-style: none;
@@ -44,7 +52,13 @@
     color: $textColor;
     margin-bottom: 10px;
     text-transform: lowercase;
-    font-weight: 300;
+    font-weight: 500;
+  }
+  &.paragraph{
+    color: red;
+    font-weight: 500;
+    font-size: 18px;
+    margin-bottom: 2rem;
   }
   &.input {
     height: 35px;
@@ -53,7 +67,7 @@
     border: none;
     border-radius: 0.75em;
     margin-bottom: 20px;
-    background: transparentize(white, 0.85);
+    background: transparentize(white, 0.25);
     color: $textColor;
   }
   &.field {
@@ -67,13 +81,7 @@
       font-weight:700;
 
     }
-  &.container {
-    margin-top: 2em;
-    min-height: 300px;
-    /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
-    @include center;
-    flex-direction: column;
-  }
+ 
   &.form {
     display: flex;
     flex-direction: column;
@@ -105,6 +113,7 @@
   &.password {
     font-weight: 300;
     margin-left: 5px;
+
   }
   &.username {
     font-weight: 500;

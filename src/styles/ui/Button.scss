@@ -21,7 +21,11 @@
   border-radius: $borderRadius;
   cursor: pointer;
   opacity: 1;
-  color: $background;
+  color: $buttonColor;
   background-color: $accent;
   transition: all 0.3s ease;
+  
+  // background: #9489DB;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.14);
+
 }

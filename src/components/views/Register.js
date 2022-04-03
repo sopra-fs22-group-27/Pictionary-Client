@@ -7,6 +7,7 @@ import 'styles/views/Register.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import {Link} from 'react-router-dom'
+import validator from 'validator'
 /*
 It is possible to add multiple components inside a single file,
 however be sure not to clutter your files with an endless amount!
@@ -22,7 +23,7 @@ const FormField1 = props => {
       <input
         type="text"
         className="register input"
-        placeholder="enter here.."
+        placeholder="Enter here.."
         value={props.value}
         onChange={e => props.onChange(e.target.value)}
       />
@@ -39,13 +40,15 @@ const FormField2 = props => {
       <input
         type="password"
         className="register input"
-        placeholder="enter here.."
+        placeholder="Enter here.."
         value={props.value}
         onChange={e => props.onChange(e.target.value)}
       />
     </div>
   );
 };
+
+
 
 FormField1.propTypes = {
   label: PropTypes.string,
@@ -59,20 +62,34 @@ FormField2.propTypes = {
   onChange: PropTypes.func
 };
 
+
 const Register = props => {
   const history = useHistory();
   const [password, setPassword] = useState(null);
   const [username, setUsername] = useState(null);
+  const [emailError, setEmailError] = useState('');
+  const [email, setEmail] = useState('');
+
+  const validateEmail = (e) => {
+    setEmail(e.target.value);
+    if(validator.isEmail(email)){
+      setEmailError('Valid Email');
+    } else if(!validator.isEmail(email) && email !== ''){
+      setEmailError('Invalid Email');
+    } else{
+      setEmailError('');
+    }
+    
+  }
 //  const [birthdate, setBirthdate] = useState(null);
   const myDate = new Date();
   const creation_date = myDate.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-  const birthday = new Date(0);
+
 // registration function
   const doRegister = async () => {
     try {
 
-
-      const requestBody = JSON.stringify({username, password, creation_date, birthday});
+      const requestBody = JSON.stringify({username, password, creation_date, email});
       const response = await api.post('/users', requestBody);
       console.log(response)
       // Get the returned user and update a new object.
@@ -103,12 +120,34 @@ const Register = props => {
     <BaseContainer>
       <div className="register container">
         <div className="register form">
-        <div className="register center">Register</div>
+        <div className="register center">Sign up</div>
           <FormField1
             label="Username"
             value={username}
-            onChange={un => setUsername(un)}
+            onChange={un => {setUsername(un)}}
+            emailerror={emailError}
           />
+          <div className="register field">
+            <label className="register label">
+              Email
+            </label>
+     
+       <input type="text"
+        className="register email"
+        placeholder="Enter here.."
+        // value={props.value}
+        onChange={(e) => validateEmail(e)}></input>
+        <span style={{
+          fontWeight: 'bold',
+          color: 'red',
+          fontSize: "10px",
+          marginBottom: "15px"
+        }}>{emailError}</span>
+  
+    
+      
+          </div>
+        
           <FormField2
             label="Password"
             value={password}
@@ -117,17 +156,27 @@ const Register = props => {
 
           <div className="register button-container">
             <Button
-              disabled={!username || !password}
-              width="100%"
+              disabled={!username || !password || emailError !== "Valid Email"}
+              width="80px"
+              height="34px"
               onClick={() => doRegister()}
             >
-              Register
+              Sign up!
             </Button>
+            {/* <Button
+            
+              width="80px"
+              height="34px"
+              onClick={() => alert(new Date((new Date().setHours(new Date().getHours() - (new Date().getTimezoneOffset() / 60)))).toISOString())}
+            >
+              Sign up!
+            </Button> */}
+            
           </div>
         </div>
         <div className="register link">
             <div><Link to="/login">Login?</Link></div>
-            <div><Link to="/home">Back To Home?</Link></div>
+            <div><Link to="/startingpage">Back To Starting Page?</Link></div>
         </div>
       </div>
 

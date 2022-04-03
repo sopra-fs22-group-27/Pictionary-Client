@@ -22,7 +22,7 @@
 //     align-items: center;
   }
   &.container {
-    margin-top: 2em;
+    margin-top: 20vh;
     min-height: 300px;
     /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
@@ -43,6 +43,7 @@
     background-color: $background;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
+
   }
   &.field {
     display: flex;
@@ -57,18 +58,24 @@
     border: none;
     border-radius: 0.75em;
     margin-bottom: 20px;
-    background: transparentize(white, 0.85);
+    background: transparentize(white, 0.25);
     color: $textColor;
   }
   &.label {
     color: $textColor;
     margin-bottom: 10px;
-    text-transform: lowercase;
-    font-weight: 300;
+    text-transform: capitalize;
+    font-weight: 500;
   }
   &.button-container {
     display: flex;
     justify-content: center;
     margin-top: 2em;
+  }
+  &.alert{
+    margin: 0;
+    font-size:smaller;
+    font-weight: 400;
+    text-decoration: none;
   }
 }
