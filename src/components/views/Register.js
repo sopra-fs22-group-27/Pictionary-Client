@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
@@ -71,16 +71,21 @@ const Register = props => {
   const [email, setEmail] = useState('');
 
   const validateEmail = (e) => {
+    console.log(email);
     setEmail(e.target.value);
     if(validator.isEmail(email)){
       setEmailError('Valid Email');
     } else if(!validator.isEmail(email) && email !== ''){
       setEmailError('Invalid Email');
-    } else{
+    } else if (!validator.isEmail(email) && email === ''){
       setEmailError('');
     }
     
   }
+  useEffect(() => {
+    console.log("Email message inside useEffect: ", email);
+    console.log("Email message inside useEffect: ", emailError);
+  }, [email, emailError]);
 //  const [birthdate, setBirthdate] = useState(null);
   const myDate = new Date();
   const creation_date = myDate.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit' });

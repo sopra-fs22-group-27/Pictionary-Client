@@ -115,7 +115,7 @@ const Profile = props => {
 
 	<div className="profile field">
 				<label className="profile label">User email</label>
-				<input type="text" className="profile input" value={user.email} disabled={user.id !== myid}/>
+				<input type="text" className="profile input" value={user.email} disabled/>
 	</div>
 	<div className="profile field">
 						<label className="profile label">User creation_date</label>
