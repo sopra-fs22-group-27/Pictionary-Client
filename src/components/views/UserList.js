@@ -36,9 +36,9 @@ const UserList = () => {
   const logout = async () => {
     if(users != null){
 	    try{
-	          const logged_in = !(myuser.logged_in);
+	          const status = "OFFLINE";
 //	          alert(logged_in);
-	          const requestBody = JSON.stringify({logged_in});
+	          const requestBody = JSON.stringify({status});
 	          const response = await api.put(`/status/${myid}`, requestBody);
 	          console.log(response);
 	          const user = new User(response.data);

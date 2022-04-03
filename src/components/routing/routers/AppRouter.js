@@ -1,10 +1,7 @@
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
-import {ProfileGuard} from "components/routing/routeProtectors/ProfileGuard";
-import ProfileRouter from "components/routing/routers/ProfileRouter";
-import {LoginGuard} from "components/routing/routeProtectors/LoginGuard";
 import Login from "components/views/Login";
 import Register from "components/views/Register"
-import Home from "components/views/Home"
+import Startingpage from "components/views/Startingpage"
 import Profile from "components/views/Profile"
 import UserList from "components/views/UserList"
 import PrivateRoute from "components/views/PrivateRoute"
@@ -24,7 +21,7 @@ const AppRouter = () => {
     <BrowserRouter>
       <Switch>
         <PrivateRoute exact path="/profile/:id" component={Profile} />
-		<PrivateRoute exact path="/userlist" component={UserList} />}
+		<PrivateRoute exact path="/userlist" component={UserList} />
 
         <Route exact path="/login">
 
@@ -34,11 +31,11 @@ const AppRouter = () => {
         <Route exact path="/register">
             <Register/>
         </Route>
-        <Route exact path="/home">
-            <Home/>
+        <Route exact path="/startingpage">
+            <Startingpage/>
         </Route>
         <Route exact path="/">
-          <Redirect to="/home"/>
+          <Redirect to="/startingpage"/>
         </Route>
       </Switch>
     </BrowserRouter>

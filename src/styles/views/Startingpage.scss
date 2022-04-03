@@ -1,6 +1,6 @@
 @import 'styles/theme';
 
-.home {
+.startingpage {
   &.center{
     text-align:center;
     font-size: 60px;
@@ -8,11 +8,12 @@
 
   }
   &.container {
-    margin-top: 2em;
+    margin-top: 20vh;
     min-height: 300px;
     /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
     flex-direction: column;
+    // background-color: rgba();
   }
   &.form {
     display: flex;

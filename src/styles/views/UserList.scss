@@ -15,6 +15,7 @@
 
   }
   &.container {
+    margin-top: 10%;
     background: $background;
     padding: 1.5em;
     border-radius: $borderRadius;
@@ -53,8 +54,10 @@
     border-radius: $borderRadius;
     display: flex;
     align-items: center;
-    background: lighten($background, 5);
+    background: lighten(rgb(52, 54, 77), 50);
+  
   }
+  
   &.password {
     font-weight: 300;
     margin-left: 5px;
