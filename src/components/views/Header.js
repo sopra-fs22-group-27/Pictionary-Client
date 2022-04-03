@@ -14,6 +14,7 @@ import * as FiIcons from 'react-icons/fi';
  * @FunctionalComponent
  */
 const Header = props => (
+<<<<<<< HEAD
   <div>
   <div>
     <Navbar bg="dark" variant="dark"
@@ -42,6 +43,11 @@ const Header = props => (
     <h1 className="header title">Pictionary</h1>
     {/* <ReactLogo width="60px" height="60px"/> */}
   </div>
+=======
+  <div className="header container" style={{height: props.height}}>
+    <h1 className="header title">Group 27</h1>
+    <ReactLogo width="60px" height="60px"/>
+>>>>>>> 1b55cd0296f0b863ccf8eba859f756f4b0a40fa8
   </div>
 );
 
