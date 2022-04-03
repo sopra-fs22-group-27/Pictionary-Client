@@ -14,41 +14,14 @@ import * as FiIcons from 'react-icons/fi';
  * @FunctionalComponent
  */
 const Header = props => (
-<<<<<<< HEAD
-  <div>
-  <div>
-    <Navbar bg="dark" variant="dark"
-        sticky="top" expand="lg" collapseOnSelect>
-        <Navbar.Brand>
-        {/* <ReactLogo width="40px" height="40px"/> */}
-        </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse>
-        <Nav>
-          <Nav.Link href="Change me">Score Board</Nav.Link>
-          <Nav.Link href="Change me">Play</Nav.Link>
-          <Nav.Link href="Change me">Sign out</Nav.Link>
-          <NavDropdown title={<FiIcons.FiSettings color="white"/>}>
-            <NavDropdown.Item href="Change me">Edit Profile</NavDropdown.Item>
-            <NavDropdown.Item href="Change me">Edit whatever</NavDropdown.Item>
-            <NavDropdown.Item href="Change me">Sign out </NavDropdown.Item>
-          </NavDropdown>
 
-        </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-  </div>
+
   <div className="header container">
     
     <h1 className="header title">Pictionary</h1>
     {/* <ReactLogo width="60px" height="60px"/> */}
   </div>
-=======
-  <div className="header container" style={{height: props.height}}>
-    <h1 className="header title">Group 27</h1>
-    <ReactLogo width="60px" height="60px"/>
->>>>>>> 1b55cd0296f0b863ccf8eba859f756f4b0a40fa8
-  </div>
+
 );
 
 Header.propTypes = {

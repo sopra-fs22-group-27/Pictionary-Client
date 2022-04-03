@@ -7,11 +7,7 @@ import { isProduction } from 'helpers/isProduction';
  * @returns {string}
  */
 export const getDomain = () => {
-<<<<<<< HEAD
   const prodUrl = 'https://sopra-fs22-li-shaoyan-server.herokuapp.com/'; // TODO: insert your groups heroku prod url for server (once deployed)
-=======
-  const prodUrl = 'https://pictionary-server-22.herokuapp.com/'; // TODO: insert your groups heroku prod url for server (once deployed)
->>>>>>> 1b55cd0296f0b863ccf8eba859f756f4b0a40fa8
   const devUrl = 'http://localhost:8080';
 
   return isProduction() ? prodUrl : devUrl;

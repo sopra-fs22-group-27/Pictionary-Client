@@ -1,17 +1,14 @@
 import Header from "components/views/Header";
 import {ReactLogo} from "components/ui/ReactLogo";
 import AppRouter from "components/routing/routers/AppRouter";
-import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap/dist/css/bootstrap.css'
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import * as FiIcons from 'react-icons/fi';
 
 const App = () => {
   return (
     <div>
-<<<<<<< HEAD
-      
-=======
-      <Navbar bg="dark" variant="dark"
+      {/* <Navbar bg="dark" variant="dark"
         sticky="top" expand="lg" collapseOnSelect>
         <Navbar.Brand>
         <ReactLogo width="40px" height="40px"/>
@@ -30,9 +27,8 @@ const App = () => {
 
         </Nav>
         </Navbar.Collapse>
-      </Navbar>
->>>>>>> 1b55cd0296f0b863ccf8eba859f756f4b0a40fa8
-      <Header height="100"/>
+      </Navbar>*/}
+      <Header height="100"/> 
       <AppRouter/>
     </div>
   );
