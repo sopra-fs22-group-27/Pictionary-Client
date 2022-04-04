@@ -4,6 +4,7 @@ import {Button} from 'components/ui/Button';
 import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import { useLocation } from "react-router-dom";
+import validator from 'validator'
 import "styles/views/EditProfile.scss";
 
 const FormField1 = props => {
@@ -65,7 +66,21 @@ const EditProfile = () => {
     //const [birthday, setBirthday] = useState(null);
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
-    const [email, setEmail] = useState(null);
+    const [emailError, setEmailError] = useState('');
+    const [email, setEmail] = useState('');
+
+    const validateEmail = (e) => {
+        //console.log(email);
+        setEmail(e.target.value);
+        if(validator.isEmail(email)){
+          setEmailError('Valid Email');
+        } else if(!validator.isEmail(email) && email !== ''){
+          setEmailError('Invalid Email');
+        } else if (!validator.isEmail(email) && email === ''){
+          setEmailError('');
+        }
+        
+      }
 
   const back = () => {
     history.push({pathname:`/profile/${myuser.id}`, state: {user: myuser, myuser: myuser}});
@@ -128,21 +143,37 @@ const EditProfile = () => {
             label="Username"
             value={username}
             onChange={username => setUsername(username)}
+            emailerror={emailError}
           />
         <FormField2
             label="Password"
             value={password}
             onChange={password => setPassword(password)}
+            emailerror={emailError}
           />
-        <FormField1
-            label="Email"
-            value={email}
-            onChange={email => setEmail(email)}
-          />
+          <div className="register field">
+            <label className="register label">
+              Email
+            </label>
+     
+       <input type="text"
+        className="register email"
+        placeholder="Enter here.."
+        // value={props.value}
+        onChange={(e) => validateEmail(e)}></input>
+        <span style={{
+          fontWeight: 'bold',
+          color: 'red',
+          fontSize: "10px",
+          marginBottom: "15px"
+        }}>{emailError}</span>
+        </div>
+
         <Button
           width="100%"
           onClick={() => edit()}
-          disabled={!username && !password && !email}
+          disabled={emailError !== "Valid Email" && (!username || (emailError !== "Valid Email" && email !== '')) && (!password || (emailError !== "Valid Email" && email !== ''))}
+          //disabled={!username && !password && emailError !== "Valid Email" && email !== ''}
         >
           Edit Values
         </Button>

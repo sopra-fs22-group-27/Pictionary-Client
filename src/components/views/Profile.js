@@ -131,14 +131,6 @@ const Profile = (props) => {
       </div>
 
       <div className="profile button">
-        <Button
-          width="100%"
-          onClick={() => history.push({ pathname: `/userlist`, state: myuser })}
-        >
-          Inspect others profile
-        </Button>
-      </div>
-      <div className="profile button">
         {user.id === myid ? (
           <Button width="100%" onClick={() => doEdit()}>
             Edit profile
@@ -146,6 +138,14 @@ const Profile = (props) => {
         ) : (
           <div></div>
         )}
+      </div>
+      <div className="profile button">
+        <Button
+          width="100%"
+          onClick={() => history.push({ pathname: `/userlist`, state: myuser })}
+        >
+          Inspect others profile
+        </Button>
       </div>
     </div>
   );
