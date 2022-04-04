@@ -5,7 +5,6 @@ import {Button} from 'components/ui/Button';
 import {useHistory} from 'react-router-dom';
 import User from 'models/User';
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
 import "styles/views/UserList.scss";
 import {Link, useLocation} from "react-router-dom";
 
@@ -28,7 +27,6 @@ const UserList = () => {
   const [users, setUsers] = useState(null);
   const location = useLocation();
   const myuser = location.state;
-  console.log(myuser)
   const myid = myuser.id;
 //  alert(myid);
 
@@ -40,13 +38,10 @@ const UserList = () => {
 //	          alert(logged_in);
 	          const requestBody = JSON.stringify({status});
 	          const response = await api.put(`/status/${myid}`, requestBody);
-	          console.log(response);
+	          //console.log(response);
 	          const user = new User(response.data);
 //	          alert("update logged_in status successfully");
 	          localStorage.removeItem('token');
-
-	          const number = localStorage.getItem('number');
-              localStorage.setItem('number', number - 1);
 
 	          history.push('/login');
 	        } catch(error){
@@ -77,15 +72,13 @@ const UserList = () => {
         // Get the returned users and update the state.
         setUsers(response.data);
 
-        // This is just some data for you to see what is available.
-        // Feel free to remove it.
-        console.log('request to:', response.request.responseURL);
+
+/*         console.log('request to:', response.request.responseURL);
         console.log('status code:', response.status);
         console.log('status text:', response.statusText);
         console.log('requested data:', response.data);
+        console.log(response); */
 
-        // See here to get more data.
-        console.log(response);
       } catch (error) {
         console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
         console.error("Details:", error);
@@ -104,7 +97,7 @@ const UserList = () => {
       <div className="userlist">
         <ul className="userlist user-list">
           {users.map(user => (
-            <Player user={user} myuser={myuser} key={user.id}/>
+            <Player user={user} myuser={myuser}/>
           ))}
         </ul>
         <Button

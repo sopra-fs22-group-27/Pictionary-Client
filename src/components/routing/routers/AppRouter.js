@@ -5,6 +5,7 @@ import Startingpage from "components/views/Startingpage"
 import Profile from "components/views/Profile"
 import UserList from "components/views/UserList"
 import PrivateRoute from "components/views/PrivateRoute"
+import EditProfile from "components/views/EditProfile";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -24,9 +25,7 @@ const AppRouter = () => {
 		<PrivateRoute exact path="/userlist" component={UserList} />
 
         <Route exact path="/login">
-
             <Login/>
-
         </Route>
         <Route exact path="/register">
             <Register/>
@@ -36,6 +35,9 @@ const AppRouter = () => {
         </Route>
         <Route exact path="/">
           <Redirect to="/startingpage"/>
+        </Route>
+        <Route exact path="/editProfile/:id">
+            <EditProfile/>
         </Route>
       </Switch>
     </BrowserRouter>
