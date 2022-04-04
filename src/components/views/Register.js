@@ -71,7 +71,7 @@ const Register = props => {
   const [email, setEmail] = useState('');
 
   const validateEmail = (e) => {
-    console.log(email);
+    //console.log(email);
     setEmail(e.target.value);
     if(validator.isEmail(email)){
       setEmailError('Valid Email');
@@ -83,8 +83,8 @@ const Register = props => {
     
   }
   useEffect(() => {
-    console.log("Email message inside useEffect: ", email);
-    console.log("Email message inside useEffect: ", emailError);
+    //console.log("Email message inside useEffect: ", email);
+    //console.log("Email message inside useEffect: ", emailError);
   }, [email, emailError]);
 //  const [birthdate, setBirthdate] = useState(null);
   const myDate = new Date();
@@ -96,18 +96,12 @@ const Register = props => {
 
       const requestBody = JSON.stringify({username, password, creation_date, email});
       const response = await api.post('/users', requestBody);
-      console.log(response)
+      //console.log(response)
       // Get the returned user and update a new object.
       const user = new User(response.data);
 
       // Store the token into the local storage.
       localStorage.setItem('token', user.token);
-      const number = localStorage.getItem('number');
-      if(number != null){
-        localStorage.setItem('number', number + 1);
-      }else{
-        localStorage.setItem('number', 1);
-      }
 
       // Login successfully worked --> navigate to the route /profile in the GameRouter
 //      history.push({pathname:`/profile/${user.id}`, state: {user: user, myuser: user}});
