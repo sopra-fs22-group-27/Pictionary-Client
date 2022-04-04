@@ -1,44 +1,8 @@
 @import 'styles/theme';
 
 .header {
-  &.container {
-    @include center;
-    // display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // padding: 0px 0px 0px 0px;
-
-    position: absolute;
-    width: 100%;
-    height: 7%;
-    left: 0px;
-    top: 0px;
-
-    background: linear-gradient(139.06deg, #F277D0 -1.91%, #9489DB 46.6%, #37D1E5 112.6%, #5ACFB9 162.3%);
-
-  }
-
-  &.title {
-    // font-weight: bold;
-    color: $accent;
-    text-align: left;
-    position: absolute;
-    width: 245px;
-    height: 56px;
-    left: 7%;
-    
-
-    font-family: 'Monoton';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 36px;
-    line-height: 56px;
-    /* identical to box height */
-
-    display: flex;
-    align-items: center;
-    letter-spacing: -0.3px;
-
-
-  }
+  background: linear-gradient(139.06deg, #F277D0 -1.91%, #9489DB 46.6%, #37D1E5 112.6%, #5ACFB9 162.3%);
 }
+
+
+
