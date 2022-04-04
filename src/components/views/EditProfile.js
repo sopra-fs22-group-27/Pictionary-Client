@@ -6,15 +6,33 @@ import BaseContainer from "components/ui/BaseContainer";
 import { useLocation } from "react-router-dom";
 import "styles/views/EditProfile.scss";
 
-const FormField = props => {
+const FormField1 = props => {
     return (
-      <div className="edit field">
-        <label className="edit label">
+      <div className="register field">
+        <label className="register label">
           {props.label}
         </label>
         <input
-          className="edit input"
-          placeholder="enter here.."
+          type="text"
+          className="register input"
+          placeholder="Enter here.."
+          value={props.value}
+          onChange={e => props.onChange(e.target.value)}
+        />
+      </div>
+    );
+  };
+
+  const FormField2 = props => {
+    return (
+      <div className="register field">
+        <label className="register label">
+          {props.label}
+        </label>
+        <input
+          type="password"
+          className="register input"
+          placeholder="Enter here.."
           value={props.value}
           onChange={e => props.onChange(e.target.value)}
         />
@@ -46,21 +64,32 @@ const EditProfile = () => {
 
     //const [birthday, setBirthday] = useState(null);
     const [username, setUsername] = useState(null);
+    const [password, setPassword] = useState(null);
+    const [email, setEmail] = useState(null);
 
   const back = () => {
     history.push({pathname:`/profile/${myuser.id}`, state: {user: myuser, myuser: myuser}});
   }
 
-  const editUsername = async () => {
+  const edit = async () => {
     try {
-        const requestBody = JSON.stringify({ username });
+        const requestBody = JSON.stringify({ username, password, email });
         const response = await api.put(`/users/${myuser.id}`, requestBody);
         console.log(response);
         //      const user = new User(response.data);
         alert("update successfully");
         // myuser.birthday = birthday;
   
-        myuser.username = username;
+        if (username){
+            myuser.username = username;
+        }
+        if (password){
+            myuser.password = password;
+        }
+        if (email){
+            myuser.email = email;
+        }
+
   
         history.push({pathname:`/profile/${myuser.id}`, state: {user: myuser, myuser: myuser}});
       } catch (error) {
@@ -95,17 +124,27 @@ const EditProfile = () => {
       <h2>Edit your Profile</h2>
       <div className="edit">
         <ul className="edit user-list">
-        <FormField
+        <FormField1
             label="Username"
             value={username}
             onChange={username => setUsername(username)}
           />
+        <FormField2
+            label="Password"
+            value={password}
+            onChange={password => setPassword(password)}
+          />
+        <FormField1
+            label="Email"
+            value={email}
+            onChange={email => setEmail(email)}
+          />
         <Button
           width="100%"
-          onClick={() => editUsername()}
-          disabled={!username}
+          onClick={() => edit()}
+          disabled={!username && !password && !email}
         >
-          Edit Username
+          Edit Values
         </Button>
 {/*         <FormFieldDate
             label="Birthday"
