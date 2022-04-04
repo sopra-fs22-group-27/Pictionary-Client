@@ -5,7 +5,6 @@ import {Button} from 'components/ui/Button';
 import {useHistory} from 'react-router-dom';
 import User from 'models/User';
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
 import "styles/views/UserList.scss";
 import {Link, useLocation} from "react-router-dom";
 

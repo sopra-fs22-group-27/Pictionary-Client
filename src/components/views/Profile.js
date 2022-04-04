@@ -58,30 +58,21 @@ const Profile = (props) => {
   //   setBirthday(e.target.value);
   // }
   //update function
-  const doUpdate = async () => {
+
+
+  const doEdit = async () => {
     try {
-      const requestBody = JSON.stringify({ username });
-      const response = await api.put(`/users/${myid}`, requestBody);
-      console.log(response);
-      //      const user = new User(response.data);
-      alert("update successfully");
-      // myuser.birthday = birthday;
 
-      myuser.username = username;
-
-      history.push({
-        pathname: `/profile/${myid}`,
-        state: { user: myuser, myuser: myuser },
-      });
+      history.push({ pathname: `/editProfile/${myid}`, state: myuser });
     } catch (error) {
       alert(
-        `Something went wrong during updating the profile: \n${handleError(
+        `Something went wrong during going to the edit Page: \n${handleError(
           error
         )}`
       );
       window.location.reload();
     }
-  };
+  }
 
   content = (
     <div className="profile">
@@ -106,8 +97,8 @@ const Profile = (props) => {
           type="text"
           className="profile input"
           value={username}
-          onChange={changeUsername}
-          disabled={user.id !== myid}
+          //disabled={user.id !== myid}
+          disabled
         />
       </div>
 
@@ -149,8 +140,8 @@ const Profile = (props) => {
       </div>
       <div className="profile button">
         {user.id === myid ? (
-          <Button width="100%" onClick={() => doUpdate(myid)}>
-            Edit my profile
+          <Button width="100%" onClick={() => doEdit()}>
+            Edit profile
           </Button>
         ) : (
           <div></div>
