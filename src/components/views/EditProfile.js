@@ -89,7 +89,7 @@ const EditProfile = () => {
   const edit = async () => {
     try {
         const requestBody = JSON.stringify({ username, password, email });
-        const response = await api.put(`/users/${myuser.id}`, requestBody);
+        const response = await api.put(`/users/${localStorage.getItem("token")}`, requestBody);
         console.log(response);
         //      const user = new User(response.data);
         alert("update successfully");
