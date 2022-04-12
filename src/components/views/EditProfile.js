@@ -64,10 +64,10 @@ const EditProfile = () => {
     var myuser = location.state;
 
     //const [birthday, setBirthday] = useState(null);
-    const [username, setUsername] = useState(null);
-    const [password, setPassword] = useState(null);
+    let [username, setUsername] = useState(null);
+    let [password, setPassword] = useState(null);
     const [emailError, setEmailError] = useState('');
-    const [email, setEmail] = useState('');
+    let [email, setEmail] = useState(null);
 
     const validateEmail = (e) => {
         //console.log(email);
@@ -88,7 +88,17 @@ const EditProfile = () => {
 
   const edit = async () => {
     try {
+      if(email==null){
+        email = myuser.email;
+      }
+      if(username==null){
+        username = myuser.username;
+      }
+      if(password==null){
+        password = myuser.password;
+      }
         const requestBody = JSON.stringify({ username, password, email });
+        console.log(requestBody);
         const response = await api.put(`/users/${localStorage.getItem("token")}`, requestBody);
         console.log(response);
         //      const user = new User(response.data);
@@ -172,7 +182,7 @@ const EditProfile = () => {
         <Button
           width="100%"
           onClick={() => edit()}
-          disabled={emailError !== "Valid Email" && (!username || (emailError !== "Valid Email" && email !== '')) && (!password || (emailError !== "Valid Email" && email !== ''))}
+          disabled={emailError !== "Valid Email" && (!username || (emailError !== "Valid Email" && email !== null)) && (!password || (emailError !== "Valid Email" && email !== null))}
           //disabled={!username && !password && emailError !== "Valid Email" && email !== ''}
         >
           Edit Values
