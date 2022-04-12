@@ -22,7 +22,7 @@ const Header = (props) => (
       expand="lg"
       collapseOnSelect
     >
-      <Navbar.Brand>Pictionary</Navbar.Brand>
+      <Navbar.Brand href="home">Pictionary</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">

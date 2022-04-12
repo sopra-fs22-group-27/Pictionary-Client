@@ -1,0 +1,28 @@
+.container {
+    background-color: rgba(55, 209, 228, 0.1);
+    border-radius: 50%;
+    width: 500px;
+    height: 500px;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 2em;
+    margin-top: 10em;
+
+}
+
+.text {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 2em;
+    color: #9489DB;   
+    margin-top: 2em;
+}
+
+.numbers {
+    font-family: 'Monoton'; //probably need to import this font
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10em;
+    color: #9489DB; 
+}
