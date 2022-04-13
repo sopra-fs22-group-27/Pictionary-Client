@@ -4,6 +4,7 @@ import "styles/views/Header.scss";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import * as FiIcons from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.css";
+import ScoreBoard from "components/views/ScoreBoard";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -26,7 +27,7 @@ const Header = (props) => (
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
-          <Nav.Link href="Change me">Score Board</Nav.Link>
+          <Nav.Link href="/scoreboard">Score Board</Nav.Link>
           <Nav.Link href="Change me">Play</Nav.Link>
           <Nav.Link href="Change me">Sign out</Nav.Link>
           <NavDropdown title={<FiIcons.FiSettings color="white" />}>

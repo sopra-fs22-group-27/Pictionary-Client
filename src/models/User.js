@@ -10,6 +10,7 @@ class User {
     this.email = null;
     this.token = null;
     this.status = null;
+    this.ranking_points = null;
     Object.assign(this, data);
   }
 }

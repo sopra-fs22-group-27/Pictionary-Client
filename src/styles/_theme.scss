@@ -13,6 +13,13 @@ $accentDark: white;
 $textColor: #9489DB;
 $background: rgba(55, 209, 229, 0.25);
 $buttonColor: #9489DB;
+$gradient:  radial-gradient(77.73% 534.3% at 103.67% 105.04%, rgba(55, 209, 229, 0.084) 0%, rgba(55, 209, 229, 0) 100%),
+linear-gradient(96.78deg, rgba(240, 100, 100, 0.05) -3.1%, rgba(242, 119, 208, 0.06) 57.76%, rgba(242, 119, 208, 0) 111.13%),
+linear-gradient(0deg, #FFFFFF, #FFFFFF);
+
+
+
+
 /* some constants */
 
 $DESKTOP_WIDTH: 1160px;
