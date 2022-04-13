@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
+import {api, handleError} from 'helpers/api';
+import Lobby from "models/Lobby";
 import 'styles/views/CreateGame.scss';
 
 const CreateGame = () => {  
@@ -10,6 +12,24 @@ const CreateGame = () => {
     const [roundLength, setRoundLength] = useState(60);
     const [numberOfRounds, setNumberOfRounds] = useState(10);
     const gameId = 'TEMP';
+
+    const doCreateGame = async (e) => {
+        try {
+          const requestBody = JSON.stringify({ gameName, numberOfPlayers, roundLength, numberOfRounds });
+          //      alert(requestBody.text)
+          const response = await api.post("/lobby", requestBody);
+    
+          // Get the returned user and update a new object.
+          const lobby = new Lobby(response.data);
+    
+          history.push({ pathname: `/lobby`, state: lobby });
+        } catch (error) {
+          alert(`Something went wrong during the login: \n${handleError(error)}`);
+          window.location.reload();
+        }
+        e.stopPropagation();
+      };
+    
 
     return (
         <BaseContainer>
