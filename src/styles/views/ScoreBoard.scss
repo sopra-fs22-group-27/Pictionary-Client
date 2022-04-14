@@ -1,0 +1,77 @@
+@import 'styles/theme';
+
+/* The '&' is a shorthand for the containing element,
+  so for example a '&.user-list' inside .game will compile to
+  .game.user-list
+
+  for more information visit https://sass-lang.com/guide
+ */
+
+.scoreboard {
+  &.center{
+    text-align:center;
+    font-size: 60px;
+    font-weight:700;
+
+  }
+  &.container {
+    //please do not temper with this code
+    border: double 4px transparent;
+    border-radius: $borderRadius;
+    background-image: $gradient, radial-gradient(circle at top left, #f00,#3020ff);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    
+    margin-top: 10%;
+    padding: 1.5em;
+    border-width:2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: $dropShadow;
+  }
+  &.scoreboard-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  &.scoreboard-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+//     color: $accent;
+  }
+  & p,h2 {
+    margin: 0.5em 0;
+  }
+}
+.scoreboard-link{
+  color: $textColor;
+  text-decoration: none;
+}
+.scoreboard-link:hover{
+  color: #1a6aff;
+}
+
+.player-scoreboard {
+  &.container {
+    margin: 0.5em 0;
+    width: 40em;
+    padding: 10px;
+    border-radius: $borderRadius;
+    display: flex;
+    align-items: center;
+    color: $textColor;
+  
+  }
+  
+  &.username {
+    font-weight: 500;
+  }
+  &.ranking_points {
+    margin-left: auto;
+    margin-right: 10px;
+    font-family: $fontMono;
+    font-weight: 300;
+  }
+}
