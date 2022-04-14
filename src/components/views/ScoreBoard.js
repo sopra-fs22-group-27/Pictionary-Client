@@ -8,23 +8,6 @@ import BaseContainer from "components/ui/BaseContainer";
 import "styles/views/ScoreBoard.scss";
 import { Link, useLocation } from "react-router-dom";
 
-// not sure if I should keep the link in there
-const ScoreboardPlayer = ({ user, myuser }) => (
-  <div className="player-scoreboard container">
-    <div className="player-scoreboard username">
-      <Link
-        className="scoreboard-link"
-        to={{
-          pathname: `/profile/${user.id}`,
-          state: { user: user, myuser: myuser },
-        }}
-      >
-        {user.id} {user.username}
-      </Link>
-    </div>
-    <div className="player-scoreboard ranking_points">{user.ranking_points}</div>
-  </div>
-);
 
 // use useEffect to update users, use userLocation to pass paras
 const ScoreBoard = () => {
@@ -38,9 +21,7 @@ const ScoreBoard = () => {
   const [users, setUsers] = useState(null);
   const location = useLocation();
   const myuser = location.state;
-  //  alert(myid);
 
-  //  alert("my id is " + myid);
   const back = async () => {
     history.push("/startingpage");
   };
@@ -84,11 +65,30 @@ const ScoreBoard = () => {
     fetchData();
   }, []);
 
+  // not sure if I should keep the link in there
+const ScoreboardPlayer = ({ user, myuser }) => (
+  <div className="player-scoreboard container">
+    <div className="player-scoreboard username">
+      <Link
+        className="scoreboard-link"
+        to={{
+          pathname: `/profile/${user.id}`,
+          state: { user: user, myuser: myuser },
+        }}
+      >
+       {user.username} 
+      </Link>
+    </div>
+    <div className="player-scoreboard ranking_points">{user.ranking_points}</div>
+  </div>
+);
+
   let content = <Spinner />;
 
   if (users) {
     content = (
       <div className="scoreboard">
+      <h2>TOP PLAYERS</h2>
         <ul className="scoreboard scoreboard-list">
           {users.map((user) => (
             <ScoreboardPlayer user={user} myuser={myuser} />
@@ -103,7 +103,6 @@ const ScoreBoard = () => {
 
   return (
     <BaseContainer className="scoreboard container">
-      <h2>TOP PLAYERS</h2>
       {content}
     </BaseContainer>
   );
