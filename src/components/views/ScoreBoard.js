@@ -69,15 +69,7 @@ const ScoreBoard = () => {
 const ScoreboardPlayer = ({ user, myuser }) => (
   <div className="player-scoreboard container">
     <div className="player-scoreboard username">
-      <Link
-        className="scoreboard-link"
-        to={{
-          pathname: `/profile/${user.id}`,
-          state: { user: user, myuser: myuser },
-        }}
-      >
-       {user.username} 
-      </Link>
+      <Link className="scoreboard-link" to={{pathname: `/profile/${user.id}`,state: { user: user, myuser: myuser },}}> {user.username} </Link>
     </div>
     <div className="player-scoreboard ranking_points">{user.ranking_points}</div>
   </div>
@@ -107,5 +99,6 @@ const ScoreboardPlayer = ({ user, myuser }) => (
     </BaseContainer>
   );
 };
+
 
 export default ScoreBoard;

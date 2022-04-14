@@ -15,6 +15,7 @@ const Player = ({user, myuser}) => (
   </div>
 );
 
+
 // use useEffect to update users, use userLocation to pass paras
 const UserList = () => {
   // use react-router-dom's hook to access the history
@@ -104,6 +105,15 @@ const UserList = () => {
           onClick={() => logout()}
         >
           Logout
+        </Button>
+            <ul></ul>
+        <Button
+          width="100%"
+          onClick={() => 
+            history.push({pathname:`/scoreboard`, state: {user: myuser, myuser: myuser}})
+          }
+        >
+          Scoreboard
         </Button>
       </div>
     );
