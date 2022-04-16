@@ -9,6 +9,7 @@ import EditProfile from "components/views/EditProfile";
 import HomePage from "components/views/HomePage";
 import CreateGame from "components/views/CreateGame";
 import Lobby from "components/views/Lobby";
+import ScoreBoard from "components/views/ScoreBoard";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -25,22 +26,23 @@ const AppRouter = () => {
     <BrowserRouter>
       <Switch>
         <PrivateRoute exact path="/profile/:id" component={Profile} />
-		<PrivateRoute exact path="/userlist" component={UserList} />
+        <PrivateRoute exact path="/userlist" component={UserList} />
+        <PrivateRoute exact path="/scoreboard" component={ScoreBoard} />
 
         <Route exact path="/login">
-            <Login/>
+          <Login />
         </Route>
         <Route exact path="/register">
-            <Register/>
+          <Register />
         </Route>
         <Route exact path="/startingpage">
-            <Startingpage/>
+          <Startingpage />
         </Route>
         <Route exact path="/">
-          <Redirect to="/startingpage"/>
+          <Redirect to="/startingpage" />
         </Route>
         <Route exact path="/editProfile/:id">
-            <EditProfile/>
+          <EditProfile />
         </Route>
         <Route exact path="/home">
           <HomePage/>
