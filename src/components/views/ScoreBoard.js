@@ -8,7 +8,6 @@ import BaseContainer from "components/ui/BaseContainer";
 import "styles/views/ScoreBoard.scss";
 import { Link, useLocation } from "react-router-dom";
 
-
 // use useEffect to update users, use userLocation to pass paras
 const ScoreBoard = () => {
   // use react-router-dom's hook to access the history
@@ -21,6 +20,7 @@ const ScoreBoard = () => {
   const [users, setUsers] = useState(null);
   const location = useLocation();
   const myuser = location.state;
+  //const myName = myuser.myuser.username;
 
   const back = async () => {
     history.push("/startingpage");
@@ -66,21 +66,51 @@ const ScoreBoard = () => {
   }, []);
 
   // not sure if I should keep the link in there
-const ScoreboardPlayer = ({ user, myuser }) => (
-  <div className="player-scoreboard container">
-    <div className="player-scoreboard username">
-      <Link className="scoreboard-link" to={{pathname: `/profile/${user.id}`,state: { user: user, myuser: myuser },}}> {user.username} </Link>
+  const ScoreboardPlayer = ({ user, myuser }) => (
+    <div className="player-scoreboard container">
+      <div className="player-scoreboard username">
+        <Link
+          className="scoreboard-link"
+          to={{
+            pathname: `/profile/${user.id}`,
+            state: { user: user, myuser: myuser },
+          }}
+        >
+          {" "}
+          {user.username}{" "}
+        </Link>
+      </div>
+      <div className="player-scoreboard ranking_points">
+        {user.ranking_points}
+      </div>
     </div>
-    <div className="player-scoreboard ranking_points">{user.ranking_points}</div>
-  </div>
-);
+  );
 
   let content = <Spinner />;
 
   if (users) {
     content = (
       <div className="scoreboard">
-      <h2>TOP PLAYERS</h2>
+        <h2>TOP PLAYERS</h2>
+        <div className="player-scoreboard container">
+          <div className="player-scoreboard username">
+            <Link
+              className="scoreboard-Mylink"
+              to={{
+                pathname: `/profile/${myuser.myuser.id}`,
+                state: { user: myuser.user, myuser: myuser },
+              }}
+            >
+              {" "}
+              {myuser.myuser.username}{" "}
+            </Link>
+          </div>
+          <div className="player-scoreboard ranking_points">
+            <div className="scoreboard-Mylink">
+            {myuser.myuser.ranking_points}
+            </div>
+          </div>
+        </div>
         <ul className="scoreboard scoreboard-list">
           {users.map((user) => (
             <ScoreboardPlayer user={user} myuser={myuser} />
@@ -94,11 +124,8 @@ const ScoreboardPlayer = ({ user, myuser }) => (
   }
 
   return (
-    <BaseContainer className="scoreboard container">
-      {content}
-    </BaseContainer>
+    <BaseContainer className="scoreboard container">{content}</BaseContainer>
   );
 };
-
 
 export default ScoreBoard;

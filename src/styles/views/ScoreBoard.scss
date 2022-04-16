@@ -49,6 +49,16 @@
   color: $textColor;
   text-decoration: none;
 }
+.scoreboard-Mylink{
+  color: $textColor;
+  font-style: none;
+  font-weight: bold;
+  text-decoration: none;
+  background: linear-gradient(120deg, #ffe5e5 0%, #d6edfd 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: 0 60%;
+}
 .scoreboard-link:hover{
   color: #1a6aff;
 }
