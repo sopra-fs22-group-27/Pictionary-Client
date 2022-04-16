@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import 'styles/views/HomePage.scss';
 import { useEffect } from 'react';
-import Lobby from 'models/Lobby';
+import Lobby from './Lobby';
 import {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import {api, handleError} from 'helpers/api';
-import Lobby from "models/Lobby";
+import Lobby from "./Lobby";
 import 'styles/views/CreateGame.scss';
 
 const CreateGame = () => {  
