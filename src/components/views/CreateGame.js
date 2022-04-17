@@ -47,7 +47,7 @@ const CreateGame = () => {
                         <input className='form-text-input' type='text' placeholder='2'
                             value={numberOfPlayersRequired}
                             onChange={(e) => {
-                                setnumberOfPlayersRequired(e.target.value);
+                                    setnumberOfPlayersRequired(e.target.value);
                             }}
                         />
                         <button className='form-text-button'
@@ -113,7 +113,11 @@ const CreateGame = () => {
                 <div className='form-button'>
                     <button className='form-button-start'
                         onClick={() => {
+                            if (gameName.length > 0 && numberOfPlayersRequired > 0 && roundLength > 0 && numberOfRounds > 0) {
                             createGame();
+                            } else {
+                                alert('Please fill all fields and make sure all numbers are positive');
+                            }
                         }}
                     >Start</button>
                 </div>
