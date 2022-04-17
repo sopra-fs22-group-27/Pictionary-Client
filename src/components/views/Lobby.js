@@ -10,9 +10,9 @@ const CreateGame = () => {
 
     return (
         <BaseContainer>
-            <div className='container'>
-                <div className='text'>Waiting for players</div>
-                <div className='numbers'>{currentPlayers}/{totalPlayers}</div>
+            <div className='lobby-container'>
+                <div className='lobby-text'>Waiting for players</div>
+                <div className='lobby-numbers'>{currentPlayers}/{totalPlayers}</div>
             </div>
         </BaseContainer>
   );
