@@ -71,6 +71,7 @@ This project was started using this template -> [Client](https://github.com/HASE
 - [Raphael Wäspi](https://github.com/sumsumcity)
 - [Dylan Baumgartner](https://github.com/mrspacerobot)
 - [Solveig Helland](https://github.com/hellasol)
+- [Shaoyan Li](https://github.com/SyLi9527)
 
 ## License
 
