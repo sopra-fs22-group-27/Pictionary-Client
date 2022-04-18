@@ -6,6 +6,9 @@ import Profile from "components/views/Profile"
 import UserList from "components/views/UserList"
 import PrivateRoute from "components/views/PrivateRoute"
 import EditProfile from "components/views/EditProfile";
+import HomePage from "components/views/HomePage";
+import CreateGame from "components/views/CreateGame";
+import Lobby from "components/views/Lobby";
 import ScoreBoard from "components/views/ScoreBoard";
 /**
  * Main router of your application.
@@ -41,6 +44,16 @@ const AppRouter = () => {
         <Route exact path="/editProfile/:id">
           <EditProfile />
         </Route>
+        <Route exact path="/home">
+          <HomePage/>
+        </Route>
+        <Route exact path="/create-game">
+          <CreateGame/>
+        </Route>
+        <Route exact path="/lobby/:id">
+          <Lobby/>
+        </Route>
+
       </Switch>
     </BrowserRouter>
   );
