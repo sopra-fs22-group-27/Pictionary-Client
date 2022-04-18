@@ -1,98 +1,75 @@
-import React from 'react';
+import React, {useState , useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
-import BaseContainer from "components/ui/BaseContainer";
+import BaseContainer from 'components/ui/BaseContainer';
 import 'styles/views/HomePage.scss';
-import { useEffect } from 'react';
-import Lobby from './Lobby';
-import {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';
-import {Button} from 'components/ui/Button';
-import PropTypes from "prop-types";
-
-const LobbyView = ({lobby}) => (
-  <div className="lobby container">
-    <div className="lobby name">{lobby.lobbyname}</div>
-    <div className="public or private">{lobby.ispublic}</div>
-    <div className="In game">id: {lobby.isingame}</div>
-    <div className="host">id: {lobby.host}</div>
-    <div className="gamelength">id: {lobby.gamelength}</div>
-  </div>
-);
-
-LobbyView.propTypes = {
-  lobby: PropTypes.object
-};
+import arrowRight from 'resources/arrow-right.svg';
 
 
 const HomePage = () => {  
   const history = useHistory();
-  const [lobbies, setLobbies] = useState(null);
+  const [games, setGames] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchGames = async () => {
+    try {
+      const response = await api.get('/games');
+      setGames(response.data);
+      if (response.data.length > 0) {
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+      console.error('Details:', error);
+      alert('Something went wrong while fetching the users! See the console for details.');
+    }
+  };
+
+  const joinGame = async (gameToken) => {
+    try {
+      console.log('gameToken:', gameToken);
+      console.log('localStorage.getItem("token"):', localStorage.getItem("token"));
+
+      const response = await api.put(`/games/${gameToken}/players/${localStorage.getItem('token')}`);
+      console.log(response);
+
+      history.push({ pathname: `/lobby/${gameToken}` });
+    } catch (error) {
+      alert(`Something went wrong while joining the lobby: \n${handleError(error)}`);
+      window.location.reload();
+    }
+  };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await api.get('/lobby');
-
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Get the returned users and update the state.
-        setLobbies(response.data);
-
-        // This is just some data for you to see what is available.
-        // Feel free to remove it.
-        console.log('request to:', response.request.responseURL);
-        console.log('status code:', response.status);
-        console.log('status text:', response.statusText);
-        console.log('requested data:', response.data);
-
-        // See here to get more data.
-        console.log(response);
-      } catch (error) {
-        console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        console.error("Details:", error);
-        alert("Something went wrong while fetching the users! See the console for details.");
-      }
-    }
-
-    fetchData();
+    fetchGames();
   }, []);
 
-  let content = <Spinner/>;
-
-  if (lobbies) {
-    content = (
-      <div className="game">
-        <ul className="game user-list">
-          {lobbies.map(lobby => (
-            <LobbyView lobby={lobby} key={lobby.token}/>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-
-
   return (
-    <BaseContainer>
+  <BaseContainer>
     <div className='create-game-container'>
-        <div className='create-game-banner'>
-            <div className='create-game-text-container'>
-                <div className='create-game-title'>CONFIGURE YOUR OWN GAME!</div>
-                <div className='create-game-text'> Want to be the game master? Customize and host your own game!</div>
-            </div>
-          <div
-            className='create-game-button'
-            onClick={() => {            
-                history.push('/create-game');
-            }}
-          >
-            Start Now
-          </div>
+      <div className='create-game-banner'>
+        <div className='create-game-text-container'>
+          <div className='create-game-title'>CONFIGURE YOUR OWN GAME!</div>
+          <div className='create-game-text'> Want to be the game master? Customize and host your own game!</div>
         </div>
+        <div className='create-game-button' onClick={() => { history.push('/create-game'); }} > Start Now </div>
+      </div>
     </div>
-    {content}
-    </BaseContainer>
+    {isLoading ? <Spinner/> : 
+    <div className='games-container'>
+      <div className='games-title'>Join a game</div>
+      {games.map(game => (
+        <div className='game-container' key={`game${game.gameToken}`} onClick={() => { joinGame(game.gameToken); }}>
+          <div className='game-name'>{game.gameName}</div>
+          <div className='game-players-wrapper'> 
+            <div className='game-players'>{game.numberOfPlayers}/{game.numberOfPlayersRequired}</div>
+          </div>
+          <img className='game-icon' src={arrowRight} alt='arrow-right' />
+        </div>
+      ))}
+    </div>}
+  </BaseContainer>
   );
 };
 

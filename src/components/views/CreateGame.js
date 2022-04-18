@@ -16,9 +16,14 @@ const CreateGame = () => {
 
     const createGame = async (e) => {
         try {
-            const requestBody = JSON.stringify({ gameName, numberOfPlayersRequired, numberOfPlayers, roundLength, numberOfRounds, gameStatus });
+            const players = localStorage.getItem('token');
+            if (!players) {
+                alert('Something went wrong while fetching the user! See the console for details.');
+                return;
+            }
+            const requestBody = JSON.stringify({ gameName, numberOfPlayersRequired, numberOfPlayers, roundLength, numberOfRounds, gameStatus, players });
             const response = await api.post("/games", requestBody);
-                history.push({ pathname: `/lobby/${response.data.gameId}` });
+            history.push({ pathname: `/lobby/${response.data.gameToken}` });
         } catch (error) {
           alert(`Something went wrong during the game creation: \n${handleError(error)}`);
           window.location.reload();
