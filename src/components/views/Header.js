@@ -2,11 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { BrowserRouter, NavLink, Link } from 'react-router-dom'
 import * as FiIcons from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.css";
 import ScoreBoard from "components/views/ScoreBoard";
-import { useHistory } from "react-router-dom";
+import { Link, BrowserRouter } from "react-router-dom";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -16,46 +15,51 @@ import { useHistory } from "react-router-dom";
  * https://reactjs.org/docs/components-and-props.html
  * @FunctionalComponent
  */
-const Header = (props) => {
-  const history = useHistory;
-  let content = <div></div>;
-  if(true){
-    content = (
-      <BrowserRouter>
-      <div className="header">
-        <Navbar
-          bg="transparent"
-          variant="dark"
-          sticky="top"
-          expand="lg"
-          collapseOnSelect
-        >
-          <Navbar.Brand>Pictionary</Navbar.Brand>
-          <Navbar.Toggle />
-          <Navbar.Collapse>
-            <Nav className="ms-auto">
-            {props.currentUser!==null?
-              <Nav.Link href="/scoreboard">Score Board</Nav.Link>:
-              <Nav.Link href="/startingpage" onClick={()=>alert("register first")}>Score Board</Nav.Link>}
-              <Nav.Link href="Change me">Play</Nav.Link>
-              <Nav.Link href="Change me">Sign out</Nav.Link>
-              <NavDropdown title={<FiIcons.FiSettings color="white" />}>
-                <NavDropdown.Item href="Change me">Edit Profile</NavDropdown.Item>
-                <NavDropdown.Item href="Change me">Edit whatever</NavDropdown.Item>
-                <NavDropdown.Item href="Change me">Sign out </NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-      </div>
-      </BrowserRouter>
-    )
-  }
-  return (content);
-}
-  
-  
 
+//  const linkTarget = (props) => (
+//   {
+//     pathname: "/scoreboard",
+//     key: Math.random, // we could use Math.random, but that's not guaranteed unique.
+//     state: {
+//       myuser: props.currentUser
+//     }
+//   }
+//  )
+const Header = (props) => (
+  
+  <div className="header">
+   <Navbar
+      bg="transparent"
+      variant="dark"
+      sticky="top"
+      expand="lg"
+      collapseOnSelect
+    >
+      
+      <Navbar.Brand>Pictionary</Navbar.Brand>
+      <Navbar.Toggle />
+      <Navbar.Collapse>
+        <Nav className="ms-auto">
+        {props.currentUser?
+          <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>Score Board</Nav.Link>
+          :<Nav.Link href="/" onClick={()=>alert("register or login first")}>Score Board</Nav.Link>}
+          
+          <Nav.Link href="Change me">Play</Nav.Link>
+          <Nav.Link href="Change me">Sign out</Nav.Link>
+          <NavDropdown title={<FiIcons.FiSettings color="white" />}>
+            <NavDropdown.Item href="Change me">Edit Profile</NavDropdown.Item>
+            <NavDropdown.Item href="Change me">Edit whatever</NavDropdown.Item>
+            <NavDropdown.Item href="Change me">Sign out </NavDropdown.Item>
+          </NavDropdown>
+          
+        </Nav>
+
+      </Navbar.Collapse>
+    </Navbar>
+    
+    {/* <ReactLogo width="60px" height="60px"/> */}
+  </div>
+);
 
 Header.propTypes = {
   height: PropTypes.string,

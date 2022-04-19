@@ -8,6 +8,7 @@ import PrivateRoute from "components/views/PrivateRoute"
 import EditProfile from "components/views/EditProfile";
 // import Drawing from "components/views/Drawing";
 import ScoreBoard from "components/views/ScoreBoard";
+import Header from "components/views/Header";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -22,10 +23,11 @@ import ScoreBoard from "components/views/ScoreBoard";
 const AppRouter = (props) => {
   return (
     <BrowserRouter>
+      <Header currentUser={props.currentUser} height="100%" />
       <Switch>
         <PrivateRoute exact path="/profile/:token" component={Profile} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         <PrivateRoute exact path="/userlist" component={UserList} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
-        <PrivateRoute exact path="/scoreboard" component={ScoreBoard} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        {/* <Route exact path="/scoreboard" component={ScoreBoard}/> */}
 
         <Route exact path="/login">
           <Login currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
@@ -42,9 +44,9 @@ const AppRouter = (props) => {
         <Route exact path="/editProfile/:token" component={EditProfile} >
           <EditProfile currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
-        {/* <Route exact path="/scoreboard" component={ScoreBoard}>
-            <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
-        </Route> */}
+        <Route exact path="/scoreboard">
+            <ScoreBoard/>
+        </Route>
       </Switch>
     </BrowserRouter>
   );

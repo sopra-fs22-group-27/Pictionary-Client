@@ -19,9 +19,10 @@ const ScoreBoard = (props) => {
   // a component can have as many state variables as you like.
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
-  // const location = useLocation();
-  const myuser = props.currentUser;
-  
+  const location = useLocation();
+  const {myuser} = location.state;
+  // const myuser = props.currentUser;
+  console.log(myuser);
   const back = async () => {
     history.push("/userlist");
   };
@@ -67,7 +68,7 @@ const ScoreBoard = (props) => {
 
   // not sure if I should keep the link in there
 const ScoreboardPlayer = ({ user, myuser }) => (
-  <div style={{background:(user.token == myuser.token?null:"yellow")}}  className="player-scoreboard container">
+  <div style={{background:(user.token !== myuser.token?null:"yellow")}}  className="player-scoreboard container">
     <div className="player-scoreboard username">
       <Link className="scoreboard-link" to={{pathname: `/profile/${user.token}`,state: { user: user }}}> {user.username} </Link>
     </div>

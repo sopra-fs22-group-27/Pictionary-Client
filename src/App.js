@@ -13,7 +13,7 @@ const App = () => {
   }, [currentUser]);
   return (
     <div>
-      <Header currentUser={currentUser} height="100"/> 
+      {/* <Header currentUser={currentUser} height="100"/>  */}
       <AppRouter currentUser={currentUser} setCurrentUser={setCurrentUser}/>
     </div>
   );

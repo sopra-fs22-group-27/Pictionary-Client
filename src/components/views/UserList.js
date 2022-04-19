@@ -10,7 +10,7 @@ import {Link, useLocation} from "react-router-dom";
 
 const Player = ({user, myuser}) => (
 
-  <div style={{background:(user.token == myuser.token?null:"black")}} className="player container">
+  <div style={{background:(user.token !== myuser.token?null:"black")}} className="player container">
     <div className="player username"><Link className="link" to={{pathname:`/profile/${user.token}`, state:{user: user}}}>User {user.username}</Link></div>
     <div className="player id">User id: {user.id}</div>
   </div>
@@ -125,7 +125,7 @@ const UserList = (props) => {
         <Button
           width="100%"
           onClick={() => 
-            history.push({pathname:`/scoreboard`})
+            history.push({pathname:`/scoreboard`, state:{myuser:myuser}})
           }
         >
           Scoreboard
