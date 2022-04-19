@@ -9,8 +9,9 @@ import "styles/views/UserList.scss";
 import {Link, useLocation} from "react-router-dom";
 
 const Player = ({user, myuser}) => (
-  <div className="player container">
-    <div className="player username"><Link className="link" to={{pathname:`/profile/${user.id}`, state: {user: user, myuser: myuser}}}>User {user.username}</Link></div>
+
+  <div style={{background:(user.token == myuser.token?null:"black")}} className="player container">
+    <div className="player username"><Link className="link" to={{pathname:`/profile/${user.token}`, state:{user: user}}}>User {user.username}</Link></div>
     <div className="player id">User id: {user.id}</div>
   </div>
 );
@@ -26,8 +27,8 @@ const UserList = (props) => {
   // a component can have as many state variables as you like.
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
-  const location = useLocation();
-  const myuser = location.state;
+  // const location = useLocation();
+  const myuser = props.currentUser;
   props.setCurrentUser(myuser);
 //  alert(myid);
 
@@ -41,6 +42,7 @@ const UserList = (props) => {
 	          const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
 	          //console.log(response);
 	          const user = new User(response.data);
+            props.setCurrentUser(null);
 //	          alert("update logged_in status successfully");
 	          localStorage.removeItem('token');
 
@@ -49,6 +51,7 @@ const UserList = (props) => {
 	          alert(`Something went wrong during updating the logged_in status: \n${handleError(error)}`);
 	        }
 	 }else{
+      props.setCurrentUser(null);
 	    history.push('/login');
 	 }
   }
@@ -122,7 +125,7 @@ const UserList = (props) => {
         <Button
           width="100%"
           onClick={() => 
-            history.push({pathname:`/scoreboard`, state: {user: myuser, myuser: myuser}})
+            history.push({pathname:`/scoreboard`})
           }
         >
           Scoreboard

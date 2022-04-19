@@ -10,7 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 
 
 // use useEffect to update users, use userLocation to pass paras
-const ScoreBoard = () => {
+const ScoreBoard = (props) => {
   // use react-router-dom's hook to access the history
   const history = useHistory();
   // define a state variable (using the state hook).
@@ -19,11 +19,11 @@ const ScoreBoard = () => {
   // a component can have as many state variables as you like.
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
-  const location = useLocation();
-  const myuser = location.state;
+  // const location = useLocation();
+  const myuser = props.currentUser;
   
   const back = async () => {
-    history.push("/startingpage");
+    history.push("/userlist");
   };
 
   // the effect hook can be used to react to change in your component.
@@ -67,9 +67,9 @@ const ScoreBoard = () => {
 
   // not sure if I should keep the link in there
 const ScoreboardPlayer = ({ user, myuser }) => (
-  <div className="player-scoreboard container">
+  <div style={{background:(user.token == myuser.token?null:"yellow")}}  className="player-scoreboard container">
     <div className="player-scoreboard username">
-      <Link className="scoreboard-link" to={{pathname: `/profile/${user.id}`,state: { user: user, myuser: myuser },}}> {user.username} </Link>
+      <Link className="scoreboard-link" to={{pathname: `/profile/${user.token}`,state: { user: user }}}> {user.username} </Link>
     </div>
     <div className="player-scoreboard ranking_points">{user.ranking_points}</div>
   </div>

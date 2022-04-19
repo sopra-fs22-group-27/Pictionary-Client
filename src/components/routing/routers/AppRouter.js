@@ -23,15 +23,15 @@ const AppRouter = (props) => {
   return (
     <BrowserRouter>
       <Switch>
-        <PrivateRoute exact path="/profile/:id" component={Profile} setCurrentUser={props.setCurrentUser}/>
-        <PrivateRoute exact path="/userlist" component={UserList} setCurrentUser={props.setCurrentUser}/>
-        <PrivateRoute exact path="/scoreboard" component={ScoreBoard} setCurrentUser={props.setCurrentUser} />
+        <PrivateRoute exact path="/profile/:token" component={Profile} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        <PrivateRoute exact path="/userlist" component={UserList} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        <PrivateRoute exact path="/scoreboard" component={ScoreBoard} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
 
         <Route exact path="/login">
-          <Login />
+          <Login currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/register">
-          <Register />
+          <Register currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/startingpage">
           <Startingpage />
@@ -39,12 +39,12 @@ const AppRouter = (props) => {
         <Route exact path="/">
           <Redirect to="/startingpage" />
         </Route>
-        <Route exact path="/editProfile/:id">
-          <EditProfile />
+        <Route exact path="/editProfile/:token" component={EditProfile} >
+          <EditProfile currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
-        <Route exact path="/scoreboard">
-            <ScoreBoard/>
-        </Route>
+        {/* <Route exact path="/scoreboard" component={ScoreBoard}>
+            <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        </Route> */}
       </Switch>
     </BrowserRouter>
   );

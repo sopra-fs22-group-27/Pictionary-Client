@@ -99,13 +99,13 @@ const Register = props => {
       //console.log(response)
       // Get the returned user and update a new object.
       const user = new User(response.data);
-
+      props.setCurrentUser(user);
       // Store the token into the local storage.
       localStorage.setItem('token', user.token);
 
       // Login successfully worked --> navigate to the route /profile in the GameRouter
 //      history.push({pathname:`/profile/${user.id}`, state: {user: user, myuser: user}});
-      history.push({pathname:`/userlist`, state:user});
+      history.push({pathname:`/userlist`});
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
 //      history.push("/register");
