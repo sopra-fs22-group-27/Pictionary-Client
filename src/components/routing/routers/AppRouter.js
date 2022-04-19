@@ -6,6 +6,7 @@ import Profile from "components/views/Profile"
 import UserList from "components/views/UserList"
 import PrivateRoute from "components/views/PrivateRoute"
 import EditProfile from "components/views/EditProfile";
+// import Drawing from "components/views/Drawing";
 import ScoreBoard from "components/views/ScoreBoard";
 /**
  * Main router of your application.
@@ -18,13 +19,13 @@ import ScoreBoard from "components/views/ScoreBoard";
  */
 
  //PrivateRoute
-const AppRouter = () => {
+const AppRouter = (props) => {
   return (
     <BrowserRouter>
       <Switch>
-        <PrivateRoute exact path="/profile/:id" component={Profile} />
-        <PrivateRoute exact path="/userlist" component={UserList} />
-        <PrivateRoute exact path="/scoreboard" component={ScoreBoard} />
+        <PrivateRoute exact path="/profile/:id" component={Profile} setCurrentUser={props.setCurrentUser}/>
+        <PrivateRoute exact path="/userlist" component={UserList} setCurrentUser={props.setCurrentUser}/>
+        <PrivateRoute exact path="/scoreboard" component={ScoreBoard} setCurrentUser={props.setCurrentUser} />
 
         <Route exact path="/login">
           <Login />
@@ -40,6 +41,9 @@ const AppRouter = () => {
         </Route>
         <Route exact path="/editProfile/:id">
           <EditProfile />
+        </Route>
+        <Route exact path="/scoreboard">
+            <ScoreBoard/>
         </Route>
       </Switch>
     </BrowserRouter>

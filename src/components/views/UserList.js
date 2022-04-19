@@ -17,7 +17,7 @@ const Player = ({user, myuser}) => (
 
 
 // use useEffect to update users, use userLocation to pass paras
-const UserList = () => {
+const UserList = (props) => {
   // use react-router-dom's hook to access the history
   const history = useHistory();
   // define a state variable (using the state hook).
@@ -28,6 +28,7 @@ const UserList = () => {
   const [users, setUsers] = useState(null);
   const location = useLocation();
   const myuser = location.state;
+  props.setCurrentUser(myuser);
 //  alert(myid);
 
 //  alert("my id is " + myid);
@@ -50,8 +51,19 @@ const UserList = () => {
 	 }else{
 	    history.push('/login');
 	 }
+  }
 
-
+  // After testing must be deleted 
+  const drawer = async () => {
+    if(users != null){
+	    try{
+	          history.push('/drawing');
+	        } catch(error){
+	          alert(`Something went wrong going to drawing \n${handleError(error)}`);
+	        }
+	 }else{
+	    history.push('/login');
+	 }
   }
 
   // the effect hook can be used to react to change in your component.

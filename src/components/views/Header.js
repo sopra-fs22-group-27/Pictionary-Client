@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { BrowserRouter, NavLink, Link } from 'react-router-dom'
 import * as FiIcons from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.css";
 import ScoreBoard from "components/views/ScoreBoard";
@@ -15,6 +16,7 @@ import ScoreBoard from "components/views/ScoreBoard";
  * @FunctionalComponent
  */
 const Header = (props) => (
+  <BrowserRouter>
   <div className="header">
     <Navbar
       bg="transparent"
@@ -27,7 +29,8 @@ const Header = (props) => (
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
-          <Nav.Link href="/scoreboard">Score Board</Nav.Link>
+          <Nav.Link href="/scoreboard">Score Board
+        </Nav.Link>
           <Nav.Link href="Change me">Play</Nav.Link>
           <Nav.Link href="Change me">Sign out</Nav.Link>
           <NavDropdown title={<FiIcons.FiSettings color="white" />}>
@@ -40,6 +43,7 @@ const Header = (props) => (
     </Navbar>
     {/* <ReactLogo width="60px" height="60px"/> */}
   </div>
+  </BrowserRouter>
 );
 
 Header.propTypes = {

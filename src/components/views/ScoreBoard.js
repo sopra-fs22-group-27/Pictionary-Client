@@ -21,7 +21,7 @@ const ScoreBoard = () => {
   const [users, setUsers] = useState(null);
   const location = useLocation();
   const myuser = location.state;
-
+  
   const back = async () => {
     history.push("/startingpage");
   };
