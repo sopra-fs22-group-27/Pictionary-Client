@@ -8,6 +8,7 @@ import ScoreBoard from "components/views/ScoreBoard";
 import { Link, BrowserRouter } from "react-router-dom";
 
 
+
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
  * Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
@@ -52,8 +53,8 @@ const Header = (props) => (
       <Navbar.Collapse>
         <Nav className="ms-auto">
         {props.currentUser.id !== null?
-          <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>Score Board</Nav.Link>
-          :<Nav.Link href="/" onClick={()=>alert("register or login first")}>Score Board</Nav.Link>}
+          <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>[Scoreboard]</Nav.Link>
+          :<Nav.Link href="/login">[Login]</Nav.Link>}
         {props.currentUser.id !== null?
           <Nav.Link href="/login" onClick={()=> logout()}>[Logout]</Nav.Link>
           :<Nav.Link href="/register">[Register]</Nav.Link>}          
