@@ -28,10 +28,8 @@ const HomePage = () => {
 
   const joinGame = async (gameToken) => {
     try {
-      console.log('gameToken:', gameToken);
-      console.log('localStorage.getItem("token"):', localStorage.getItem("token"));
 
-      const response = await api.put(`/games/${gameToken}/players/${localStorage.getItem('token')}`);
+      const response = await api.put(`/games/${gameToken}/player/${localStorage.getItem('token')}`);
       console.log(response);
 
       history.push({ pathname: `/lobby/${gameToken}` });

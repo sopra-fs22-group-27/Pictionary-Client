@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import {api, handleError} from 'helpers/api';
-import Lobby from "./Lobby";
 import 'styles/views/CreateGame.scss';
 
 const CreateGame = () => {  
@@ -14,23 +13,23 @@ const CreateGame = () => {
     const numberOfPlayers = 1; //the creator of the game is always in the game
     const gameStatus = 'waiting'; //possile values: waiting, started, finished
 
-    const createGame = async (e) => {
+    const createGame = async () => {
         try {
-            const players = localStorage.getItem('token');
-            if (!players) {
+            const playerTokens = [localStorage.getItem('token')];
+            if (!playerTokens) {
                 alert('Something went wrong while fetching the user! See the console for details.');
                 return;
             }
-            const requestBody = JSON.stringify({ gameName, numberOfPlayersRequired, numberOfPlayers, roundLength, numberOfRounds, gameStatus, players });
+            const requestBody = JSON.stringify({ gameName, numberOfPlayersRequired, numberOfPlayers, roundLength, numberOfRounds, gameStatus, playerTokens });
+            console.log(requestBody)
             const response = await api.post("/games", requestBody);
             history.push({ pathname: `/lobby/${response.data.gameToken}` });
         } catch (error) {
+            console.log(handleError(error))
           alert(`Something went wrong during the game creation: \n${handleError(error)}`);
           window.location.reload();
         }
-        e.stopPropagation();
       };
-    
 
     return (
         <BaseContainer>
