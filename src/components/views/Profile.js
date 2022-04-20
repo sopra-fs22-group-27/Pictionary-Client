@@ -32,11 +32,19 @@ const Profile = (props) => {
 
   const location = useLocation();
   //console.log(location)
-  var { user, myuser } = location.state;
-  const myid = myuser.id;
+  var { user } = location.state;
 
+  const myuser = props.currentUser;
+  const myToken = myuser.token;
+  // const userToken = props.match.params.token;
+ 
   let content = <Spinner />;
 
+  // const getUser = async() =>{
+  //   getUserToken();
+  //   return await api.get(`/users/${userToken}`);
+  // }
+  
   // var yourDate = new Date(user.birthday);
   // const offset = yourDate.getTimezoneOffset();
   // yourDate = new Date(yourDate.getTime() - (offset*60*1000));
@@ -63,7 +71,7 @@ const Profile = (props) => {
   const doEdit = async () => {
     try {
 
-      history.push({ pathname: `/editProfile/${myid}`, state: myuser });
+      history.push({ pathname: `/editProfile/${myToken}`});
     } catch (error) {
       alert(
         `Something went wrong during going to the edit Page: \n${handleError(
@@ -77,13 +85,13 @@ const Profile = (props) => {
   content = (
     <div className="profile">
       <div>
-        {user.id === myid ? (
+        {user.token === myToken ? (
           <div className="profile field">
-            <label className="profile label">User ID</label>
+            <label className="profile label">User Token</label>
             <input
               type="text"
               className="profile input"
-              value={user.id}
+              value={user.token}
               disabled
             />
           </div>
@@ -131,7 +139,7 @@ const Profile = (props) => {
       </div>
 
       <div className="profile button">
-        {user.id === myid ? (
+        {user.token === myToken ? (
           <Button width="100%" onClick={() => doEdit()}>
             Edit profile
           </Button>

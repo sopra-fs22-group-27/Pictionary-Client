@@ -54,7 +54,6 @@
   font-style: none;
   font-weight: bold;
   text-decoration: none;
-  background: linear-gradient(120deg, #ffe5e5 0%, #d6edfd 100%);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: 0 60%;
@@ -66,13 +65,29 @@
 .player-scoreboard {
   &.container {
     margin: 0.5em 0;
-    width: 40em;
+    width: 30em;
     padding: 10px;
     border-radius: $borderRadius;
     display: flex;
     align-items: center;
     color: $textColor;
-  
+  }
+
+  &.my-container {
+    margin: 0.5em 0;
+    width: 30em;
+    padding: 10px;
+    border-radius: $borderRadius;
+    display: flex;
+    align-items: center;
+    color: $textColor;
+    
+    border: double 4px transparent;
+    border-radius: $borderRadius;
+    background-image: $gradient, radial-gradient(circle at top left, #f00,#3020ff);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    border-width:2px;
   }
   
   &.username {

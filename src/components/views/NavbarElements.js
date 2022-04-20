@@ -84,3 +84,16 @@ export const NavBtnLink = styled(Link)`
     color: #010606;
   }
 `;
+
+export const Brand = styled(Link)`
+  color: #15cdfc;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
+  &.active {
+    color: #15cdfc;
+  }
+`;

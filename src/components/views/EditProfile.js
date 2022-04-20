@@ -57,17 +57,17 @@ const FormField1 = props => {
     );
   }; */
 
-const EditProfile = () => {
+const EditProfile = (props) => {
     const history = useHistory();
 
-    const location = useLocation();
-    var myuser = location.state;
+    // const location = useLocation();
+    var myuser = props.currentUser;
 
     //const [birthday, setBirthday] = useState(null);
-    let [username, setUsername] = useState(null);
-    let [password, setPassword] = useState(null);
+    let [username, setUsername] = useState('');
+    let [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
-    let [email, setEmail] = useState(null);
+    let [email, setEmail] = useState('');
 
     const validateEmail = (e) => {
         //console.log(email);
@@ -83,7 +83,8 @@ const EditProfile = () => {
       }
 
   const back = () => {
-    history.push({pathname:`/profile/${myuser.id}`, state: {user: myuser, myuser: myuser}});
+    // console.log(myuser)
+    history.push({pathname:`/profile/${myuser.token}`, state:{user: myuser}});
   }
 
   const edit = async () => {
@@ -102,7 +103,7 @@ const EditProfile = () => {
         const response = await api.put(`/users/${localStorage.getItem("token")}`, requestBody);
         console.log(response);
         //      const user = new User(response.data);
-        alert("update successfully");
+  
         // myuser.birthday = birthday;
   
         if (username){
@@ -114,9 +115,15 @@ const EditProfile = () => {
         if (email){
             myuser.email = email;
         }
+        props.setCurrentUser(myuser);
+
+        alert("update successfully");
+        // myuser.birthday = birthday;
+
+
 
   
-        history.push({pathname:`/profile/${myuser.id}`, state: {user: myuser, myuser: myuser}});
+        history.push({pathname:`/profile/${myuser.token}`, state:{user:myuser}});
       } catch (error) {
         alert(
           `Something went wrong during updating the profile: \n${handleError(
@@ -181,7 +188,7 @@ const EditProfile = () => {
 
         <Button
           width="100%"
-          onClick={() => edit()}
+          onClick={edit}
           disabled={emailError !== "Valid Email" && (!username || (emailError !== "Valid Email" && email !== null)) && (!password || (emailError !== "Valid Email" && email !== null))}
           //disabled={!username && !password && emailError !== "Valid Email" && email !== ''}
         >
@@ -203,7 +210,7 @@ const EditProfile = () => {
         </ul>
         <Button
           width="100%"
-          onClick={() => back()}
+          onClick={back}
         >
           Back
         </Button>

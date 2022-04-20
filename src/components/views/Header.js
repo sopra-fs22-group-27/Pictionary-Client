@@ -5,6 +5,15 @@ import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import * as FiIcons from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.css";
 import ScoreBoard from "components/views/ScoreBoard";
+import { Link, BrowserRouter } from "react-router-dom";
+
+import {useEffect, useState} from 'react';
+import {api, handleError} from 'helpers/api';
+import {useHistory} from 'react-router-dom';
+import User from 'models/User';
+
+
+
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -14,31 +23,65 @@ import ScoreBoard from "components/views/ScoreBoard";
  * https://reactjs.org/docs/components-and-props.html
  * @FunctionalComponent
  */
+
+//  const linkTarget = (props) => (
+//   {
+//     pathname: "/scoreboard",
+//     key: Math.random, // we could use Math.random, but that's not guaranteed unique.
+//     state: {
+//       myuser: props.currentUser
+//     }
+//   }
+//  )
+
+const logout = async (props) => {
+          const status = "OFFLINE";
+//	          alert(logged_in);
+          const requestBody = JSON.stringify({status});
+          const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
+          //console.log(response);
+          const user = new User(response.data);
+          props.setCurrentUser(user);
+//	          alert("update logged_in status successfully");
+          localStorage.removeItem('token');
+        } 
+      
+
 const Header = (props) => (
   <div className="header">
-    <Navbar
+   <Navbar
       bg="transparent"
       variant="dark"
       sticky="top"
       expand="lg"
       collapseOnSelect
     >
-      <Navbar.Brand href="home">Pictionary</Navbar.Brand>
+      <Navbar.Brand as={Link} to={{pathname: "/startingpage", state:{myuser:props.currentUser}}}>Pictionary</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
-          <Nav.Link href="/scoreboard">Score Board</Nav.Link>
-          <Nav.Link href="Change me">Play</Nav.Link>
-          <Nav.Link href="Change me">Sign out</Nav.Link>
-          <NavDropdown title={<FiIcons.FiSettings color="white" />}>
+        {props.currentUser.id !== null?
+          <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>[Scoreboard]</Nav.Link>
+          :<Nav.Link href="/login">[Login]</Nav.Link>}
+        {props.currentUser.id !== null?
+          <Nav.Link href="/login" onClick={()=> logout()}>[Logout]</Nav.Link>
+          :<Nav.Link href="/register">[Register]</Nav.Link>}          
+          {/* <Nav.Link href="Change me">Play</Nav.Link>
+          <Nav.Link href="Change me">Sign out</Nav.Link> */}
+
+
+{/*           <NavDropdown title={<FiIcons.FiSettings color="white" />}>
             <NavDropdown.Item href="Change me">Edit Profile</NavDropdown.Item>
             <NavDropdown.Item href="Change me">Edit whatever</NavDropdown.Item>
             <NavDropdown.Item href="Change me">Sign out </NavDropdown.Item>
           </NavDropdown>
+           */}
         </Nav>
+
       </Navbar.Collapse>
     </Navbar>
-    {/* <ReactLogo width="60px" height="60px"/> */}
+    
+
   </div>
 );
 

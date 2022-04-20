@@ -9,15 +9,16 @@ import "styles/views/UserList.scss";
 import {Link, useLocation} from "react-router-dom";
 
 const Player = ({user, myuser}) => (
-  <div className="player container">
-    <div className="player username"><Link className="link" to={{pathname:`/profile/${user.id}`, state: {user: user, myuser: myuser}}}>User {user.username}</Link></div>
+
+  <div style={{background:(user.token !== myuser.token?null:"black")}} className="player container">
+    <div className="player username"><Link className="link" to={{pathname:`/profile/${user.token}`, state:{user: user}}}>User {user.username}</Link></div>
     <div className="player id">User id: {user.id}</div>
   </div>
 );
 
 
 // use useEffect to update users, use userLocation to pass paras
-const UserList = () => {
+const UserList = (props) => {
   // use react-router-dom's hook to access the history
   const history = useHistory();
   // define a state variable (using the state hook).
@@ -26,8 +27,9 @@ const UserList = () => {
   // a component can have as many state variables as you like.
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
-  const location = useLocation();
-  const myuser = location.state;
+  // const location = useLocation();
+  const myuser = props.currentUser;
+  props.setCurrentUser(myuser);
 //  alert(myid);
 
 //  alert("my id is " + myid);
@@ -37,6 +39,7 @@ const UserList = () => {
 	          const response = await api.put(`/status/${localStorage.getItem("token")}`);
 	          console.log(response);
 	          const user = new User(response.data);
+            props.setCurrentUser(user);
 //	          alert("update logged_in status successfully");
 	          localStorage.removeItem('token');
 
@@ -45,10 +48,22 @@ const UserList = () => {
 	          alert(`Something went wrong during updating the logged_in status: \n${handleError(error)}`);
 	        }
 	 }else{
+      props.setCurrentUser(myuser);
 	    history.push('/login');
 	 }
+  }
 
-
+  // After testing must be deleted 
+  const drawer = async () => {
+    if(users != null){
+	    try{
+	          history.push('/drawing');
+	        } catch(error){
+	          alert(`Something went wrong going to drawing \n${handleError(error)}`);
+	        }
+	 }else{
+	    history.push('/login');
+	 }
   }
 
   // the effect hook can be used to react to change in your component.
@@ -107,7 +122,7 @@ const UserList = () => {
         <Button
           width="100%"
           onClick={() => 
-            history.push({pathname:`/scoreboard`, state: {user: myuser, myuser: myuser}})
+            history.push({pathname:`/scoreboard`, state:{myuser:myuser}})
           }
         >
           Scoreboard

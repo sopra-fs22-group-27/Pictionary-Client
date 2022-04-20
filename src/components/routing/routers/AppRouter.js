@@ -6,10 +6,9 @@ import Profile from "components/views/Profile"
 import UserList from "components/views/UserList"
 import PrivateRoute from "components/views/PrivateRoute"
 import EditProfile from "components/views/EditProfile";
-import HomePage from "components/views/HomePage";
-import CreateGame from "components/views/CreateGame";
-import Lobby from "components/views/Lobby";
+// import Drawing from "components/views/Drawing";
 import ScoreBoard from "components/views/ScoreBoard";
+import Header from "components/views/Header";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -21,19 +20,20 @@ import ScoreBoard from "components/views/ScoreBoard";
  */
 
  //PrivateRoute
-const AppRouter = () => {
+const AppRouter = (props) => {
   return (
     <BrowserRouter>
+      <Header currentUser={props.currentUser} height="100%" />
       <Switch>
-        <PrivateRoute exact path="/profile/:id" component={Profile} />
-        <PrivateRoute exact path="/userlist" component={UserList} />
-        <PrivateRoute exact path="/scoreboard" component={ScoreBoard} />
+        <PrivateRoute exact path="/profile/:token" component={Profile} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        <PrivateRoute exact path="/userlist" component={UserList} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        {/* <Route exact path="/scoreboard" component={ScoreBoard}/> */}
 
         <Route exact path="/login">
-          <Login />
+          <Login currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/register">
-          <Register />
+          <Register currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/startingpage">
           <Startingpage />
@@ -41,19 +41,12 @@ const AppRouter = () => {
         <Route exact path="/">
           <Redirect to="/startingpage" />
         </Route>
-        <Route exact path="/editProfile/:id">
-          <EditProfile />
+        <Route exact path="/editProfile/:token" component={EditProfile} >
+          <EditProfile currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
-        <Route exact path="/home">
-          <HomePage/>
+        <Route exact path="/scoreboard">
+            <ScoreBoard/>
         </Route>
-        <Route exact path="/create-game">
-          <CreateGame/>
-        </Route>
-        <Route exact path="/lobby/:id">
-          <Lobby/>
-        </Route>
-
       </Switch>
     </BrowserRouter>
   );
