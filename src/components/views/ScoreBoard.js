@@ -68,7 +68,7 @@ const ScoreBoard = (props) => {
 
   // not sure if I should keep the link in there
 const ScoreboardPlayer = ({ user, myuser }) => (
-  <div style={{background:(user.token !== myuser.token?null:"yellow")}}  className="player-scoreboard container">
+  <div className="player-scoreboard container">
     <div className="player-scoreboard username">
       <Link className="scoreboard-link" to={{pathname: `/profile/${user.token}`,state: { user: user }}}> {user.username} </Link>
     </div>
@@ -82,6 +82,23 @@ const ScoreboardPlayer = ({ user, myuser }) => (
     content = (
       <div className="scoreboard">
       <h2>TOP PLAYERS</h2>
+
+      <div className="player-scoreboard my-container">
+          <div className="player-scoreboard username">
+            <Link
+              className="scoreboard-Mylink"
+              to={{pathname: `/profile/${myuser.token}`,state: { user: myuser }}}> 
+              {" "}
+              {myuser.username}{" "}
+            </Link>
+          </div>
+          <div className="player-scoreboard ranking_points">
+            <div className="scoreboard-Mylink">
+            {myuser.ranking_points}
+            </div>
+          </div>
+      </div>
+
         <ul className="scoreboard scoreboard-list">
           {users.map((user) => (
             <ScoreboardPlayer user={user} myuser={myuser} />

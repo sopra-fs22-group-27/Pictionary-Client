@@ -5,4 +5,12 @@
 }
 
 
-
+/* mixins
+This is for the Header / Navbar
+*/
+@media (min-width: 992px) {
+  .navbar-expand-lg {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+}
