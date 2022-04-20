@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import ScoreBoard from "components/views/ScoreBoard";
 import { Link, BrowserRouter } from "react-router-dom";
 
+
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
  * Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
@@ -25,7 +26,14 @@ import { Link, BrowserRouter } from "react-router-dom";
 //     }
 //   }
 //  )
+
+const logout = () => {
+  localStorage.removeItem('token');
+}
+
 const Header = (props) => (
+
+
   
   <div className="header">
    <Navbar
@@ -36,28 +44,35 @@ const Header = (props) => (
       collapseOnSelect
     >
       
-      <Navbar.Brand>Pictionary</Navbar.Brand>
+
+      <Navbar.Brand as={Link} to={{pathname: "/startingpage", state:{myuser:props.currentUser}}}>Pictionary</Navbar.Brand>
+
+
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
         {props.currentUser.id !== null?
           <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>Score Board</Nav.Link>
           :<Nav.Link href="/" onClick={()=>alert("register or login first")}>Score Board</Nav.Link>}
-          
-          <Nav.Link href="Change me">Play</Nav.Link>
-          <Nav.Link href="Change me">Sign out</Nav.Link>
-          <NavDropdown title={<FiIcons.FiSettings color="white" />}>
+        {props.currentUser.id !== null?
+          <Nav.Link href="/login" onClick={()=> logout()}>[Logout]</Nav.Link>
+          :<Nav.Link href="/register">[Register]</Nav.Link>}          
+          {/* <Nav.Link href="Change me">Play</Nav.Link>
+          <Nav.Link href="Change me">Sign out</Nav.Link> */}
+
+
+{/*           <NavDropdown title={<FiIcons.FiSettings color="white" />}>
             <NavDropdown.Item href="Change me">Edit Profile</NavDropdown.Item>
             <NavDropdown.Item href="Change me">Edit whatever</NavDropdown.Item>
             <NavDropdown.Item href="Change me">Sign out </NavDropdown.Item>
           </NavDropdown>
-          
+           */}
         </Nav>
 
       </Navbar.Collapse>
     </Navbar>
     
-    {/* <ReactLogo width="60px" height="60px"/> */}
+
   </div>
 );
 
