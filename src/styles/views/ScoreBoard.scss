@@ -65,7 +65,7 @@
 .player-scoreboard {
   &.container {
     margin: 0.5em 0;
-    width: 40em;
+    width: 30em;
     padding: 10px;
     border-radius: $borderRadius;
     display: flex;
@@ -75,12 +75,13 @@
 
   &.my-container {
     margin: 0.5em 0;
-    width: 40em;
+    width: 30em;
     padding: 10px;
     border-radius: $borderRadius;
     display: flex;
     align-items: center;
     color: $textColor;
+    
     border: double 4px transparent;
     border-radius: $borderRadius;
     background-image: $gradient, radial-gradient(circle at top left, #f00,#3020ff);
