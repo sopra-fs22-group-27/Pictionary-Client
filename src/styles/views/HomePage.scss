@@ -1,0 +1,53 @@
+.create-game-container {
+    min-width: 680px;
+    max-width: 80%;
+    margin: 0 auto;
+    margin-top: 5em;
+  }
+
+.create-game-banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    width: 100%;
+    height: 84px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: linear-gradient(
+          96.78deg,
+          #fef7f8 -6.3%,
+          #fbf6fa 35.9%,
+          #e9f2f5 100.12%
+        )
+        padding-box,
+      linear-gradient(
+          114.59deg,
+          #f06464 1.6%,
+          #f277d0 32.79%,
+          #9489db 71.64%,
+          #37d1e5 101.91%,
+          #5acfb9 131.52%
+        )
+        border-box;
+  }
+
+  .create-game-text-container {
+    flex-basis: 75%;
+    color: #9489db;
+  }
+  .create-game-title {
+    font-weight: 700;
+    margin: 4px 0;
+  }
+  .create-game-button {
+    margin-left: auto;
+    padding: 10px 15px;
+    background: #9489db;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+  }

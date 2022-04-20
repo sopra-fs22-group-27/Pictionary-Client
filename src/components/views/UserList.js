@@ -36,11 +36,8 @@ const UserList = (props) => {
   const logout = async () => {
     if(users != null){
 	    try{
-	          const status = "OFFLINE";
-//	          alert(logged_in);
-	          const requestBody = JSON.stringify({status});
-	          const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
-	          //console.log(response);
+	          const response = await api.put(`/status/${localStorage.getItem("token")}`);
+	          console.log(response);
 	          const user = new User(response.data);
             props.setCurrentUser(user);
 //	          alert("update logged_in status successfully");
