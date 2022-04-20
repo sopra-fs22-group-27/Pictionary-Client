@@ -40,7 +40,7 @@ const Header = (props) => (
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
-        {props.currentUser?
+        {props.currentUser.id !== null?
           <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>Score Board</Nav.Link>
           :<Nav.Link href="/" onClick={()=>alert("register or login first")}>Score Board</Nav.Link>}
           

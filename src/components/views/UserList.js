@@ -42,7 +42,7 @@ const UserList = (props) => {
 	          const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
 	          //console.log(response);
 	          const user = new User(response.data);
-            props.setCurrentUser(null);
+            props.setCurrentUser(user);
 //	          alert("update logged_in status successfully");
 	          localStorage.removeItem('token');
 
@@ -51,7 +51,7 @@ const UserList = (props) => {
 	          alert(`Something went wrong during updating the logged_in status: \n${handleError(error)}`);
 	        }
 	 }else{
-      props.setCurrentUser(null);
+      props.setCurrentUser(myuser);
 	    history.push('/login');
 	 }
   }

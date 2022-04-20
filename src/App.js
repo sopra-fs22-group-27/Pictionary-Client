@@ -4,10 +4,11 @@ import AppRouter from "components/routing/routers/AppRouter";
 // import 'bootstrap/dist/css/bootstrap.css'
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import * as FiIcons from 'react-icons/fi';
+import User from "models/User";
 import { useEffect, useState } from "react";
 
 const App = () => {
-  const[currentUser, setCurrentUser] = useState(null);
+  const[currentUser, setCurrentUser] = useState(new User());
   useEffect(() => {
     console.log(currentUser);
   }, [currentUser]);
