@@ -7,6 +7,12 @@ import "bootstrap/dist/css/bootstrap.css";
 import ScoreBoard from "components/views/ScoreBoard";
 import { Link, BrowserRouter } from "react-router-dom";
 
+import {useEffect, useState} from 'react';
+import {api, handleError} from 'helpers/api';
+import {useHistory} from 'react-router-dom';
+import User from 'models/User';
+
+
 
 
 /**
@@ -28,14 +34,20 @@ import { Link, BrowserRouter } from "react-router-dom";
 //   }
 //  )
 
-const logout = () => {
-  localStorage.removeItem('token');
-}
+const logout = async (props) => {
+          const status = "OFFLINE";
+//	          alert(logged_in);
+          const requestBody = JSON.stringify({status});
+          const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
+          //console.log(response);
+          const user = new User(response.data);
+          props.setCurrentUser(user);
+//	          alert("update logged_in status successfully");
+          localStorage.removeItem('token');
+        } 
+      
 
 const Header = (props) => (
-
-
-  
   <div className="header">
    <Navbar
       bg="transparent"
@@ -44,11 +56,7 @@ const Header = (props) => (
       expand="lg"
       collapseOnSelect
     >
-      
-
       <Navbar.Brand as={Link} to={{pathname: "/startingpage", state:{myuser:props.currentUser}}}>Pictionary</Navbar.Brand>
-
-
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
