@@ -1,12 +1,34 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import BaseContainer from "components/ui/BaseContainer";
 import 'styles/views/Lobby.scss';
+import {api, handleError} from 'helpers/api';
 
 const CreateGame = () => {  
-    const totalPlayers = 4; //TEMP VALUE
-    const currentPlayers = 2; //TEMP VALUE
+    const [totalPlayers, setTotalPlayers] = useState(1);
+    const [currentPlayers, setCurrentPlayers] = useState(1);
+    const gameToken = window.location.pathname.split('/')[2];
 
-    //get how many users have joined this game in 5 second intervals and display it
+    const getGame = async () => {
+        try {
+          const response = await api.get(`/games/${gameToken}`);
+          console.log(response);
+          setCurrentPlayers(response.data.numberOfPlayers);
+          setTotalPlayers(response.data.numberOfPlayersRequired);
+    
+        } catch (error) {
+          alert(`Something went wrong while joining the lobby: \n${handleError(error)}`);
+          window.location.reload();
+        }
+      };
+
+    useEffect(() => {
+        getGame(gameToken);
+        setInterval(() => {
+            getGame(gameToken);
+        }, 50000);
+    }, []);
+
+    
 
     return (
         <BaseContainer>
