@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
+
 .create-game-container {
     min-width: 680px;
     max-width: 80%;
@@ -50,4 +52,76 @@
     color: #fff;
     font-weight: 600;
     cursor: pointer;
+  }
+
+  .games-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 680px;
+    max-width: 80%;
+    margin: 0 auto;
+  }
+
+  .games-title {
+    font-family: Lato, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 14px;
+    color: #9489DB;
+    text-transform: uppercase;
+    margin-bottom: 1.5em;
+    margin-left: 1em;
+    margin-top: 3em;
+  }
+
+  .game-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    background: rgba(55, 209, 228, 0.1);
+    border-radius: 10px;
+    margin-bottom: 1em;
+    cursor: pointer;
+    &:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
+    }
+  }
+
+  .game-name {
+    font-family: Lato, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 14px;
+    color: #9489DB;
+    text-transform: uppercase;
+    padding-left: 1em;
+  }
+
+  .game-players-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #9489db;
+    border-radius: 50%;
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+  }
+
+  .game-players {
+    font-family: Lato, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    color: #FFFFFF;
+  }
+
+  .game-icon {
+    padding-right: 1em;
+    padding-left: 3em;
   }
