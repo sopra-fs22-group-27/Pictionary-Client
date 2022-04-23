@@ -28,8 +28,8 @@ const UserList = (props) => {
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
   // const location = useLocation();
-  const myuser = props.currentUser;
-  props.setCurrentUser(myuser);
+  const myuser = JSON.parse(localStorage.getItem("user"));
+  // props.setCurrentUser(myuser);
 //  alert(myid);
 
 //  alert("my id is " + myid);
@@ -42,12 +42,13 @@ const UserList = (props) => {
             props.setCurrentUser(user);
 //	          alert("update logged_in status successfully");
 	          localStorage.removeItem('token');
-
+            localStorage.setItem("user", JSON.stringify(user));
 	          history.push('/login');
 	        } catch(error){
 	          alert(`Something went wrong during updating the logged_in status: \n${handleError(error)}`);
 	        }
 	 }else{
+      
       props.setCurrentUser(myuser);
 	    history.push('/login');
 	 }

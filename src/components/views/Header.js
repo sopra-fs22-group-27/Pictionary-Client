@@ -60,10 +60,10 @@ const Header = (props) => (
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
-        {props.currentUser.id !== null?
+        {localStorage.getItem("user").id !== null?
           <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>[Scoreboard]</Nav.Link>
           :<Nav.Link href="/login">[Login]</Nav.Link>}
-        {props.currentUser.id !== null?
+        {localStorage.getItem("user").id !== null?
           <Nav.Link href="/login" onClick={()=> logout()}>[Logout]</Nav.Link>
           :<Nav.Link href="/register">[Register]</Nav.Link>}          
           {/* <Nav.Link href="Change me">Play</Nav.Link>

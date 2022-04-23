@@ -102,7 +102,7 @@ const Register = props => {
       props.setCurrentUser(user);
       // Store the token into the local storage.
       localStorage.setItem('token', user.token);
-
+      localStorage.setItem("user", JSON.stringify(user));
       // Login successfully worked --> navigate to the route /profile in the GameRouter
 //      history.push({pathname:`/profile/${user.id}`, state: {user: user, myuser: user}});
       history.push({pathname:`/userlist`});

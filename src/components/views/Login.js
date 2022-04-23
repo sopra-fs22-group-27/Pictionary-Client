@@ -71,6 +71,7 @@ const Login = (props) => {
       props.setCurrentUser(user);
       // Store the token into the local storage.
       localStorage.setItem("token", user.token);
+      localStorage.setItem("user", JSON.stringify(user));
       //	  alert(user.token);
       // Login successfully worked --> navigate to the route /profile in the ProfileRouter
       //      history.push({pathname:`/profile/${user.id}`, state: {user: user, myuser: user}});
