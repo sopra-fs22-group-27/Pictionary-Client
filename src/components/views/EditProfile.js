@@ -64,10 +64,10 @@ const EditProfile = (props) => {
     var myuser = props.currentUser;
 
     //const [birthday, setBirthday] = useState(null);
-    let [username, setUsername] = useState('');
-    let [password, setPassword] = useState('');
+    let [username, setUsername] = useState(null);
+    let [password, setPassword] = useState(null);
     const [emailError, setEmailError] = useState('');
-    let [email, setEmail] = useState('');
+    let [email, setEmail] = useState(null);
 
     const validateEmail = (e) => {
         //console.log(email);
