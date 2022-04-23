@@ -34,7 +34,7 @@ const Profile = (props) => {
   //console.log(location)
   var { user } = location.state;
 
-  const myuser = props.currentUser;
+  const myuser = JSON.parse(localStorage.getItem("user"));
   const myToken = myuser.token;
   // const userToken = props.match.params.token;
  

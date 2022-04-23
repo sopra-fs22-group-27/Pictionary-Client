@@ -123,7 +123,7 @@ const EditProfile = (props) => {
 
 
   
-        history.push({pathname:`/profile/${myuser.token}`, state:{user:myuser}});
+        history.push({pathname:`/profile/${localStorage.getItem("token")}`, state:{user:myuser}});
       } catch (error) {
         alert(
           `Something went wrong during updating the profile: \n${handleError(

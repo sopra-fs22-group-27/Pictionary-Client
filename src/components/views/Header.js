@@ -56,7 +56,7 @@ const Header = (props) => (
       expand="lg"
       collapseOnSelect
     >
-      <Navbar.Brand as={Link} to={{pathname: "/startingpage", state:{myuser:props.currentUser}}}>Pictionary</Navbar.Brand>
+      <Navbar.Brand as={Link} to={{pathname: "/startingpage", state:{myuser:JSON.parse(localStorage.getItem("user"))}}}>Pictionary</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav className="ms-auto">
