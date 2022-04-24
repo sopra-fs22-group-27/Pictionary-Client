@@ -20,7 +20,8 @@ const ScoreBoard = (props) => {
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
   const location = useLocation();
-  const {myuser} = location.state;
+  const myuser = JSON.parse(localStorage.getItem("user"));
+ 
   // const myuser = props.currentUser;
   console.log(myuser);
   const back = async () => {
@@ -64,6 +65,7 @@ const ScoreBoard = (props) => {
     }
 
     fetchData();
+    props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
   }, []);
 
   // not sure if I should keep the link in there

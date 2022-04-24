@@ -45,7 +45,7 @@ const AppRouter = (props) => {
           <EditProfile currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/scoreboard">
-            <ScoreBoard/>
+          <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
       </Switch>
     </BrowserRouter>

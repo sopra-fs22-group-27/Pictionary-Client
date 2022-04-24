@@ -29,7 +29,7 @@ const UserList = (props) => {
   const [users, setUsers] = useState(null);
   // const location = useLocation();
   const myuser = JSON.parse(localStorage.getItem("user"));
-  // props.setCurrentUser(myuser);
+
 //  alert(myid);
 
 //  alert("my id is " + myid);
@@ -39,16 +39,18 @@ const UserList = (props) => {
 	          const response = await api.put(`/status/${localStorage.getItem("token")}`);
 	          console.log(response);
 	          const user = new User(response.data);
-            props.setCurrentUser(user);
+            props.setCurrentUser(null);
 //	          alert("update logged_in status successfully");
-	          localStorage.removeItem('token');
-            localStorage.setItem("user", JSON.stringify(user));
+	          localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            // window.location.reload();
 	          history.push('/login');
 	        } catch(error){
 	          alert(`Something went wrong during updating the logged_in status: \n${handleError(error)}`);
 	        }
 	 }else{
-      
+      localStorage.removeItem("user");
+      // window.location.reload();
       props.setCurrentUser(myuser);
 	    history.push('/login');
 	 }
@@ -71,6 +73,11 @@ const UserList = (props) => {
   // in this case, the effect hook is only run once, the first time the component is mounted
   // this can be achieved by leaving the second argument an empty array.
   // for more information on the effect hook, please see https://reactjs.org/docs/hooks-effect.html
+  useEffect(() => {
+    if (performance.navigation.type === 1) {
+      props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
+    }
+  }, []);
   useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     async function fetchData() {
@@ -100,7 +107,7 @@ const UserList = (props) => {
     }
 
     fetchData();
-
+    props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
   }, []);
 
   let content = <Spinner/>;

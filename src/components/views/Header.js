@@ -35,15 +35,17 @@ import User from 'models/User';
 //  )
 
 const logout = async (props) => {
+          console.log(JSON.parse(localStorage.getItem("user")));
           const status = "OFFLINE";
 //	          alert(logged_in);
           const requestBody = JSON.stringify({status});
           const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
           //console.log(response);
           const user = new User(response.data);
-          props.setCurrentUser(user);
+          props.setCurrentUser(null);
 //	          alert("update logged_in status successfully");
           localStorage.removeItem('token');
+          localStorage.removeItem('user');
         } 
       
 
@@ -59,11 +61,13 @@ const Header = (props) => (
       <Navbar.Brand as={Link} to={{pathname: "/startingpage", state:{myuser:JSON.parse(localStorage.getItem("user"))}}}>Pictionary</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
+      {/* <div>{JSON.parse(localStorage.getItem("user")).username}</div> */}
         <Nav className="ms-auto">
-        {localStorage.getItem("user").id !== null?
-          <Nav.Link as={Link} to={{pathname: "/scoreboard", state:{myuser:props.currentUser}}}>[Scoreboard]</Nav.Link>
+    
+        {props.currentUser?
+          <Nav.Link href="/scoreboard">[Scoreboard]</Nav.Link>
           :<Nav.Link href="/login">[Login]</Nav.Link>}
-        {localStorage.getItem("user").id !== null?
+        {props.currentUser?
           <Nav.Link href="/login" onClick={()=> logout()}>[Logout]</Nav.Link>
           :<Nav.Link href="/register">[Register]</Nav.Link>}          
           {/* <Nav.Link href="Change me">Play</Nav.Link>

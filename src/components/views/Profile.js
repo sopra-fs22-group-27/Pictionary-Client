@@ -35,6 +35,7 @@ const Profile = (props) => {
   var { user } = location.state;
 
   const myuser = JSON.parse(localStorage.getItem("user"));
+
   const myToken = myuser.token;
   // const userToken = props.match.params.token;
  
@@ -66,8 +67,12 @@ const Profile = (props) => {
   //   setBirthday(e.target.value);
   // }
   //update function
-
-
+  useEffect(() => {
+    if (performance.navigation.type === 1) {
+      props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
+    }
+  }, []);
+  
   const doEdit = async () => {
     try {
 

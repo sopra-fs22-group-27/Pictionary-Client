@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import {Button} from 'components/ui/Button';
 import {useHistory} from 'react-router-dom';
@@ -61,8 +61,8 @@ const EditProfile = (props) => {
     const history = useHistory();
 
     // const location = useLocation();
-    var myuser = props.currentUser;
-
+    const myuser = JSON.parse(localStorage.getItem("user"));
+    // props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
     //const [birthday, setBirthday] = useState(null);
     let [username, setUsername] = useState(null);
     let [password, setPassword] = useState(null);
@@ -80,7 +80,13 @@ const EditProfile = (props) => {
           setEmailError('');
         }
         
+    }
+
+    useEffect(() => {
+      if (performance.navigation.type === 1) {
+        props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
       }
+    }, []);
 
   const back = () => {
     // console.log(myuser)
@@ -116,7 +122,7 @@ const EditProfile = (props) => {
             myuser.email = email;
         }
         props.setCurrentUser(myuser);
-
+        localStorage.setItem("user", JSON.stringify(myuser));
         alert("update successfully");
         // myuser.birthday = birthday;
 
