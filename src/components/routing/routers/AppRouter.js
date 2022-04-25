@@ -9,6 +9,7 @@ import EditProfile from "components/views/EditProfile";
 // import Drawing from "components/views/Drawing";
 import ScoreBoard from "components/views/ScoreBoard";
 import Header from "components/views/Header";
+import CreateGame from "components/views/CreateGame";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -27,6 +28,7 @@ const AppRouter = (props) => {
       <Switch>
         <PrivateRoute exact path="/profile/:token" component={Profile} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         <PrivateRoute exact path="/userlist" component={UserList} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        <PrivateRoute exact path="/creategame" component={CreateGame} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         {/* <Route exact path="/scoreboard" component={ScoreBoard}/> */}
 
         <Route exact path="/login">
@@ -47,6 +49,7 @@ const AppRouter = (props) => {
         <Route exact path="/scoreboard">
           <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
+
       </Switch>
     </BrowserRouter>
   );
