@@ -89,7 +89,7 @@ const Profile = (props) => {
 
   content = (
     <div className="profile">
-      <div>
+{/*       <div>
         {user.token === myToken ? (
           <div className="profile field">
             <label className="profile label">User Token</label>
@@ -103,9 +103,9 @@ const Profile = (props) => {
         ) : (
           <div></div>
         )}
-      </div>
+      </div> */}
       <div className="profile field">
-        <label className="profile label">User username</label>
+        <label className="profile label">Username</label>
         <input
           type="text"
           className="profile input"
@@ -116,7 +116,7 @@ const Profile = (props) => {
       </div>
 
       <div className="profile field">
-        <label className="profile label">User email</label>
+        <label className="profile label">Email</label>
         <input
           type="text"
           className="profile input"
@@ -125,7 +125,7 @@ const Profile = (props) => {
         />
       </div>
       <div className="profile field">
-        <label className="profile label">User creation_date</label>
+        <label className="profile label">Creation Date</label>
         <input
           type="text"
           className="profile input"
@@ -134,11 +134,11 @@ const Profile = (props) => {
         />
       </div>
       <div className="profile field">
-        <label className="profile label">User status</label>
+        <label className="profile label">Status</label>
         <input
           type="text"
           className="profile input"
-          value={user.status === "ONLINE" ? "ONLINE" : "OFFLINE"}
+          value={user.status === "ONLINE" ? "Online" : "Offline"}
           disabled
         />
       </div>
@@ -157,7 +157,7 @@ const Profile = (props) => {
           width="100%"
           onClick={() => history.push({ pathname: `/userlist`, state: myuser })}
         >
-          Inspect others profile
+          Back
         </Button>
       </div>
     </div>
