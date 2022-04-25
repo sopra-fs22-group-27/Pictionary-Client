@@ -10,6 +10,7 @@ import EditProfile from "components/views/EditProfile";
 import ScoreBoard from "components/views/ScoreBoard";
 import Header from "components/views/Header";
 import CreateGame from "components/views/CreateGame";
+import HomePage from "components/views/HomePage";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"
@@ -48,6 +49,10 @@ const AppRouter = (props) => {
         </Route>
         <Route exact path="/scoreboard">
           <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        </Route>
+
+        <Route exact path="/homepage">
+          <HomePage currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
 
       </Switch>

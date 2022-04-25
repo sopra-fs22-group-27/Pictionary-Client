@@ -144,7 +144,19 @@ const UserList = (props) => {
         >
           Create Game
         </Button>
+
+        <ul></ul>
+        <Button
+          width="100%"
+          onClick={() => 
+            history.push({pathname:`/homepage`, state:{myuser:myuser}})
+          }
+        >
+          Home Page
+        </Button>
       </div>
+
+      
     );
   }
 
