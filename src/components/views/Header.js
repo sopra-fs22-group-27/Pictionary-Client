@@ -35,18 +35,25 @@ import User from 'models/User';
 //  )
 
 const logout = async (props) => {
-  console.log(JSON.parse(localStorage.getItem("user")));
-  const status = "OFFLINE";
-//	          alert(logged_in);
-  const requestBody = JSON.stringify({status});
-  const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
-  //console.log(response);
-  const user = new User(response.data);
-  props.setCurrentUser(null);
-//	          alert("update logged_in status successfully");
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-} 
+  if(props.currentUser != null){
+    try{
+          const response = await api.put(`/status/${localStorage.getItem("token")}`);
+          console.log(response);
+          // const user = new User(response.data);
+
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          // window.location.reload();
+
+        } catch(error){
+          alert(`Something went wrong during updating the logged_out status: \n${handleError(error)}`);
+        }
+ }else{
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+ }
+}
 
 
       
@@ -74,7 +81,7 @@ const Header = (props) => (
           <Nav.Link href="/scoreboard">Scoreboard</Nav.Link>
           :<Nav.Link href="/login">Login</Nav.Link>}
         {props.currentUser?
-          <Nav.Link href="/login" onClick={()=> logout()}>Logout</Nav.Link>
+          <Nav.Link href="/login" onClick={()=> logout(props)}>Logout</Nav.Link>
           :<Nav.Link href="/register">Register</Nav.Link>}          
   
           {/* <Nav.Link href="Change me">Play</Nav.Link>
