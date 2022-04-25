@@ -5,12 +5,24 @@ import 'styles/views/HomePage.scss';
 import {api, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';
 import arrowRight from 'resources/arrow-right.svg';
+import { useLocation } from "react-router-dom";
 
 
 const HomePage = () => {  
   const history = useHistory();
   const [games, setGames] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const location = useLocation();
+  //console.log(location)
+
+  const [users, setUsers] = useState(null);
+  const myuser = JSON.parse(localStorage.getItem("user"));
+  //var { user } = location.state;
+
+ 
+  //const myuser = props.currentUser;
+  console.log(myuser);
 
   const fetchGames = async () => {
     try {
@@ -20,9 +32,9 @@ const HomePage = () => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+      console.error(`Something went wrong while fetching the Games: \n${handleError(error)}`);
       console.error('Details:', error);
-      alert('Something went wrong while fetching the users! See the console for details.');
+      alert('Something went wrong while fetching the Games! See the console for details.');
     }
   };
 
@@ -51,7 +63,7 @@ const HomePage = () => {
           <div className='create-game-title'>CONFIGURE YOUR OWN GAME!</div>
           <div className='create-game-text'> Want to be the game master? Customize and host your own game!</div>
         </div>
-        <div className='create-game-button' onClick={() => { history.push('/create-game'); }} > Start Now </div>
+        <div className='create-game-button' onClick={() => history.push({pathname:`/creategame`, state:{myuser:myuser}})} > Start Now </div>
       </div>
     </div>
     {isLoading ? <Spinner/> : 

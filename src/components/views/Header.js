@@ -35,18 +35,20 @@ import User from 'models/User';
 //  )
 
 const logout = async (props) => {
-          console.log(JSON.parse(localStorage.getItem("user")));
-          const status = "OFFLINE";
+  console.log(JSON.parse(localStorage.getItem("user")));
+  const status = "OFFLINE";
 //	          alert(logged_in);
-          const requestBody = JSON.stringify({status});
-          const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
-          //console.log(response);
-          const user = new User(response.data);
-          props.setCurrentUser(null);
+  const requestBody = JSON.stringify({status});
+  const response = await api.put(`/status/${localStorage.getItem("token")}`, requestBody);
+  //console.log(response);
+  const user = new User(response.data);
+  props.setCurrentUser(null);
 //	          alert("update logged_in status successfully");
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-        } 
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+} 
+
+
       
 
 const Header = (props) => (
@@ -58,18 +60,23 @@ const Header = (props) => (
       expand="lg"
       collapseOnSelect
     >
-      <Navbar.Brand as={Link} to={{pathname: "/startingpage", state:{myuser:JSON.parse(localStorage.getItem("user"))}}}>Pictionary</Navbar.Brand>
+      <Navbar.Brand as={Link} to={{pathname: "/homepage", state:{myuser:JSON.parse(localStorage.getItem("user"))}}}>Pictionary</Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
       {/* <div>{JSON.parse(localStorage.getItem("user")).username}</div> */}
         <Nav className="ms-auto">
+
+        {props.currentUser?
+          <Nav.Link as={Link} to={{pathname: "/homepage", state:{myuser:JSON.parse(localStorage.getItem("user"))}}}>Home</Nav.Link>
+          :<Nav.Link href="/startingpage">Home</Nav.Link>}    
     
         {props.currentUser?
-          <Nav.Link href="/scoreboard">[Scoreboard]</Nav.Link>
-          :<Nav.Link href="/login">[Login]</Nav.Link>}
+          <Nav.Link href="/scoreboard">Scoreboard</Nav.Link>
+          :<Nav.Link href="/login">Login</Nav.Link>}
         {props.currentUser?
-          <Nav.Link href="/login" onClick={()=> logout()}>[Logout]</Nav.Link>
-          :<Nav.Link href="/register">[Register]</Nav.Link>}          
+          <Nav.Link href="/login" onClick={()=> logout()}>Logout</Nav.Link>
+          :<Nav.Link href="/register">Register</Nav.Link>}          
+  
           {/* <Nav.Link href="Change me">Play</Nav.Link>
           <Nav.Link href="Change me">Sign out</Nav.Link> */}
 
