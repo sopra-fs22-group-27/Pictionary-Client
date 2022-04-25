@@ -25,7 +25,7 @@ const ScoreBoard = (props) => {
   // const myuser = props.currentUser;
   console.log(myuser);
   const back = async () => {
-    history.push("/userlist");
+    history.push("/homepage");
   };
 
   // the effect hook can be used to react to change in your component.

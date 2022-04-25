@@ -155,7 +155,7 @@ const Profile = (props) => {
       <div className="profile button">
         <Button
           width="100%"
-          onClick={() => history.push({ pathname: `/userlist`, state: myuser })}
+          onClick={() => history.push({ pathname: `/scoreboard`, state: myuser })}
         >
           Back
         </Button>
