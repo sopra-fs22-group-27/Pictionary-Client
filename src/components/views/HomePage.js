@@ -8,7 +8,7 @@ import arrowRight from 'resources/arrow-right.svg';
 import { useLocation } from "react-router-dom";
 
 
-const HomePage = () => {  
+const HomePage = (props) => {  
   const history = useHistory();
   const [games, setGames] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -79,6 +79,12 @@ const HomePage = () => {
     console.log(gameName);
 
   }, [gameName]);
+
+  useEffect(() => {
+    if (performance.navigation.type === 1) {
+      props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
+    }
+  }, []);
 
   return (
   <BaseContainer>

@@ -30,6 +30,7 @@ const AppRouter = (props) => {
         <PrivateRoute exact path="/profile/:token" component={Profile} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         <PrivateRoute exact path="/userlist" component={UserList} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         <PrivateRoute exact path="/creategame" component={CreateGame} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
+        <PrivateRoute exact path="/homepage" component={HomePage} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         {/* <Route exact path="/scoreboard" component={ScoreBoard}/> */}
 
         <Route exact path="/login">
@@ -51,9 +52,9 @@ const AppRouter = (props) => {
           <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
 
-        <Route exact path="/homepage">
+        {/* <Route exact path="/homepage">
           <HomePage currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
-        </Route>
+        </Route> */}
 
       </Switch>
     </BrowserRouter>
