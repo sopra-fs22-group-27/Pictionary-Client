@@ -9,17 +9,6 @@ import PropTypes from "prop-types";
 import "styles/views/Profile.scss";
 import { useLocation } from "react-router-dom";
 
-//const Player = ({item}) => (
-//
-//    <div className="player username">{item}</div>
-//
-//
-//);
-
-//Player.propTypes = {
-//  user: PropTypes.object
-//};
-
 const Profile = (props) => {
   // use react-router-dom's hook to access the history
 
@@ -37,15 +26,9 @@ const Profile = (props) => {
   const myuser = JSON.parse(localStorage.getItem("user"));
 
   const myToken = myuser.token;
-  // const userToken = props.match.params.token;
- 
+
   let content = <Spinner />;
 
-  // const getUser = async() =>{
-  //   getUserToken();
-  //   return await api.get(`/users/${userToken}`);
-  // }
-  
   // var yourDate = new Date(user.birthday);
   // const offset = yourDate.getTimezoneOffset();
   // yourDate = new Date(yourDate.getTime() - (offset*60*1000));
@@ -59,9 +42,6 @@ const Profile = (props) => {
   // const [birthday, setBirthday] = useState(yourDate.toISOString().split('T')[0]);
   const [username, setUsername] = useState(user.username);
 
-  const changeUsername = (e) => {
-    setUsername(e.target.value);
-  };
   // const changeBirthday = (e) =>{
 
   //   setBirthday(e.target.value);
@@ -72,11 +52,10 @@ const Profile = (props) => {
       props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
     }
   }, []);
-  
+
   const doEdit = async () => {
     try {
-
-      history.push({ pathname: `/editProfile/${myToken}`});
+      history.push({ pathname: `/editProfile/${myToken}` });
     } catch (error) {
       alert(
         `Something went wrong during going to the edit Page: \n${handleError(
@@ -85,11 +64,11 @@ const Profile = (props) => {
       );
       window.location.reload();
     }
-  }
+  };
 
   content = (
     <div className="profile">
-{/*       <div>
+      {/*       <div>
         {user.token === myToken ? (
           <div className="profile field">
             <label className="profile label">User Token</label>
@@ -155,7 +134,9 @@ const Profile = (props) => {
       <div className="profile button">
         <Button
           width="100%"
-          onClick={() => history.push({ pathname: `/scoreboard`, state: myuser })}
+          onClick={() =>
+            history.push({ pathname: `/scoreboard`, state: myuser })
+          }
         >
           Back
         </Button>
@@ -164,7 +145,6 @@ const Profile = (props) => {
   );
 
   return (
-    //    <Layout content={content} />}
     <BaseContainer className="profile container">
       <h2>{user.username}</h2>
 

@@ -3,10 +3,8 @@ import Login from "components/views/Login";
 import Register from "components/views/Register"
 import Startingpage from "components/views/Startingpage"
 import Profile from "components/views/Profile"
-import UserList from "components/views/UserList"
 import PrivateRoute from "components/views/PrivateRoute"
 import EditProfile from "components/views/EditProfile";
-// import Drawing from "components/views/Drawing";
 import ScoreBoard from "components/views/ScoreBoard";
 import Header from "components/views/Header";
 import CreateGame from "components/views/CreateGame";
@@ -28,7 +26,6 @@ const AppRouter = (props) => {
       <Header currentUser={props.currentUser} height="100%" />
       <Switch>
         <PrivateRoute exact path="/profile/:token" component={Profile} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
-        <PrivateRoute exact path="/userlist" component={UserList} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         <PrivateRoute exact path="/creategame" component={CreateGame} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         {/* <Route exact path="/scoreboard" component={ScoreBoard}/> */}
 
