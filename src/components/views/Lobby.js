@@ -14,6 +14,12 @@ const CreateGame = () => {
       console.log(response);
       setCurrentPlayers(response.data.numberOfPlayers);
       setTotalPlayers(response.data.numberOfPlayersRequired);
+
+      if(totalPlayers == currentPlayers){
+        const players = response.data.playerTokens;
+        const firstDrawer = Math.floor(Math.random() * players.length);
+        window.location.href = `/game/${gameToken}/drawer/${players[firstDrawer]}`;
+      }
     } catch (error) {
       alert(
         `Something went wrong while joining the lobby: \n${handleError(error)}`
@@ -26,7 +32,7 @@ const CreateGame = () => {
     getGame(gameToken);
     setInterval(() => {
       getGame(gameToken);
-    }, 50000);
+    }, 5000);
   }, []);
 
   return (
