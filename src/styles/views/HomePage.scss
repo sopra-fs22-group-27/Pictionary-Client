@@ -75,6 +75,33 @@
     margin-top: 3em;
   }
 
+  .games-input {
+    margin-bottom: 1.5em;
+    margin-left: 1em;
+    margin-top: 2.5em;
+    font-family: Lato, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 14px;
+    color: #9489DB;
+    text-transform: uppercase;
+    width: 270px;
+    // text-align: center;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    border-image-source: linear-gradient(to right, red, purple, green, blue, violet);
+    border-image-slice: 1;
+  }
+  .game-title-container {
+    // margin-bottom: 1.5em;
+    // margin-left: 1em;
+    // margin-top: 3em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   .game-container {
     display: flex;
     flex-direction: row;
