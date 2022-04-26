@@ -1,3 +1,4 @@
+//#region
 import React, {useState, useEffect} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
@@ -8,6 +9,7 @@ import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import {Link} from 'react-router-dom'
 import validator from 'validator'
+
 /*
 It is possible to add multiple components inside a single file,
 however be sure not to clutter your files with an endless amount!
@@ -69,8 +71,8 @@ const Register = props => {
   const [username, setUsername] = useState(null);
   const [emailError, setEmailError] = useState('');
   const [email, setEmail] = useState('');
-
-  const validateEmail = (e) => {
+//#endregion
+/*   const validateEmail = (e) => {
     //console.log(email);
     setEmail(e.target.value);
     if(validator.isEmail(email)){
@@ -81,7 +83,20 @@ const Register = props => {
       setEmailError('');
     }
     
+  } */
+
+  const emailValidator = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+
+  const validateEmail = (e) => {
+    setEmail(e.target.value);
+    if(email.match(emailValidator)){
+      setEmailError('Valid Email');
+    } else {
+      setEmailError('Invalid Email');
+    }
   }
+
+//#region
   useEffect(() => {
     //console.log("Email message inside useEffect: ", email);
     //console.log("Email message inside useEffect: ", emailError);
@@ -105,7 +120,7 @@ const Register = props => {
       localStorage.setItem("user", JSON.stringify(user));
       // Login successfully worked --> navigate to the route /profile in the GameRouter
 //      history.push({pathname:`/profile/${user.id}`, state: {user: user, myuser: user}});
-      history.push({pathname:`/userlist`});
+      history.push({pathname:`/homepage`});
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
 //      history.push("/register");
@@ -114,7 +129,7 @@ const Register = props => {
 	  window.location.reload();
     }
   };
-
+//#endregion     
   return (
     <BaseContainer>
       <div className="register container">
@@ -134,8 +149,17 @@ const Register = props => {
        <input type="text"
         className="register email"
         placeholder="Enter here.."
-        // value={props.value}
-        onChange={(e) => validateEmail(e)}></input>
+        autoComplete="off"
+
+        //onPaste={(e) => validateEmail(e)}
+        //onInput={(e) => validateEmail(e)}
+
+        // onKeyUp solves the problem of the onPaste and onInput events not working
+        onKeyUp={(e) => validateEmail(e)}
+        onChange={(e) => validateEmail(e)}
+        >
+
+        </input>
         <span style={{
           fontWeight: 'bold',
           color: 'red',
