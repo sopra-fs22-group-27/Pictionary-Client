@@ -12,7 +12,7 @@ const HomePage = () => {
   const history = useHistory();
   const [games, setGames] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [gameName, setGameName] = useState("");
   const location = useLocation();
   //console.log(location)
 
@@ -51,9 +51,34 @@ const HomePage = () => {
     }
   };
 
+  const display = (games) => {
+    if (gameName === ""){
+      var filteredGames = games;
+    }
+    else {
+      var filteredGames = games.filter((game) =>{
+        return game.gameName.toUpperCase().startsWith(gameName.toUpperCase());
+      })
+    }
+    return filteredGames.map(game => (
+      <div className='game-container' key={`game${game.gameToken}`} onClick={() => { joinGame(game.gameToken); }}>
+        <div className='game-name'>{game.gameName}</div>
+        <div className='game-players-wrapper'> 
+          <div className='game-players'>{game.numberOfPlayers}/{game.numberOfPlayersRequired}</div>
+        </div>
+        <img className='game-icon' src={arrowRight} alt='arrow-right' />
+      </div>
+    ))
+  }
+
   useEffect(() => {
     fetchGames();
   }, []);
+
+  useEffect(() => {
+    console.log(gameName);
+
+  }, [gameName]);
 
   return (
   <BaseContainer>
@@ -68,16 +93,12 @@ const HomePage = () => {
     </div>
     {isLoading ? <Spinner/> : 
     <div className='games-container'>
-      <div className='games-title'>Join a game</div>
-      {games.map(game => (
-        <div className='game-container' key={`game${game.gameToken}`} onClick={() => { joinGame(game.gameToken); }}>
-          <div className='game-name'>{game.gameName}</div>
-          <div className='game-players-wrapper'> 
-            <div className='game-players'>{game.numberOfPlayers}/{game.numberOfPlayersRequired}</div>
-          </div>
-          <img className='game-icon' src={arrowRight} alt='arrow-right' />
-        </div>
-      ))}
+      <div className='game-title-container'>
+        <div className='games-title'>Join a game</div>
+        <input label='gameName' className='games-input' placeholder='Search a game by name' 
+          onChange={(e) => setGameName(e.target.value)} value={gameName}></input>
+      </div>
+      {display(games)}
     </div>}
   </BaseContainer>
   );
