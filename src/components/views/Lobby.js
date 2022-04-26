@@ -4,7 +4,7 @@ import "styles/views/Lobby.scss";
 import { api, handleError } from "helpers/api";
 
 const CreateGame = () => {
-  const [totalPlayers, setTotalPlayers] = useState(1);
+  const [totalPlayers, setTotalPlayers] = useState(null);
   const [currentPlayers, setCurrentPlayers] = useState(1);
   const gameToken = window.location.pathname.split("/")[2];
 
@@ -33,7 +33,7 @@ const CreateGame = () => {
     setInterval(() => {
       getGame(gameToken);
     }, 5000);
-  }, []);
+  },);
 
   return (
     <BaseContainer>
