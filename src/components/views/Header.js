@@ -7,13 +7,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import ScoreBoard from "components/views/ScoreBoard";
 import { Link, BrowserRouter } from "react-router-dom";
 
-import {useEffect, useState} from 'react';
-import {api, handleError} from 'helpers/api';
-import {useHistory} from 'react-router-dom';
-import User from 'models/User';
-
-
-
+import { useEffect, useState } from "react";
+import { api, handleError } from "helpers/api";
+import { useHistory } from "react-router-dom";
+import User from "models/User";
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -24,82 +21,96 @@ import User from 'models/User';
  * @FunctionalComponent
  */
 
-//  const linkTarget = (props) => (
-//   {
-//     pathname: "/scoreboard",
-//     key: Math.random, // we could use Math.random, but that's not guaranteed unique.
-//     state: {
-//       myuser: props.currentUser
-//     }
-//   }
-//  )
-
 const logout = async (props) => {
-  if(props.currentUser != null){
-    try{
-          const response = await api.put(`/status/${localStorage.getItem("token")}`);
-          console.log(response);
-          // const user = new User(response.data);
-
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          // window.location.reload();
-
-        } catch(error){
-          alert(`Something went wrong during updating the logged_out status: \n${handleError(error)}`);
-        }
- }else{
+  if (props.currentUser != null) {
+    try {
+      const response = await api.put(
+        `/status/${localStorage.getItem("token")}`
+      );
+      console.log(response);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    } catch (error) {
+      alert(
+        `Something went wrong during updating the logged_out status: \n${handleError(
+          error
+        )}`
+      );
+    }
+  } else {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-
- }
-}
-
-
-      
+  }
+};
 
 const Header = (props) => (
   <div className="header">
-   <Navbar
+    <Navbar
       bg="transparent"
       variant="dark"
       sticky="top"
       expand="lg"
       collapseOnSelect
     >
-      <Navbar.Brand as={Link} to={{pathname: "/homepage", state:{myuser:JSON.parse(localStorage.getItem("user"))}}}>Pictionary</Navbar.Brand>
+      {props.currentUser ? (
+        <Navbar.Brand
+          as={Link}
+          to={{
+            pathname: "/homepage",
+            state: { myuser: JSON.parse(localStorage.getItem("user")) },
+          }}
+        >
+          Pictionary
+        </Navbar.Brand>
+      ) : (
+        <Navbar.Brand as={Link} to={{ pathname: "/startingpage" }}>
+          Pictionary
+        </Navbar.Brand>
+      )}
+
       <Navbar.Toggle />
       <Navbar.Collapse>
-      {/* <div>{JSON.parse(localStorage.getItem("user")).username}</div> */}
+        {/* <div>{JSON.parse(localStorage.getItem("user")).username}</div> */}
         <Nav className="ms-auto">
+          {props.currentUser ? (
+            <Nav.Link
+              as={Link}
+              to={{
+                pathname: "/homepage",
+                state: { myuser: JSON.parse(localStorage.getItem("user")) },
+              }}
+            >
+              Home
+            </Nav.Link>
+          ) : (
+            <Nav.Link href="/startingpage">Home</Nav.Link>
+          )}
 
-        {props.currentUser?
-          <Nav.Link as={Link} to={{pathname: "/homepage", state:{myuser:JSON.parse(localStorage.getItem("user"))}}}>Home</Nav.Link>
-          :<Nav.Link href="/startingpage">Home</Nav.Link>}    
-    
-        {props.currentUser?
-          <Nav.Link href="/scoreboard">Scoreboard</Nav.Link>
-          :<Nav.Link href="/login">Login</Nav.Link>}
-        {props.currentUser?
-          <Nav.Link href="/login" onClick={()=> logout(props)}>Logout</Nav.Link>
-          :<Nav.Link href="/register">Register</Nav.Link>}          
-  
+          {props.currentUser ? (
+            <Nav.Link href="/scoreboard">Scoreboard</Nav.Link>
+          ) : (
+            <Nav.Link href="/login">Login</Nav.Link>
+          )}
+          {props.currentUser ? (
+            <Nav.Link href="/login" onClick={() => logout(props)}>
+              Logout
+            </Nav.Link>
+          ) : (
+            <Nav.Link href="/register">Register</Nav.Link>
+          )}
+
           {/* <Nav.Link href="Change me">Play</Nav.Link>
           <Nav.Link href="Change me">Sign out</Nav.Link> */}
 
-
-{/*           <NavDropdown title={<FiIcons.FiSettings color="white" />}>
+          {/*           <NavDropdown title={<FiIcons.FiSettings color="white" />}>
             <NavDropdown.Item href="Change me">Edit Profile</NavDropdown.Item>
             <NavDropdown.Item href="Change me">Edit whatever</NavDropdown.Item>
             <NavDropdown.Item href="Change me">Sign out </NavDropdown.Item>
           </NavDropdown>
            */}
         </Nav>
-
       </Navbar.Collapse>
     </Navbar>
-    
-
   </div>
 );
 

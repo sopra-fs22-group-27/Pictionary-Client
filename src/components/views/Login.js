@@ -75,7 +75,7 @@ const Login = (props) => {
       //	  alert(user.token);
       // Login successfully worked --> navigate to the route /profile in the ProfileRouter
       //      history.push({pathname:`/profile/${user.id}`, state: {user: user, myuser: user}});
-      history.push({ pathname: `/homepage`});
+      history.push({ pathname: `/homepage` });
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
       window.location.reload();
