@@ -17,7 +17,7 @@
     "validator": "^13.7.0"
   },
   "scripts": {
-    "dev": "react-scripts start",
+    "dev": "react-scripts --openssl-legacy-provider start",
     "start": "serve -s build",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
