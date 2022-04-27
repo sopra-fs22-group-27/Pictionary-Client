@@ -48,58 +48,39 @@ const Game = (props) => {
     x: 0,
     y: 0
   });
+  const gameToken = window.location.pathname.split("/")[2];
+
 
   useEffect(async() => {
-    const response = await api.get('/games/'+window.location.pathname.split("/")[2]);
+    const currentDrawer = window.location.pathname.split("/")[4];
+    const currentUser = localStorage.getItem("token");
         
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
     }
-    if (drawerToken === null){
-        setDrawerToken(response.data.playerTokens[0]);
-    }
-    if (word===null){
-      if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
+    setDrawerToken(currentDrawer);
+
+    if (currentUser === currentDrawer) {
+      setDrawer(true);
+      if (word === null){
         setOpenModal(true)
       }
-    }
-
-    if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
-      setDrawer(true);
     }
   }, []);
 
   useEffect(() => {
     async function sendImage() {
-      var canvas = document.getElementById("canvas");
-      var img = canvas.toDataURL();
-      var gameToken = localStorage.getItem(gameToken)
+      const canvas = document.getElementById("canvas");
+      const img = canvas.toDataURL();
+
       const requestBody = JSON.stringify({img});
       try{
-      const response = await api.put('/games/drawing?gameToken='+window.location.pathname.split("/")[2], requestBody);
+        await api.put('/games/drawing?gameToken=' + gameToken, requestBody);
       }
       catch (error) {
         console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
         console.error("Details:", error);
         alert("Something went wrong while fetching the users! See the console for details.");
-      }
-    }
-    const getImage = async() => {
-      var img = new Image();
-      try{
-      const img2 = await api.get("games/drawing?gameToken="+window.location.pathname.split("/")[2]) 
-      var canvas = document.getElementById("canvas");
-      var context = canvas.getContext('2d');
-      img.onload = function() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(this, 0, 0);
-      }
-      img.src = String(img2.data);
-      }
-      catch (error) {
-      console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-      console.error("Details:", error);
-      alert("Something went wrong while fetching the users! See the console for details.");
       }
     }
 
@@ -115,6 +96,25 @@ const Game = (props) => {
        return()=>clearInterval(interval)
     }
   },); // no [] that after every change is called
+
+  const getImage = async() => {
+    var img = new Image();
+    try{
+    const img2 = await api.get("games/drawing?gameToken=" + gameToken) 
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext('2d');
+    img.onload = function() {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(this, 0, 0);
+    }
+    img.src = String(img2.data);
+    }
+    catch (error) {
+    console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+    console.error("Details:", error);
+    alert("Something went wrong while fetching the users! See the console for details.");
+    }
+  }
 
   const draw = useCallback((x, y) => {
     if (mouseDown && canDraw) {

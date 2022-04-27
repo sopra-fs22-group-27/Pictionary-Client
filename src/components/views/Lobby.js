@@ -20,8 +20,7 @@ const CreateGame = () => {
       if(totalPlayers == currentPlayers){
         const players = response.data.playerTokens;
         const firstDrawer = Math.floor(Math.random() * players.length);
-        history.push({ pathname: `/game/${gameToken}` });
-        //window.location.href = `/game/${gameToken}/drawer/${players[firstDrawer]}`;
+        history.push({ pathname: `/game/${gameToken}/drawer/${players[firstDrawer]}`});
       }
     } catch (error) {
       alert(
