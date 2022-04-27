@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import BaseContainer from "components/ui/BaseContainer";
 import "styles/views/Lobby.scss";
+import { useHistory } from "react-router-dom";
 import { api, handleError } from "helpers/api";
 
 const CreateGame = () => {
+  const history = useHistory();
   const [totalPlayers, setTotalPlayers] = useState(null);
   const [currentPlayers, setCurrentPlayers] = useState(1);
   const gameToken = window.location.pathname.split("/")[2];
@@ -18,7 +20,8 @@ const CreateGame = () => {
       if(totalPlayers == currentPlayers){
         const players = response.data.playerTokens;
         const firstDrawer = Math.floor(Math.random() * players.length);
-        window.location.href = `/game/${gameToken}/drawer/${players[firstDrawer]}`;
+        history.push({ pathname: `/game/${gameToken}` });
+        //window.location.href = `/game/${gameToken}/drawer/${players[firstDrawer]}`;
       }
     } catch (error) {
       alert(
