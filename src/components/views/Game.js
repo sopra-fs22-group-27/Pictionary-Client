@@ -51,51 +51,69 @@ const Game = (props) => {
   const gameToken = window.location.pathname.split("/")[2];
 
 
+  // Only if the page mounts
   useEffect(async() => {
-    const currentDrawer = window.location.pathname.split("/")[4];
-    const currentUser = localStorage.getItem("token");
+    const response = await api.get('/games/'+window.location.pathname.split("/")[2]);
+    //const currentDrawer = window.location.pathname.split("/")[4];
+    //const currentUser = localStorage.getItem("token");
         
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
     }
-    setDrawerToken(currentDrawer);
+/*     setDrawerToken(currentDrawer);
 
     if (currentUser === currentDrawer) {
       setDrawer(true);
       if (word === null){
         setOpenModal(true)
       }
+    } */
+
+    if (drawerToken === null){
+      setDrawerToken(response.data.playerTokens[0]);
     }
+    if (word===null){
+      if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
+        setOpenModal(true)
+      }
+    }
+
+  if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
+    setDrawer(true);
+  }
+  console.log("useEffect with []")
   }, []);
 
+  // Every second --> getting image from backend if guesser
   useEffect(() => {
-    async function sendImage() {
-      const canvas = document.getElementById("canvas");
-      const img = canvas.toDataURL();
+    const interval = setInterval(() => {
+      console.log('This will run every second!');
+      getImage();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-      const requestBody = JSON.stringify({img});
-      try{
-        await api.put('/games/drawing?gameToken=' + gameToken, requestBody);
-      }
-      catch (error) {
-        console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        console.error("Details:", error);
-        alert("Something went wrong while fetching the users! See the console for details.");
-      }
-    }
-
-    //sending image to backend if drawer
+  // Always if there is a change in the drawing --> sending image to backend
+  useEffect(() => {
     if(drawer){
       sendImage();
     }
-    //getting image from backend if guesser
-    if(!drawer){
-      const interval=setInterval(()=>{
-        getImage();
-       },800)
-       return()=>clearInterval(interval)
+  });
+
+  const  sendImage = async() => {
+    const canvas = document.getElementById("canvas");
+    const img = canvas.toDataURL();
+
+    const requestBody = JSON.stringify({img});
+    try{
+      await api.put('/games/drawing?gameToken=' + gameToken, requestBody);
     }
-  },); // no [] that after every change is called
+    catch (error) {
+      console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+      console.error("Details:", error);
+      alert("Something went wrong while fetching the users! See the console for details.");
+    }
+  }
 
   const getImage = async() => {
     var img = new Image();
