@@ -44,6 +44,7 @@ const Game = (props) => {
   const [canDraw, setCanDraw] = useState(true);
   const [drawer, setDrawer] = useState(false); //If true then you are the drawer
   const [drawerToken, setDrawerToken] = useState(null); //Token of the drawer
+  const [guessedWord, setGuessedWord] = useState(""); 
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -81,13 +82,11 @@ const Game = (props) => {
   if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
     setDrawer(true);
   }
-  console.log("useEffect with []")
   }, []);
 
   // Every second --> getting image from backend if guesser
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('This will run every second!');
       getImage();
     }, 1000);
     return () => clearInterval(interval);
@@ -100,7 +99,7 @@ const Game = (props) => {
     }
   });
 
-  const  sendImage = async() => {
+  const sendImage = async() => {
     const canvas = document.getElementById("canvas");
     const img = canvas.toDataURL();
 
@@ -232,23 +231,36 @@ const Game = (props) => {
     return '#' + (Number(`0x1${hex}`) ^ 0xFFFFFF).toString(16).substring(1).toUpperCase()
   }
 
-  const pickWord1 = () => {
+  const pickWord1 = async() => {
     setOpenModal(false);
     setWord(word1.at(0))
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1.at(0));
     setTicking(true)
   }  
 
-  const pickWord2 = () => {
+  const pickWord2 = async() => {
     setOpenModal(false);
     setWord(word2.at(0))
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2.at(0));
     setTicking(true)
   }  
 
-  const pickWord3 = () => {
+  const pickWord3 = async() => {
     setOpenModal(false);
     setWord(word3.at(0))
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3.at(0));
     setTicking(true)
   }  
+
+  const makeGuess = async() =>{
+    const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/word/"+guessedWord);
+    if (response.data){
+      alert("Your guess is correct")
+    }
+    else{
+      alert("Wrong! Try again...")
+    }
+  }
 
 
 
@@ -331,7 +343,7 @@ const Game = (props) => {
             opacity="1" colour={selectedColor} onClick={changeWidth}/>
           </Typography>
           <br />
-          <Typography align='center'><Button  variant="outlined" onClick={() => {setOpenWidthPicker(false); setIsSelectingWidth("outset")}}>Confirm</Button></Typography>
+          <Typography align='center'><Button variant="outlined" onClick={() => {setOpenWidthPicker(false); setIsSelectingWidth("outset")}}>Confirm</Button></Typography>
           <br />
         </Dialog>
       </div>
@@ -353,8 +365,24 @@ const Game = (props) => {
         onMouseMove={onMouseMove}
       />
      <br />
-     <Typography align='center'><Button variant="outlined" onClick={() => alert("I think we can delete this Button")}>Submit</Button></Typography>
+     {
+      !drawer?
+      <div align="center">
+        <form>
+          <label>Enter your guess:
+            <input 
+              type="text" 
+              value={guessedWord}
+              onChange={(e) => setGuessedWord(e.target.value)}
+            />
+          </label>
+          <Button onClick={makeGuess}>submit</Button>         
+          </form>
+      </div>
+      :null
+      }
     </BaseContainer>
+
   );
 }
 

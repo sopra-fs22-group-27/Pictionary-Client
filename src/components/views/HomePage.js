@@ -80,7 +80,7 @@ const HomePage = (props) => {
 
   useEffect(() => {
     fetchGames();
-  }, []);
+  }, [games]);
 
   useEffect(() => {
     console.log(gameName);
