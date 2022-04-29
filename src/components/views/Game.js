@@ -87,10 +87,13 @@ const Game = (props) => {
   // Every second --> getting image from backend if guesser
   useEffect(() => {
     const interval = setInterval(() => {
-      getImage();
+      if (!drawer){
+        console.log("test")
+        getImage();
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  });
 
   // Always if there is a change in the drawing --> sending image to backend
   useEffect(() => {
