@@ -44,6 +44,7 @@ const Game = (props) => {
   const [canDraw, setCanDraw] = useState(true);
   const [drawer, setDrawer] = useState(false); //If true then you are the drawer
   const [drawerToken, setDrawerToken] = useState(null); //Token of the drawer
+  const [guessedWord, setGuessedWord] = useState(""); 
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -51,51 +52,70 @@ const Game = (props) => {
   const gameToken = window.location.pathname.split("/")[2];
 
 
+  // Only if the page mounts
   useEffect(async() => {
-    const currentDrawer = window.location.pathname.split("/")[4];
-    const currentUser = localStorage.getItem("token");
+    const response = await api.get('/games/'+window.location.pathname.split("/")[2]);
+    //const currentDrawer = window.location.pathname.split("/")[4];
+    //const currentUser = localStorage.getItem("token");
         
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
     }
-    setDrawerToken(currentDrawer);
+/*     setDrawerToken(currentDrawer);
 
     if (currentUser === currentDrawer) {
       setDrawer(true);
       if (word === null){
         setOpenModal(true)
       }
+    } */
+
+    if (drawerToken === null){
+      setDrawerToken(response.data.playerTokens[0]);
     }
+    if (word===null){
+      if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
+        setOpenModal(true)
+      }
+    }
+
+  if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
+    setDrawer(true);
+  }
   }, []);
 
+  // Every second --> getting image from backend if guesser
   useEffect(() => {
-    async function sendImage() {
-      const canvas = document.getElementById("canvas");
-      const img = canvas.toDataURL();
-
-      const requestBody = JSON.stringify({img});
-      try{
-        await api.put('/games/drawing?gameToken=' + gameToken, requestBody);
+    const interval = setInterval(() => {
+      if (!drawer){
+        console.log("test")
+        getImage();
       }
-      catch (error) {
-        console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        console.error("Details:", error);
-        alert("Something went wrong while fetching the users! See the console for details.");
-      }
-    }
+    }, 1000);
+    return () => clearInterval(interval);
+  });
 
-    //sending image to backend if drawer
+  // Always if there is a change in the drawing --> sending image to backend
+  useEffect(() => {
     if(drawer){
       sendImage();
     }
-    //getting image from backend if guesser
-    if(!drawer){
-      const interval=setInterval(()=>{
-        getImage();
-       },800)
-       return()=>clearInterval(interval)
+  });
+
+  const sendImage = async() => {
+    const canvas = document.getElementById("canvas");
+    const img = canvas.toDataURL();
+
+    const requestBody = JSON.stringify({img});
+    try{
+      await api.put('/games/drawing?gameToken=' + gameToken, requestBody);
     }
-  },); // no [] that after every change is called
+    catch (error) {
+      console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+      console.error("Details:", error);
+      alert("Something went wrong while fetching the users! See the console for details.");
+    }
+  }
 
   const getImage = async() => {
     var img = new Image();
@@ -214,23 +234,36 @@ const Game = (props) => {
     return '#' + (Number(`0x1${hex}`) ^ 0xFFFFFF).toString(16).substring(1).toUpperCase()
   }
 
-  const pickWord1 = () => {
+  const pickWord1 = async() => {
     setOpenModal(false);
     setWord(word1.at(0))
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1.at(0));
     setTicking(true)
   }  
 
-  const pickWord2 = () => {
+  const pickWord2 = async() => {
     setOpenModal(false);
     setWord(word2.at(0))
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2.at(0));
     setTicking(true)
   }  
 
-  const pickWord3 = () => {
+  const pickWord3 = async() => {
     setOpenModal(false);
     setWord(word3.at(0))
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3.at(0));
     setTicking(true)
   }  
+
+  const makeGuess = async() =>{
+    const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/word/"+guessedWord);
+    if (response.data){
+      alert("Your guess is correct")
+    }
+    else{
+      alert("Wrong! Try again...")
+    }
+  }
 
 
 
@@ -313,7 +346,7 @@ const Game = (props) => {
             opacity="1" colour={selectedColor} onClick={changeWidth}/>
           </Typography>
           <br />
-          <Typography align='center'><Button  variant="outlined" onClick={() => {setOpenWidthPicker(false); setIsSelectingWidth("outset")}}>Confirm</Button></Typography>
+          <Typography align='center'><Button variant="outlined" onClick={() => {setOpenWidthPicker(false); setIsSelectingWidth("outset")}}>Confirm</Button></Typography>
           <br />
         </Dialog>
       </div>
@@ -335,8 +368,24 @@ const Game = (props) => {
         onMouseMove={onMouseMove}
       />
      <br />
-     <Typography align='center'><Button variant="outlined" onClick={() => alert("I think we can delete this Button")}>Submit</Button></Typography>
+     {
+      !drawer?
+      <div align="center">
+        <form>
+          <label>Enter your guess:
+            <input 
+              type="text" 
+              value={guessedWord}
+              onChange={(e) => setGuessedWord(e.target.value)}
+            />
+          </label>
+          <Button onClick={makeGuess}>submit</Button>         
+          </form>
+      </div>
+      :null
+      }
     </BaseContainer>
+
   );
 }
 

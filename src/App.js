@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
-    console.log(currentUser);
+    //console.log(currentUser);
   }, [currentUser]);
   useEffect(() => {
     window.addEventListener("storage", () => {

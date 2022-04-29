@@ -53,7 +53,7 @@ const AppRouter = (props) => {
         <Route exact path="/lobby/:token">
           <Lobby/>
         </Route>
-        <Route exact path="/game/:token/drawer/:token">
+        <Route exact path="/game/:token"> 
             <Game/>
         </Route>
 
