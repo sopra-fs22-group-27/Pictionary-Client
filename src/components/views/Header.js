@@ -92,7 +92,7 @@ const Header = (props) => (
             <Nav.Link href="/login">Login</Nav.Link>
           )}
           {props.currentUser ? (
-            <Nav.Link href="/login" onClick={() => logout(props)}>
+            <Nav.Link as={Link} to={{pathname:"/login"}} onClick={() => logout(props)}>
               Logout
             </Nav.Link>
           ) : (
