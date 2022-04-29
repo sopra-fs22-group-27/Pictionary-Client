@@ -13,12 +13,13 @@ const CreateGame = () => {
   const getGame = async () => {
     try {
       const response = await api.get(`/games/${gameToken}`);
-      console.log(response);
+      const full = await api.get(`/games/${gameToken}/full`);
+      console.log(full);
       setCurrentPlayers(response.data.numberOfPlayers);
       setTotalPlayers(response.data.numberOfPlayersRequired);
 
-      if(totalPlayers == currentPlayers){
-        const players = response.data.playerTokens;
+      if(full.data){
+        //const players = response.data.playerTokens;
         history.push({ pathname: `/game/${gameToken}`});
         //const firstDrawer = Math.floor(Math.random() * players.length);
         //history.push({ pathname: `/game/${gameToken}/drawer/${players[firstDrawer]}`});
@@ -33,10 +34,11 @@ const CreateGame = () => {
 
   useEffect(() => {
     getGame(gameToken);
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       getGame(gameToken);
     }, 5000);
-  },);
+    return () => clearInterval(intervalId);
+  },[]);
 
   return (
     <BaseContainer>

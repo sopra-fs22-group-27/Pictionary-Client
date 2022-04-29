@@ -54,7 +54,8 @@ const Game = (props) => {
 
   // Only if the page mounts
   useEffect(async() => {
-    const response = await api.get('/games/'+window.location.pathname.split("/")[2]);
+    const response = await api.get('/gameRound/'+window.location.pathname.split("/")[2]);
+    //const gameInfo = await api.get('/game/'+window.location.pathname.split("/")[2]);
     //const currentDrawer = window.location.pathname.split("/")[4];
     //const currentUser = localStorage.getItem("token");
         
@@ -71,15 +72,15 @@ const Game = (props) => {
     } */
 
     if (drawerToken === null){
-      setDrawerToken(response.data.playerTokens[0]);
+      setDrawerToken(response.data.drawerToken);
     }
     if (word===null){
-      if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
+      if (localStorage.getItem("token")===response.data.drawerToken){ 
         setOpenModal(true)
       }
     }
 
-  if (localStorage.getItem("token")===response.data.playerTokens[0]){ //response.data.playerTokens[0] is also the drawerToken if this useEffect is finished. Here it always takes the first player in the list.
+  if (localStorage.getItem("token")===response.data.drawerToken){
     setDrawer(true);
   }
   }, []);
@@ -88,7 +89,6 @@ const Game = (props) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (!drawer){
-        console.log("test")
         getImage();
       }
     }, 1000);
@@ -158,8 +158,20 @@ const Game = (props) => {
     setSelectedWidth(e)
   }
 
-  const finishDrawing = () => {
+  const finishDrawing = async() => {
     setCanDraw(false)
+    alert("This Round is finished")
+    try{
+      await api.put('/nextRound/' + gameToken);
+      //refresh because of timer
+      //also statement because the backend makes 409 if there arent rounds left! we should recognize in the fronted beforehand
+      
+    }
+    catch (error) {
+      console.error(`Something went wrong while going to other GameRound: \n${handleError(error)}`);
+      console.error("Details:", error);
+      alert("Something went wrong while going to other GameRound! See the console for details.");
+    }
   }
 
   const clear = () => {
@@ -256,7 +268,7 @@ const Game = (props) => {
   }  
 
   const makeGuess = async() =>{
-    const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/word/"+guessedWord);
+    const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
     if (response.data){
       alert("Your guess is correct")
     }
@@ -297,7 +309,7 @@ const Game = (props) => {
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
        <CountdownCircleTimer
           isPlaying={ticking}
-          duration={60} //here we can add the time which is selected
+          duration={10} //here we can add the time which is selected
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[60, 30, 10, 0]}
           // need to implement further
