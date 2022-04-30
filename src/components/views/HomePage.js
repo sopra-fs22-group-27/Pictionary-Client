@@ -14,7 +14,7 @@ const HomePage = (props) => {
   const [gameName, setGameName] = useState("");
 
   const myuser = JSON.parse(localStorage.getItem("user"));
-  console.log(myuser);
+  // console.log(myuser);
 
   const fetchGames = async () => {
     try {

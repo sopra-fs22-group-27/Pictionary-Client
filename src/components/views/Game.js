@@ -1,6 +1,7 @@
 import BaseContainer from "components/ui/BaseContainer";
 import { api, handleError } from "helpers/api";
 import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { CirclePicker } from 'react-color';
 import LineWidthPicker from 'react-line-width-picker'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
@@ -50,7 +51,10 @@ const Game = (props) => {
     y: 0
   });
   const gameToken = window.location.pathname.split("/")[2];
-
+  // const [currentGameRound, setCurrentGameRound] = useState(0);
+  // const [gameIsOver, setGameIsOver] = useState(false);
+  
+  const history = useHistory();
 
   // Only if the page mounts
   useEffect(async() => {
@@ -91,7 +95,7 @@ const Game = (props) => {
       if (!drawer){
         getImage();
       }
-    }, 1000);
+    }, 10);
     return () => clearInterval(interval);
   });
 
@@ -102,6 +106,52 @@ const Game = (props) => {
     }
   });
 
+  //
+  // useEffect(() => {
+  //   if(drawer && ticking){
+  //     console.log("dsfsdfsd")
+  //     startRound();
+  //   }
+  // }, [])
+
+  // get current round
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if(!drawer && !ticking){
+        fetchRound();
+      }
+    }, 100);
+    return () => clearInterval(interval);
+    
+  });
+
+  const fetchRound = async() => {
+    try{
+      const response = await api.get('/games/' + gameToken);
+      const game = response.data;
+      const round = game.currentGameRound;
+      console.log(round);
+      // setCurrentGameRound(round);
+      if(localStorage.getItem('currentGameRound')===null){
+        localStorage.setItem('currentGameRound', 0);
+      }else{
+        if(!drawer && localStorage.getItem('currentGameRound') != round && round != 0){
+          // console.log(localStorage.getItem('currentGameRound'))
+          // console.log(round)
+          // localStorage.setItem('currentGameRound', round);
+          setTicking(true);
+        }
+      }
+    }
+    catch (error) {
+      console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
+      console.error("Details:", error);
+      alert("Something went wrong while fetching the round! See the console for details.");
+    }
+  }
+
+ 
+  
   const sendImage = async() => {
     const canvas = document.getElementById("canvas");
     const img = canvas.toDataURL();
@@ -157,14 +207,9 @@ const Game = (props) => {
   const changeWidth = (e) =>{
     setSelectedWidth(e)
   }
-
-  const finishDrawing = async() => {
-    setCanDraw(false)
-    alert("This Round is finished")
+  const startRound = async() => {
     try{
       await api.put('/nextRound/' + gameToken);
-      //refresh because of timer
-      //also statement because the backend makes 409 if there arent rounds left! we should recognize in the fronted beforehand
       
     }
     catch (error) {
@@ -172,6 +217,42 @@ const Game = (props) => {
       console.error("Details:", error);
       alert("Something went wrong while going to other GameRound! See the console for details.");
     }
+  }
+  
+  const finishDrawing = async() => {
+    setCanDraw(false)
+    try{
+      const response = await api.get('/games/' + gameToken);
+      const game = response.data;
+      const round = game.currentGameRound;
+      // console.log(round);
+      localStorage.setItem('currentGameRound', round);
+      console.log(game.numberOfRounds);
+      if(round === game.numberOfRounds){
+        alert("This game is over");
+        localStorage.removeItem('currentGameRound');
+        history.push({pathname: "/homepage",});
+      } else{
+        alert("This Round is finished")
+        //refresh because of timer
+        //also statement because the backend makes 409 if there arent rounds left! we should recognize in the fronted beforehand
+      
+        //wait for three seconds and refresh
+        setInterval(() => {
+          console.log("wait for three second");
+          window.location.reload();
+    }, 3000);
+      }
+    }
+    catch (error) {
+      console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
+      console.error("Details:", error);
+      alert("Something went wrong while fetching the round! See the console for details.");
+    }
+
+    
+   
+    
   }
 
   const clear = () => {
@@ -251,6 +332,7 @@ const Game = (props) => {
     setWord(word1.at(0))
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1.at(0));
     setTicking(true)
+    await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord2 = async() => {
@@ -258,6 +340,7 @@ const Game = (props) => {
     setWord(word2.at(0))
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2.at(0));
     setTicking(true)
+    await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord3 = async() => {
@@ -265,6 +348,7 @@ const Game = (props) => {
     setWord(word3.at(0))
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3.at(0));
     setTicking(true)
+    await api.put('/nextRound/' + gameToken);
   }  
 
   const makeGuess = async() =>{
@@ -276,7 +360,6 @@ const Game = (props) => {
       alert("Wrong! Try again...")
     }
   }
-
 
 
 
