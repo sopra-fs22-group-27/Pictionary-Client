@@ -353,14 +353,22 @@ const Game = (props) => {
   }  
 
   const makeGuess = async() =>{
-    const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
-    if (response.data){
-      alert("Your guess is correct")
-    }
-    else{
-      alert("Wrong! Try again...")
+    try{
+      const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
+      console.log(response.data)
+      if (response.data){
+        alert("Your guess is correct")
+      }
+      else{
+        alert("Wrong! Try again...")
+      }
+    } catch (error) {
+      console.error(`Something went wrong while sending the guessword: \n${handleError(error)}`);
+      console.error("Details:", error);
+      alert("Something went wrong while sending the guessword! See the console for details.");
     }
   }
+    
 
 
 
