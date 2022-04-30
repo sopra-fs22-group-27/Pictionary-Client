@@ -161,9 +161,9 @@ const Game = (props) => {
       await api.put('/games/drawing?gameToken=' + gameToken, requestBody);
     }
     catch (error) {
-      console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+      console.error(`Something went wrong while sending the images: \n${handleError(error)}`);
       console.error("Details:", error);
-      alert("Something went wrong while fetching the users! See the console for details.");
+      alert("Something went wrong while sending the images! See the console for details.");
     }
   }
 
@@ -180,9 +180,9 @@ const Game = (props) => {
     img.src = String(img2.data);
     }
     catch (error) {
-    console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
+    console.error(`Something went wrong while fetching the images: \n${handleError(error)}`);
     console.error("Details:", error);
-    alert("Something went wrong while fetching the users! See the console for details.");
+    alert("Something went wrong while fetching the images! See the console for details.");
     }
   }
 
@@ -207,17 +207,17 @@ const Game = (props) => {
   const changeWidth = (e) =>{
     setSelectedWidth(e)
   }
-  const startRound = async() => {
-    try{
-      await api.put('/nextRound/' + gameToken);
+  // const startRound = async() => {
+  //   try{
+  //     await api.put('/nextRound/' + gameToken);
       
-    }
-    catch (error) {
-      console.error(`Something went wrong while going to other GameRound: \n${handleError(error)}`);
-      console.error("Details:", error);
-      alert("Something went wrong while going to other GameRound! See the console for details.");
-    }
-  }
+  //   }
+  //   catch (error) {
+  //     console.error(`Something went wrong while going to other GameRound: \n${handleError(error)}`);
+  //     console.error("Details:", error);
+  //     alert("Something went wrong while going to other GameRound! See the console for details.");
+  //   }
+  // }
   
   const finishDrawing = async() => {
     setCanDraw(false)
@@ -240,6 +240,7 @@ const Game = (props) => {
         //wait for three seconds and refresh
         setInterval(() => {
           console.log("wait for three second");
+          window.location.reload();
           window.location.reload();
     }, 3000);
       }
