@@ -95,7 +95,7 @@ const Game = (props) => {
       if (!drawer){
         getImage();
       }
-    }, 10);
+    }, 1000);
     return () => clearInterval(interval);
   });
 
