@@ -357,7 +357,8 @@ const Game = (props) => {
     await api.put('/nextRound/' + gameToken);
   }  
 
-  const makeGuess = async() =>{
+  const makeGuess = async(e) =>{
+    e.preventDefault();
     try{
       const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
       //console.log(response.data)
@@ -375,9 +376,6 @@ const Game = (props) => {
     }
   }
     
-
-
-
   return (
     <BaseContainer className="drawing container">
 
@@ -481,7 +479,7 @@ const Game = (props) => {
      {
       !drawer?
       <div align="center">
-        <form>
+        <form onSubmit={makeGuess}>
           <label>Enter your guess:
             <input 
               type="text" 
@@ -489,7 +487,7 @@ const Game = (props) => {
               onChange={(e) => setGuessedWord(e.target.value)}
             />
           </label>
-          <Button onClick={makeGuess} disabled={guessed} onKeyPress={makeGuess}>submit</Button>         
+          <Button type="submit" disabled={guessed}>submit</Button>         
           </form>
       </div>
       :null
