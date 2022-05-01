@@ -46,6 +46,8 @@ const Game = (props) => {
   const [drawer, setDrawer] = useState(false); //If true then you are the drawer
   const [drawerToken, setDrawerToken] = useState(null); //Token of the drawer
   const [guessedWord, setGuessedWord] = useState(""); 
+  const [roundLength, setRoundLength] = useState(60); //How long the round should be
+  const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -59,6 +61,7 @@ const Game = (props) => {
   // Only if the page mounts
   useEffect(async() => {
     const response = await api.get('/gameRound/'+window.location.pathname.split("/")[2]);
+    const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
     //const gameInfo = await api.get('/game/'+window.location.pathname.split("/")[2]);
     //const currentDrawer = window.location.pathname.split("/")[4];
     //const currentUser = localStorage.getItem("token");
@@ -74,6 +77,9 @@ const Game = (props) => {
         setOpenModal(true)
       }
     } */
+    if (roundLength===60){
+      setRoundLength(game.data.roundLength)
+    }
 
     if (drawerToken === null){
       setDrawerToken(response.data.drawerToken);
@@ -130,7 +136,6 @@ const Game = (props) => {
       const response = await api.get('/games/' + gameToken);
       const game = response.data;
       const round = game.currentGameRound;
-      console.log(round);
       // setCurrentGameRound(round);
       if(localStorage.getItem('currentGameRound')===null){
         localStorage.setItem('currentGameRound', 0);
@@ -355,9 +360,10 @@ const Game = (props) => {
   const makeGuess = async() =>{
     try{
       const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
-      console.log(response.data)
+      //console.log(response.data)
       if (response.data){
         alert("Your guess is correct")
+        setGuessed(true);
       }
       else{
         alert("Wrong! Try again...")
@@ -401,7 +407,7 @@ const Game = (props) => {
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
        <CountdownCircleTimer
           isPlaying={ticking}
-          duration={10} //here we can add the time which is selected
+          duration={roundLength} //here we can add the time which is selected
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[60, 30, 10, 0]}
           // need to implement further
@@ -483,7 +489,7 @@ const Game = (props) => {
               onChange={(e) => setGuessedWord(e.target.value)}
             />
           </label>
-          <Button onClick={makeGuess}>submit</Button>         
+          <Button onClick={makeGuess} disabled={guessed} onKeyPress={makeGuess}>submit</Button>         
           </form>
       </div>
       :null
