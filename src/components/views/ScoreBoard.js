@@ -18,9 +18,9 @@ const ScoreBoard = (props) => {
   // a component can have as many state variables as you like.
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
-  const myuser = JSON.parse(localStorage.getItem("user"));
+  const myuser = JSON.parse(localStorage.getItem('user'));
 
-  console.log(myuser);
+  // console.log(myuser);
   const back = async () => {
     history.push("/homepage");
   };
@@ -29,6 +29,28 @@ const ScoreBoard = (props) => {
   // in this case, the effect hook is only run once, the first time the component is mounted
   // this can be achieved by leaving the second argument an empty array.
   // for more information on the effect hook, please see https://reactjs.org/docs/hooks-effect.html
+  useEffect(() => {
+    async function fetchMyUser(){
+      try{
+        const response = await api.get("/users/" + localStorage.getItem('token'));
+        const myuser = response.data;
+        localStorage.setItem('user', JSON.stringify(myuser));
+
+      } catch (error) {
+        console.error(
+          `Something went wrong while getting myuser: \n${handleError(
+            error
+          )}`
+        );
+        console.error("Details:", error);
+        alert(
+          "Something went wrong while getting myuser. See the console for details."
+        );
+      }
+    }
+    fetchMyUser();
+  }, [])
+
   useEffect(() => {
     // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
     async function fetchData() {
