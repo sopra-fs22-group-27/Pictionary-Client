@@ -362,7 +362,7 @@ const Game = (props) => {
       const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
       //console.log(response.data)
       if (response.data){
-        alert("Your guess is correct")
+        alert("Your guess is correct! You get 10p")
         setGuessed(true);
       }
       else{

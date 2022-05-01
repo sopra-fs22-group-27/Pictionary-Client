@@ -36,7 +36,7 @@ const CreateGame = () => {
     getGame(gameToken);
     const intervalId = setInterval(() => {
       getGame(gameToken);
-    }, 5000);
+    }, 2000);
     return () => clearInterval(intervalId);
   },[]);
 
