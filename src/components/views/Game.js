@@ -13,7 +13,7 @@ import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
+import { FaUndo, FaRedo, FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
 import "styles/views/Game.scss";
 // import { IconName } from "react-icons/fi";
 
@@ -37,6 +37,8 @@ const Game = (props) => {
   const [isDrawing, setIsDrawing] = useState("inset");
   const [isErasing, setIsErasing] = useState("outset");
   const [isDeleting, setIsDeleting] = useState("outset");
+  const [isUndoing, setIsUndoing] = useState("outset");
+  const [isRedoing, setIsRedoing] = useState("outset");
   const [isSelectingColor, setIsSelectingColor] = useState("outset");
   const [isSelectingWidth, setIsSelectingWidth] = useState("outset");
   const [openModal, setOpenModal] = useState(false);
@@ -52,11 +54,24 @@ const Game = (props) => {
     x: 0,
     y: 0
   });
+
+  const [undoIndex, setUndoIndex] = useState(-1);
+  const [redoIndex, setRedoIndex] = useState(-1);
+  const [undoArray, setUndoArray] = useState([]);
+  const [redoArray, setRedoArray] = useState([]);
+
   const gameToken = window.location.pathname.split("/")[2];
   // const [currentGameRound, setCurrentGameRound] = useState(0);
   // const [gameIsOver, setGameIsOver] = useState(false);
   
   const history = useHistory();
+
+  useEffect(() => {
+    console.log(undoArray);
+    console.log(redoArray);
+    console.log(undoIndex);
+    console.log(redoIndex);
+  }, [undoArray, redoArray, undoIndex, redoIndex])
 
   // Only if the page mounts
   useEffect(async() => {
@@ -262,11 +277,17 @@ const Game = (props) => {
   }
 
   const clear = () => {
-    setIsDeleting("inset")
-    setTimeout(() => {
-      setIsDeleting("outset")
-    }, 100)
-    ctx.current.clearRect(0, 0, ctx.current.canvas.width, ctx.current.canvas.height)
+    if(window.confirm("delete all or not?")){
+      setIsDeleting("inset")
+      setTimeout(() => {
+        setIsDeleting("outset")
+      }, 100)
+      ctx.current.clearRect(0, 0, ctx.current.canvas.width, ctx.current.canvas.height)
+      setUndoArray([]);
+      setUndoArray([]);
+      setUndoIndex(-1);
+      setRedoIndex(-1);
+    } 
   }
   
   const erase = () => {
@@ -289,12 +310,60 @@ const Game = (props) => {
         y: e.nativeEvent.offsetY
       })
       setMouseDown(true)
+      setRedoArray([]);
+      setRedoIndex(-1);
     }
   }
 
   const onMouseUp = (e) => {
     if (drawer){
       setMouseDown(false)
+      if (e.type !== 'mouseleave'){
+        setUndoArray([...undoArray, ctx.current.getImageData(0, 0, ctx.current.canvas.width, ctx.current.canvas.height)]);
+        setUndoIndex(undoIndex + 1);
+        
+      }
+    }
+  }
+
+  const undoLast = (e) => {
+    if(drawer){
+      if(undoIndex <= 0){
+        setUndoIndex(-1);
+        setUndoArray([]);
+        if(undoIndex == 0){
+          setRedoArray([...redoArray, undoArray.pop()]);
+          setUndoArray([]);
+          setUndoIndex(-1);
+          setRedoIndex(redoIndex + 1);
+          ctx.current.clearRect(0, 0, ctx.current.canvas.width, ctx.current.canvas.height)
+        }
+      } else{
+        setRedoArray([...redoArray, undoArray.pop()]);
+        ctx.current.putImageData(undoArray[undoIndex - 1], 0, 0);
+        setUndoIndex(undoIndex - 1);
+        setRedoIndex(redoIndex + 1);
+      }
+      setIsUndoing("inset")
+      setTimeout(() => {
+        setIsUndoing("outset")
+      }, 100)
+    }
+  }
+
+  const redoLast = (e) => {
+    if(drawer){
+      if(redoIndex >= 0){
+        
+        ctx.current.putImageData(redoArray[redoIndex], 0, 0);
+        setUndoArray([...undoArray, redoArray.pop()]);
+        setUndoIndex(undoIndex + 1);
+        setRedoIndex(redoIndex - 1);
+      }
+      setIsRedoing("inset")
+      setTimeout(() => {
+        setIsRedoing("outset")
+      }, 100)
     }
   }
 
@@ -420,6 +489,8 @@ const Game = (props) => {
         <h1 className="drawing h1">Draw the Word: <h2 className="drawing h2">{word}</h2></h1>
         <div className="drawing settings">      
         <div className="drawing icons">
+          <FaUndo display={drawer} className="drawing undo"  title="click to undo last stroke" style={{border:isUndoing}} size={"2.2em"} onClick={undoLast}/>
+          <FaRedo display={drawer} className="drawing redo"  title="click to redo last stroke" style={{border:isRedoing}} size={"2.2em"} onClick={redoLast}/>
           <FaTrashAlt display={drawer} className="drawing trash"  title="click to erase all" style={{border:isDeleting}} size={"2.2em"} onClick={clear}/>
           <FaPen className="drawing pen" title="click to draw" style={{color:selectedColor, border:isDrawing}} size={"2.2em"} onClick={paint}/>
           <BsBorderWidth className="drawing pen" title="click to change linewidth" style={{border:isSelectingWidth}} size={"2.2em"} onClick={() => {setOpenWidthPicker(true); setIsSelectingWidth("inset")}}/>
