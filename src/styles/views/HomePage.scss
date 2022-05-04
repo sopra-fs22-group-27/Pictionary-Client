@@ -54,6 +54,19 @@
     cursor: pointer;
   }
 
+  .form-text-input {
+    border: none;   
+    border-radius: 3px;
+    padding: 0.5em;
+    text-align: center;
+    // font-weight: 600;
+    // font-size: 20;
+    // font-style: normal;
+    // font-weight: 600;
+    // font-size: 14px;    
+    // // color: red;
+  }
+
   .games-container {
     display: flex;
     flex-direction: column;
