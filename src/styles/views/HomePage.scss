@@ -88,6 +88,21 @@
     margin-top: 3em;
   }
 
+  .select-gametype-button{
+    font-family: Lato, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 14px;
+    color: #9489DB;
+    text-transform: uppercase;
+    margin-bottom: 1.5em;
+    margin-left: 1em;
+    margin-top: 2.5em;
+    border: none;
+    background-color: #FFFFFF;
+  }
+
   .games-input {
     margin-bottom: 1.5em;
     margin-left: 1em;
@@ -129,6 +144,17 @@
     &:hover {
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.14);
     }
+  }
+
+  .game-status {
+    font-family: Lato, Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 14px;
+    color: #5acfb9;
+    // text-transform: uppercase;
+    padding-left: 1em;
   }
 
   .game-name {

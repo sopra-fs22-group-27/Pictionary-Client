@@ -15,12 +15,15 @@ import Typography from '@mui/material/Typography';
 const HomePage = (props) => {  
   const history = useHistory();
   const [games, setGames] = useState(null);
+  const [joinableGames, setJoinableGames] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingPartial, setIsLoadingPartial] = useState(true);
   const [gameName, setGameName] = useState("");
   const [password, setPassword] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [gameToken, setGameToken] = useState(null);
-
+  const [seeAllGames, setSeeAllGames] = useState(true);
+  
   const myuser = JSON.parse(localStorage.getItem("user"));
   // console.log(myuser);
 
@@ -38,6 +41,24 @@ const HomePage = (props) => {
       console.error("Details:", error);
       alert(
         "Something went wrong while fetching the Games! See the console for details."
+      );
+    }
+  };
+
+  const fetchJoinableGames = async () => {
+    try {
+      const response = await api.get("/joinable-games");
+      setJoinableGames(response.data);
+      if (response.data.length > 0) {
+        setIsLoadingPartial(false);
+      }
+    } catch (error) {
+      console.error(
+        `Something went wrong while fetching the joinable Games: \n${handleError(error)}`
+      );
+      console.error("Details:", error);
+      alert(
+        "Something went wrong while fetching the joinable Games! See the console for details."
       );
     }
   };
@@ -87,8 +108,9 @@ const HomePage = (props) => {
               {game.isPublic 
                 ? <BsFillUnlockFill title="this game doesn't need password to enter" style={{ marginLeft:"2em", color:"green"}} size={"2.2em"} /> 
                 : <BsFillLockFill title="this game needs password to enter" style={{marginLeft: "2em", color:"red"}} size={"2.2em"} />}
+              <div className="game-status">{game.gameStatus}</div>
               <div className="game-players-wrapper">
-              
+                
                 <div className="game-players">
                   
                   {game.numberOfPlayers}/{game.numberOfPlayersRequired}
@@ -102,6 +124,10 @@ const HomePage = (props) => {
   useEffect(() => {
     fetchGames();
   }, [games]);
+
+  useEffect(() => {
+    fetchJoinableGames();
+  }, [joinableGames]);
 
   useEffect(() => {
     console.log(gameName);
@@ -140,14 +166,15 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-      {isLoading ? <Spinner/> : 
+      {isLoading && isLoadingPartial? <Spinner/> : 
       <div className='games-container'>
         <div className='game-title-container'>
           <div className='games-title'>Join a game</div>
+          <button className="select-gametype-button" onClick={() => setSeeAllGames(!seeAllGames)}>{seeAllGames? "All Games" : "Joinable Games"}</button>
           <input label='gameName' className='games-input' placeholder='Search a game by name' 
             onChange={(e) => setGameName(e.target.value)} value={gameName}></input>
         </div>
-        {display(games)}
+        {seeAllGames? display(games): display(joinableGames)}
       </div>}
     </BaseContainer>
     <Dialog 
