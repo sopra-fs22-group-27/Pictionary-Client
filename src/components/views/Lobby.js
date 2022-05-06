@@ -8,7 +8,20 @@ const CreateGame = () => {
   const history = useHistory();
   const [totalPlayers, setTotalPlayers] = useState(null);
   const [currentPlayers, setCurrentPlayers] = useState(1);
+  const [allowedToCancelLobby, setAllowedToCancelLobby] = useState(false);
   const gameToken = window.location.pathname.split("/")[2];
+
+  const deleteGame = async () => {
+    try {
+      await api.delete(`/games/${gameToken}`);
+      history.push("/");
+    } catch (error) {
+      console.log(handleError(error));
+      alert(
+        `Something went wrong during the game deletion: \n${handleError(error)}`
+      );
+    }
+  }
 
   const getGame = async () => {
     try {
@@ -25,14 +38,24 @@ const CreateGame = () => {
         //history.push({ pathname: `/game/${gameToken}/drawer/${players[firstDrawer]}`});
       }
     } catch (error) {
+      //if 404, game has been deleted, redirect to home
+      if(error.response.status === 404){
+        alert("Game has been deleted by the creator");
+        history.push("/");
+      } else {
       alert(
         `Something went wrong while joining the lobby: \n${handleError(error)}`
       );
+      }
       window.location.reload();
     }
   };
 
   useEffect(() => {
+    const createdGame = localStorage.getItem("createdGame");
+    if (createdGame == gameToken) {
+      setAllowedToCancelLobby(true);
+    }
     getGame(gameToken);
     const intervalId = setInterval(() => {
       getGame(gameToken);
@@ -47,6 +70,11 @@ const CreateGame = () => {
         <div className="lobby-numbers">
           {currentPlayers}/{totalPlayers}
         </div>
+        {allowedToCancelLobby && (
+          <div className="lobby-cancel-button" onClick={() => deleteGame()}>
+            Cancel game
+            </div>
+        )}
       </div>
     </BaseContainer>
   );
