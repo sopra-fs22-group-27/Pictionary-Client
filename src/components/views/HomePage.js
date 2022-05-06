@@ -122,11 +122,17 @@ const HomePage = (props) => {
   }
 
   useEffect(() => {
-    fetchGames();
+    let timer = setTimeout(() => fetchGames(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [games]);
 
   useEffect(() => {
-    fetchJoinableGames();
+    let timer = setTimeout(() => fetchJoinableGames(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [joinableGames]);
 
   useEffect(() => {
@@ -166,7 +172,7 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-      {isLoading && isLoadingPartial? <Spinner/> : 
+      {isLoading || isLoadingPartial? <Spinner/> : 
       <div className='games-container'>
         <div className='game-title-container'>
           <div className='games-title'>Join a game</div>
@@ -186,7 +192,7 @@ const HomePage = (props) => {
       <Typography align="center">
         <input
               className="form-text-input"
-              type="text"
+              type="password"
               placeholder="Enter password"
               value={password}
               style={{ width: "100%" }}

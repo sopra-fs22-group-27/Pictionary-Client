@@ -203,6 +203,10 @@ const CreateGame = () => {
                 (isPublic || (!isPublic && password !== ""))
               ) {
                 createGame();
+              } else if (password === ""){
+                alert(
+                  "Password can't be empty"
+                );
               } else {
                 alert(
                   "Please fill all fields and make sure all numbers are positive"
