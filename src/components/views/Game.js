@@ -249,6 +249,15 @@ const Game = (props) => {
       localStorage.setItem('currentGameRound', round);
       console.log(game.numberOfRounds);
       if(round === game.numberOfRounds){
+        if(drawer){
+          try{
+            await api.put(`/games/${gameToken}/updateStatus`);
+          } catch(error) {
+            console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
+            console.error("Details:", error);
+            alert("Something went wrong while updating game status! See the console for details.");
+          }
+        }
         alert("This game is over");
         localStorage.removeItem('currentGameRound');
         history.push({pathname: "/homepage",});
@@ -259,7 +268,7 @@ const Game = (props) => {
       
         //wait for three seconds and refresh
         setInterval(() => {
-          console.log("wait for three second");
+          console.log("wait for three seconds");
           window.location.reload();
           window.location.reload();
     }, 3000);
