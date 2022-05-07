@@ -204,7 +204,7 @@ const CreateGame = () => {
                 (isPublic || (!isPublic && password !== ""))
               ) {
                 createGame();
-              } else if (password === ""){
+              } else if (password === "" && !isPublic){
                 alert(
                   "Password can't be empty"
                 );
