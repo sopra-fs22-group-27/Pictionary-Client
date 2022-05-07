@@ -1,6 +1,9 @@
 @import 'styles/theme';
 
 .header {
+  position: sticky;
+  top: 0;
+  width: 100%;
   background: linear-gradient(139.06deg, #F277D0 -1.91%, #9489DB 46.6%, #37D1E5 112.6%, #5ACFB9 162.3%);
 }
 

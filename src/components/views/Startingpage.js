@@ -7,6 +7,7 @@ import "styles/views/Startingpage.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import Video from "./Video";
 
 const Startingpage = (props) => {
   const history = useHistory();
@@ -20,23 +21,9 @@ const Startingpage = (props) => {
   };
 
   return (
-    <BaseContainer>
-      <div className="startingpage container">
-        <div className="startingpage form">
-          <div className="startingpage center">Starting Page</div>
-          <div className="startingpage button-container">
-            <Button width="100%" onClick={redirect2register}>
-              Register
-            </Button>
-          </div>
-          <div className="startingpage button-container">
-            <Button width="100%" onClick={redirect2login}>
-              Login
-            </Button>
-          </div>
-        </div>
-      </div>
-    </BaseContainer>
+    <div>
+    <Video />
+    </div>
   );
 };
 

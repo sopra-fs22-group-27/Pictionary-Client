@@ -1,0 +1,91 @@
+#video {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.hero {
+    height: 100vh;
+    width: 100%;
+    object-fit: contain;
+}
+
+.hero .content {
+    text-align: center;
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    top: 40vh;
+}
+
+.hero .content h1 {
+    font-size: 4rem;
+    color: #fff;
+}
+
+.hero p {
+    font-size: 1.8rem;
+    font-weight: 200;
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+    color: #fff;
+}
+
+.hero .btn {
+    margin: 1rem .2rem;
+}
+
+.hero2 {
+    height: 100vh;
+    width: 100%;
+    object-fit: contain;
+}
+
+.hero2 .content {
+    text-align: center;
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    height: 55%;
+    top: 100vh;
+}
+
+.hero2 .content h1 {
+    font-size: 4rem;
+    color: #fff;
+}
+
+
+.hero2 text {
+    text-align: justify;
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 1.6rem;
+    color: #fff;
+}
+
+.hero2 h3 {
+    text-align: left;
+    font-size: 2rem;
+    font-weight: 200;
+    margin-bottom: 1.6rem;
+    color: #fff;
+}
+
+.hero2 .btn {
+    margin: 1rem .2rem;
+}
+
+@media screen and (max-width:640px) {
+    .content h1 {
+        font-size: 3rem;
+    }
+
+    .content p {
+        font-size: 1.4rem;
+        margin-bottom: 1.6rem;
+    }
+}
