@@ -50,6 +50,7 @@ const Video = (props) => {
                 As a guesser, you can see the drawing of the drawer. 
                 Your goal should be to be as fast as possible in guessing the correct word for the drawing. 
                 If you guess the drawing, you will receive points. If your guess is wrong you loose points. 
+                Guess fast, time is your enemy.
                 </text>
                 </Col>
             </Row>
