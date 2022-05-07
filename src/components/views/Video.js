@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useHistory } from "react-router-dom";
 import '../../styles/views/VideoStyles.scss'
-import beachVideo from 'resources/beach.mp4'
+import mainVideo from 'resources/video1.mp4'
 import firstgif from 'resources/first_gif.gif'
 import secondgif from 'resources/second_gif.gif'
 import Container from 'react-bootstrap/Container'
@@ -23,7 +23,7 @@ const Video = (props) => {
     return (
         <div className='hero'>
             <video autoPlay loop muted id='video'>
-                <source src={beachVideo} type='video/mp4' />
+                <source src={mainVideo} type='video/mp4' />
             </video>
             <div className='content'>
                 <h1>Pictionary</h1>
