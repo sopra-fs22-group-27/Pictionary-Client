@@ -172,7 +172,7 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-      {isLoading || isLoadingPartial? <Spinner/> : 
+      {!games? <Spinner/> : 
       <div className='games-container'>
         <div className='game-title-container'>
           <div className='games-title'>Join a game</div>
