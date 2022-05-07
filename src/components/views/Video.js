@@ -47,11 +47,9 @@ const Video = (props) => {
                 <Col>
                 <h3>Guesser</h3>
                 <text class="text-justify">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lectus enim, vulputate lobortis magna ut, 
-                eleifend tempor dui. Sed orci lorem, dapibus sed dapibus in, euismod vel lacus. Donec placerat tellus elit. 
-                Sed sit amet varius orci, faucibus pellentesque lectus. Vestibulum at felis eu arcu tempus molestie a vel arcu. 
-                Nullam tempus justo nunc, sed iaculis ante interdum sit amet. Nunc in euismod arcu. Mauris arcu lorem, imperdiet 
-                efficitur magna
+                As a guesser, you can see the drawing of the drawer. 
+                Your goal should be to be as fast as possible in guessing the correct word for the drawing. 
+                If you guess the drawing, you will receive points. If your guess is wrong you loose points. 
                 </text>
                 </Col>
             </Row>
@@ -62,11 +60,10 @@ const Video = (props) => {
                 <Col>
                 <h3>Drawer</h3>
                 <text class="text-justify">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lectus enim, vulputate lobortis magna ut, 
-                eleifend tempor dui. Sed orci lorem, dapibus sed dapibus in, euismod vel lacus. Donec placerat tellus elit. 
-                Sed sit amet varius orci, faucibus pellentesque lectus. Vestibulum at felis eu arcu tempus molestie a vel arcu. 
-                Nullam tempus justo nunc, sed iaculis ante interdum sit amet. Nunc in euismod arcu. Mauris arcu lorem, imperdiet 
-                efficitur magna
+                As a drawer, you have the possibility to draw the given word as good as you can. 
+                You can choose between different colours, additional thickness of the pencil and more. 
+                Your goal is to draw the word in a way such that the guessers are able to get some points. 
+                Your drawing skills get graded by the Google Vision API and you can receive additional points for a perfect drawing. 
                 </text>
                 </Col>
                 <Col><img src={secondgif} alt="loading..." /></Col>
