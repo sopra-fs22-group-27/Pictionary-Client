@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import '../../styles/views/VideoStyles.scss'
 import beachVideo from 'resources/beach.mp4'
 import firstgif from 'resources/first_gif.gif'
+import secondgif from 'resources/second_gif.gif'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -59,6 +60,7 @@ const Video = (props) => {
             <Container>
             <Row>
                 <Col>
+                <h3>Drawer</h3>
                 <text class="text-justify">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lectus enim, vulputate lobortis magna ut, 
                 eleifend tempor dui. Sed orci lorem, dapibus sed dapibus in, euismod vel lacus. Donec placerat tellus elit. 
@@ -67,10 +69,9 @@ const Video = (props) => {
                 efficitur magna
                 </text>
                 </Col>
-                <Col>Picture</Col>
+                <Col><img src={secondgif} alt="loading..." /></Col>
             </Row>
             </Container>
-            <Container>Maybe Team here</Container>
             </div>
             </div>
         </div>
