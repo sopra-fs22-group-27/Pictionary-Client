@@ -563,11 +563,11 @@ const Game = (props) => {
           <label>Enter your guess:
             <input 
               type="text" 
-              value={guessedWord}
+              value={guessedWord.toLowerCase()}
               onChange={(e) => setGuessedWord(e.target.value)}
             />
           </label>
-          <Button type="submit" disabled={guessed}>submit</Button>         
+          <Button type="submit" disabled={guessed || !guessedWord} >submit</Button>         
           </form>
       </div>
       :null
