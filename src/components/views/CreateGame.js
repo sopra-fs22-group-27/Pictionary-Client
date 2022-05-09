@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import { api, handleError } from "helpers/api";
@@ -12,6 +12,8 @@ const CreateGame = () => {
   const [numberOfRounds, setNumberOfRounds] = useState(10);
   const numberOfPlayers = 1; //the creator of the game is always in the game
   const gameStatus = "waiting"; //possile values: waiting, started, finished
+  const [isPublic, setIsPublic] = useState(true);
+  const [password, setPassword] = useState("");
 
   const createGame = async () => {
     try {
@@ -29,6 +31,8 @@ const CreateGame = () => {
         roundLength,
         numberOfRounds,
         gameStatus,
+        isPublic,
+        password
       });
       console.log(requestBody);
       const response = await api.post("/games?userToken=" + playerTokens, requestBody);
@@ -156,6 +160,37 @@ const CreateGame = () => {
             </button>
           </div>
         </div>
+        <div className="form-checkbox-container">
+          <div className="form-text-checkbox">
+            <div className="form-text-title">Game is private?</div>
+          
+            <input
+              className="form-checkbox"
+              type="checkbox"
+              value={isPublic}
+              onChange={() => {
+                setIsPublic(!isPublic);
+                if(isPublic){
+                  setPassword("");
+                }
+              }}
+            />
+          </div>
+           <div className="form-text-input">
+            {!isPublic
+              ? <input
+                  className="form-text-input"
+                  type="text"
+                  placeholder="Enter your password"
+                  value={password}
+                  style={{ width: "100%", fontSize:"14px" }}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+              : null}
+          </div>
+        </div>
         <div className="form-button">
           <button
             className="form-button-start"
@@ -164,9 +199,14 @@ const CreateGame = () => {
                 gameName.length > 0 &&
                 numberOfPlayersRequired > 0 &&
                 roundLength > 0 &&
-                numberOfRounds > 0
+                numberOfRounds > 0 &&
+                (isPublic || (!isPublic && password !== ""))
               ) {
                 createGame();
+              } else if (password === "" && !isPublic){
+                alert(
+                  "Password can't be empty"
+                );
               } else {
                 alert(
                   "Please fill all fields and make sure all numbers are positive"
