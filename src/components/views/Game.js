@@ -18,13 +18,10 @@ import "styles/views/Game.scss";
 // import { IconName } from "react-icons/fi";
 
 var randomPictionaryWords = require('word-pictionary-list');
-var word1 = randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()})
-var word2 = randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()})
-var word3 = randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()})
 
 
-const Game = (props) => {
 
+const Game = () => {
   const canvasRef = useRef(null);
   const ctx = useRef(null);
 
@@ -59,6 +56,10 @@ const Game = (props) => {
   const [redoIndex, setRedoIndex] = useState(-1);
   const [undoArray, setUndoArray] = useState([]);
   const [redoArray, setRedoArray] = useState([]);
+  const [word1, setWord1] = useState(null);
+  const [word2, setWord2] = useState(null);
+  const [word3, setWord3] = useState(null);
+
 
   const gameToken = window.location.pathname.split("/")[2];
   // const [currentGameRound, setCurrentGameRound] = useState(0);
@@ -75,38 +76,63 @@ const Game = (props) => {
 
   // Only if the page mounts
   useEffect(async() => {
-    const response = await api.get('/gameRound/'+window.location.pathname.split("/")[2]);
-    const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
-    //const gameInfo = await api.get('/game/'+window.location.pathname.split("/")[2]);
-    //const currentDrawer = window.location.pathname.split("/")[4];
-    //const currentUser = localStorage.getItem("token");
-        
-    if (canvasRef.current) {
-      ctx.current = canvasRef.current.getContext('2d');
-    }
-/*     setDrawerToken(currentDrawer);
-
-    if (currentUser === currentDrawer) {
-      setDrawer(true);
-      if (word === null){
-        setOpenModal(true)
+    if (localStorage.getItem("words") !== 'null' && localStorage.getItem("words").split(",")[0]) {
+      setWord1(localStorage.getItem("words").split(",")[0]);
+      setWord2(localStorage.getItem("words").split(",")[1]);
+      setWord3(localStorage.getItem("words").split(",")[2]);
+    } else {
+      const nrOfWords = 3;
+      const randomWords = [];
+      for (let i = 0; i < nrOfWords; i++) {
+        randomWords.push( randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()}));
       }
-    } */
+      setWord1(randomWords[0]);
+      setWord2(randomWords[1]);
+      setWord3(randomWords[2]);
+      localStorage.setItem("words", randomWords);
+    }
+  
+    const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
     if (roundLength===60){
       setRoundLength(game.data.roundLength)
     }
+    if (canvasRef.current) {
+      ctx.current = canvasRef.current.getContext('2d');
+    }
 
-    if (drawerToken === null){
+    if (localStorage.getItem("drawerToken") == 'null') {
+      const response = await api.get('/gameRound/'+window.location.pathname.split("/")[2]);
+      //const gameInfo = await api.get('/game/'+window.location.pathname.split("/")[2]);
+      //const currentDrawer = window.location.pathname.split("/")[4];
+      //const currentUser = localStorage.getItem("token");
+          
+   
+  /*     setDrawerToken(currentDrawer);
+      if (currentUser === currentDrawer) {
+        setDrawer(true);
+        if (word === null){
+          setOpenModal(true)
+        }
+      } */
       setDrawerToken(response.data.drawerToken);
-    }
-    if (word===null){
-      if (localStorage.getItem("token")===response.data.drawerToken){ 
-        setOpenModal(true)
+      localStorage.setItem("drawerToken", response.data.drawerToken);
+      
+      if (word === null){
+        if (localStorage.getItem("token") === response.data.drawerToken){ 
+          setOpenModal(true)
+          setDrawer(true);
+        }
       }
-    }
-
-  if (localStorage.getItem("token")===response.data.drawerToken){
-    setDrawer(true);
+    } else {
+      setDrawerToken(localStorage.getItem("drawerToken"));
+      setWord(localStorage.getItem("selectedWord"));
+      if (localStorage.getItem("token") === localStorage.getItem("drawerToken")){
+        if (localStorage.getItem("selectedWord") == 'null') {
+          setOpenModal(true)
+        }
+        setDrawer(true);
+        setTicking(true);
+      }
   }
   }, []);
 
@@ -241,6 +267,8 @@ const Game = (props) => {
   
   const finishDrawing = async() => {
     setCanDraw(false)
+    localStorage.setItem('drawerToken', null);
+    localStorage.setItem('selectedWord', null);
     try{
       const response = await api.get('/games/' + gameToken);
       const game = response.data;
@@ -278,11 +306,7 @@ const Game = (props) => {
       console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
       console.error("Details:", error);
       alert("Something went wrong while fetching the round! See the console for details.");
-    }
-
-    
-   
-    
+    }  
   }
 
   const clear = () => {
@@ -413,25 +437,31 @@ const Game = (props) => {
 
   const pickWord1 = async() => {
     setOpenModal(false);
-    setWord(word1.at(0))
-    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1.at(0));
+    setWord(word1)
+    localStorage.setItem('selectedWord', word1);
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1);
     setTicking(true)
+    localStorage.setItem('words', null);
     await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord2 = async() => {
     setOpenModal(false);
-    setWord(word2.at(0))
-    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2.at(0));
+    setWord(word2)
+    localStorage.setItem('selectedWord', word2);
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2);
     setTicking(true)
+    localStorage.setItem('words', null);
     await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord3 = async() => {
     setOpenModal(false);
-    setWord(word3.at(0))
-    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3.at(0));
+    setWord(word3)
+    localStorage.setItem('selectedWord', word3);
+    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3);
     setTicking(true)
+    localStorage.setItem('words', null);
     await api.put('/nextRound/' + gameToken);
   }  
 
@@ -456,7 +486,6 @@ const Game = (props) => {
     
   return (
     <BaseContainer className="drawing container">
-
     <Modal
         open={openModal}
         //onClose={handleCloseModal} //would close if you click outside of the modal
@@ -488,14 +517,13 @@ const Game = (props) => {
           colorsTime={[60, 30, 10, 0]}
           // need to implement further
           onComplete={finishDrawing}>
-          {({ remainingTime }) => remainingTime}
+          {({ remainingTime }) => remainingTime}       
         </CountdownCircleTimer>
     </div>
 
-    {
-      drawer?
+    {drawer ?
       <div>
-        <h1 className="drawing h1">Draw the Word: <h2 className="drawing h2">{word}</h2></h1>
+        <div className="drawing h1">Draw the Word: <div className="drawing h2">{word}</div></div>
         <div className="drawing settings">      
         <div className="drawing icons">
           <FaUndo display={drawer} className="drawing undo"  title="click to undo last stroke" style={{border:isUndoing}} size={"2.2em"} onClick={undoLast}/>
