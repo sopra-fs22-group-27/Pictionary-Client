@@ -140,6 +140,8 @@ const Register = (props) => {
               onKeyUp={(e) => validateEmail(e)}
               onChange={(e) => validateEmail(e)}
             ></input>
+          </div>
+          {emailError === "Invalid Email" ? (
             <span
               style={{
                 fontWeight: "bold",
@@ -150,7 +152,18 @@ const Register = (props) => {
             >
               {emailError}
             </span>
-          </div>
+          ) : (
+            <span
+              style={{
+                fontWeight: "bold",
+                color: "green",
+                fontSize: "10px",
+                marginBottom: "15px",
+              }}
+            >
+              {emailError}
+            </span>
+          )}
 
           <FormField2
             label="Password"
