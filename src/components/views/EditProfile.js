@@ -145,6 +145,7 @@ const EditProfile = (props) => {
               onKeyUp={(e) => validateEmail(e)}
               onChange={(e) => validateEmail(e)}
             ></input>
+          {emailError === "Invalid Email" ? (
             <span
               style={{
                 fontWeight: "bold",
@@ -155,6 +156,18 @@ const EditProfile = (props) => {
             >
               {emailError}
             </span>
+          ) : (
+            <span
+              style={{
+                fontWeight: "bold",
+                color: "green",
+                fontSize: "10px",
+                marginBottom: "15px",
+              }}
+            >
+              {emailError}
+            </span>
+          )}
           </div>
 
           <Button
