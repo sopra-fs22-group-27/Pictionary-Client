@@ -15,6 +15,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { FaUndo, FaRedo, FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
 import "styles/views/Game.scss";
+import Chatbox from "./Chatbox";
 // import { IconName } from "react-icons/fi";
 
 var randomPictionaryWords = require('word-pictionary-list');
@@ -572,6 +573,7 @@ const Game = (props) => {
       </div>
       :null
       }
+      {ticking && <Chatbox user={JSON.parse(localStorage.getItem('user'))} gameToken={gameToken} />}
     </BaseContainer>
 
   );

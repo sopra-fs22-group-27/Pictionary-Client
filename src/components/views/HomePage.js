@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
+import Chatbox from "./Chatbox";
 
 const HomePage = (props) => {  
   const history = useHistory();
@@ -208,6 +209,7 @@ const HomePage = (props) => {
       <br />
 
     </Dialog>
+    {/* <Chatbox user={JSON.parse(localStorage.getItem('user'))} gameToken={gameToken} /> */}
   </div>
   );
 };

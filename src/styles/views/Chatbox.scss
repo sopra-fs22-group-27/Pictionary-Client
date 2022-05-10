@@ -1,0 +1,129 @@
+@import 'styles/theme';  
+  
+  .c-container{
+    position: relative;
+  }
+  
+  .register-text{
+    position: fixed;
+    padding:30px;
+    box-shadow:0 2.8px 2.2px rgba(0, 0, 0, 0.034),0 6.7px 5.3px rgba(0, 0, 0, 0.048),0 12.5px 10px rgba(0, 0, 0, 0.06),0 22.3px 17.9px rgba(0, 0, 0, 0.072),0 41.8px 33.4px rgba(0, 0, 0, 0.086),0 100px 80px rgba(0, 0, 0, 0.12);
+    top:35%;
+    left:32%;
+    display: flex;
+
+    flex-direction: row;
+  }
+  .chat-box{
+    width: 50%;
+    box-shadow:0 2.8px 2.2px rgba(0, 0, 0, 0.034),0 6.7px 5.3px rgba(0, 0, 0, 0.048),0 12.5px 10px rgba(0, 0, 0, 0.06),0 22.3px 17.9px rgba(0, 0, 0, 0.072),0 41.8px 33.4px rgba(0, 0, 0, 0.086),0 100px 80px rgba(0, 0, 0, 0.12);
+    margin:40px 50px;
+    height: 500px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .member-list{
+    width: 20%;
+    font-size: 0.7em;
+  }
+  
+  .chat-content{
+    width:80%;
+    margin-left: 10px;
+  }
+  
+  .chat-messages{
+    height: 90%;
+    border: 1px solid #000;
+    overflow-y: scroll;
+    // scrollbar-color: ;
+    // scrollbar-track-color: aqua;
+    // overflow-x: scroll;
+    ::-webkit-scrollbar {
+      width: 20px;
+    }
+    text-overflow: ellipsis;
+    font-size: 1em;
+  }
+  
+  .send-message{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .input-message{
+    width:90%;
+    border-radius: 50px;
+  }
+  
+  ul {
+    padding: 0;
+    list-style-type: none;
+  }
+  .send-button{
+    width:10%;
+    border-radius: 50px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  .member{
+    padding: 10px;
+    background: #eee;
+    border:#000;
+    cursor: pointer;
+    margin: 5px 2px;
+    box-shadow: 0 8px 8px -4px lightblue;
+  }
+  .member.active{
+    background: blueviolet;
+    color:#fff;
+  }
+  .member:hover{
+    background: grey;
+    color:#fff;
+  }
+  
+  .avatar{
+    background-color: cornflowerblue;
+    padding: 3px 5px;
+    border-radius: 5px;
+    color:#fff;
+    font-size: 1em;
+    // margin-left: 1em;
+  }
+  .avatar.self{
+    color:#000;
+    background-color: yellowgreen;
+    font-size: 1em;
+    padding: 3px 5px;
+    border-radius: 5px;
+    // text-align: center;
+    // margin-left: 1em;
+    // max-height: 30px;
+  }
+  
+  .message{
+    padding:2px;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    margin: 2px 5px;
+    height: auto;
+    font-size: 0.8em;
+    padding: 2px 5px;
+  }
+  .message-data{
+    padding: 2px 5px;
+  }
+  .message.self{
+
+    color: black;
+    padding: 2px 5px;
+    
+  }
+
+
