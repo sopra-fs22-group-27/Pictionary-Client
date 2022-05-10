@@ -76,7 +76,7 @@ const Game = () => {
 
   // Only if the page mounts
   useEffect(async() => {
-    if (localStorage.getItem("words") !== 'null' && localStorage.getItem("words").split(",")[0]) {
+    if (localStorage.getItem("words") !== 'null' && localStorage.getItem("words") !== null) {
       setWord1(localStorage.getItem("words").split(",")[0]);
       setWord2(localStorage.getItem("words").split(",")[1]);
       setWord3(localStorage.getItem("words").split(",")[2]);
@@ -93,9 +93,9 @@ const Game = () => {
     }
   
     const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
-    if (roundLength===60){
+    // if (roundLength===60){
       setRoundLength(game.data.roundLength)
-    }
+    // }
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
     }
@@ -131,7 +131,6 @@ const Game = () => {
           setOpenModal(true)
         }
         setDrawer(true);
-        setTicking(true);
       }
   }
   }, []);
@@ -181,6 +180,9 @@ const Game = () => {
       if(localStorage.getItem('currentGameRound')===null){
         localStorage.setItem('currentGameRound', 0);
       }else{
+        if(!drawer && localStorage.getItem('selectedWord') !== 'null') {
+          setTicking(true);
+        }
         if(!drawer && localStorage.getItem('currentGameRound') != round && round != 0){
           // console.log(localStorage.getItem('currentGameRound'))
           // console.log(round)
@@ -523,7 +525,7 @@ const Game = () => {
 
     {drawer ?
       <div>
-        <div className="drawing h1">Draw the Word: <div className="drawing h2">{word}</div></div>
+        {word !== 'null' && <div className="drawing h1">Draw the Word: <div className="drawing h2">{word}</div></div>}
         <div className="drawing settings">      
         <div className="drawing icons">
           <FaUndo display={drawer} className="drawing undo"  title="click to undo last stroke" style={{border:isUndoing}} size={"2.2em"} onClick={undoLast}/>
