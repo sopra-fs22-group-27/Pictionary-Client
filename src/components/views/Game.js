@@ -1,8 +1,9 @@
 import BaseContainer from "components/ui/BaseContainer";
 import { api, handleError } from "helpers/api";
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { CirclePicker } from 'react-color';
+import { Spinner } from "components/ui/Spinner";
 import LineWidthPicker from 'react-line-width-picker'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import 'react-line-width-picker/dist/index.css'
@@ -47,6 +48,7 @@ const Game = () => {
   const [guessedWord, setGuessedWord] = useState(""); 
   const [roundLength, setRoundLength] = useState(60); //How long the round should be
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
+  const [users, setUsers] = useState(null); //for the score during the game
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -134,6 +136,12 @@ const Game = () => {
         setTicking(true);
       }
   }
+  const user_score = api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
+  var arr = [];
+  for (const [key, value] of Object.entries((await user_score).data)) {
+    arr.push(`${key}: ${value}`)
+  }
+  setUsers(arr);
   }, []);
 
   // Every second --> getting image from backend if guesser
@@ -482,8 +490,18 @@ const Game = () => {
       console.error("Details:", error);
       alert("Something went wrong while sending the guessword! See the console for details.");
     }
+    console.log(users)
   }
-    
+
+  let score = <Spinner />;
+
+  if (users!==null) {
+    score = (
+      users.map((item) =>
+      <h4>{item}</h4>)
+    );
+  };
+
   return (
     <BaseContainer className="drawing container">
     <Modal
@@ -600,6 +618,12 @@ const Game = () => {
       </div>
       :null
       }
+
+      <div className="drawing scores">
+        <h2>Points:</h2>  
+        {score} 
+      </div>
+
     </BaseContainer>
 
   );
