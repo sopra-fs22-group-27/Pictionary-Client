@@ -124,7 +124,7 @@ const Game = () => {
         }
       }
     } else {
-      setDrawerToken(localStorage.getItem("drawerToken"));
+      setDrawerToken(localStorage.getItem("drawerToken")); 
       setWord(localStorage.getItem("selectedWord"));
       if (localStorage.getItem("token") === localStorage.getItem("drawerToken")){
         if (localStorage.getItem("selectedWord") == 'null') {
@@ -134,6 +134,11 @@ const Game = () => {
       }
   }
   }, []);
+
+
+  useEffect(() => {  
+    localStorage.setItem('selectedWord', word);
+  }, [word]);
 
   // Every second --> getting image from backend if guesser
   useEffect(() => {
@@ -179,17 +184,10 @@ const Game = () => {
       // setCurrentGameRound(round);
       if(localStorage.getItem('currentGameRound')===null){
         localStorage.setItem('currentGameRound', 0);
-      }else{
-        if(!drawer && localStorage.getItem('selectedWord') !== 'null') {
-          setTicking(true);
-        }
-        if(!drawer && localStorage.getItem('currentGameRound') != round && round != 0){
-          // console.log(localStorage.getItem('currentGameRound'))
-          // console.log(round)
-          // localStorage.setItem('currentGameRound', round);
-          setTicking(true);
-        }
       }
+          if(!drawer && localStorage.getItem('currentGameRound') !== round.toString() && round != 0){
+            setTicking(true);
+        }      
     }
     catch (error) {
       console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
@@ -440,7 +438,6 @@ const Game = () => {
   const pickWord1 = async() => {
     setOpenModal(false);
     setWord(word1)
-    localStorage.setItem('selectedWord', word1);
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1);
     setTicking(true)
     localStorage.setItem('words', null);
@@ -450,7 +447,6 @@ const Game = () => {
   const pickWord2 = async() => {
     setOpenModal(false);
     setWord(word2)
-    localStorage.setItem('selectedWord', word2);
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2);
     setTicking(true)
     localStorage.setItem('words', null);
@@ -460,7 +456,6 @@ const Game = () => {
   const pickWord3 = async() => {
     setOpenModal(false);
     setWord(word3)
-    localStorage.setItem('selectedWord', word3);
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3);
     setTicking(true)
     localStorage.setItem('words', null);
