@@ -31,12 +31,11 @@ const CreateGame = () => {
         roundLength,
         numberOfRounds,
         gameStatus,
-        playerTokens,
         isPublic,
         password
       });
       console.log(requestBody);
-      const response = await api.post("/games", requestBody);
+      const response = await api.post("/games?userToken=" + playerTokens, requestBody);
       history.push({ pathname: `/lobby/${response.data.gameToken}` });
       localStorage.setItem("createdGame", response.data.gameToken);
     } catch (error) {

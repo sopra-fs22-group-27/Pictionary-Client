@@ -35,6 +35,8 @@ const CreateGame = () => {
 
       if(full.data){
         //const players = response.data.playerTokens;
+        localStorage.setItem('drawerToken', null);
+        localStorage.setItem('selectedWord', null);
         history.push({ pathname: `/game/${gameToken}`});
         //const firstDrawer = Math.floor(Math.random() * players.length);
         //history.push({ pathname: `/game/${gameToken}/drawer/${players[firstDrawer]}`});
