@@ -209,7 +209,6 @@ const HomePage = (props) => {
       <br />
 
     </Dialog>
-    {/* <Chatbox user={JSON.parse(localStorage.getItem('user'))} gameToken={gameToken} /> */}
   </div>
   );
 };

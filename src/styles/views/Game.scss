@@ -16,10 +16,10 @@
       // align-items: center;
     }
     #canvas{
+      // flex: 3;
       border: 1px solid #9489DB;
       border-radius: 25px;  
-      align-self: center;
-      
+      // align-self: center;
     }
     &.settings {
       align-self: center;
@@ -58,6 +58,7 @@
       text-align: center;
       color: black;
     }
+
     &.h1{
       text-align: center;
       margin-bottom: 70px;
@@ -77,6 +78,14 @@
       position:absolute;
       right: 5%;
       top: 10%;
+    }
+    &.canvas-chatbox {
+      display: flex;
+      flex-direction: row;
+      align-content: space-between;
+    }
+    &.chatbox {
+      // flex: 1;
     }
 
 }

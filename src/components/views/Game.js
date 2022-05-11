@@ -456,6 +456,7 @@ const Game = (props) => {
   }
     
   return (
+    
     <BaseContainer className="drawing container">
 
     <Modal
@@ -479,7 +480,7 @@ const Game = (props) => {
           </Button>
         </Box>
     </Modal>
-  
+
     <div className="drawing timer">
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
        <CountdownCircleTimer
@@ -492,6 +493,7 @@ const Game = (props) => {
           {({ remainingTime }) => remainingTime}
         </CountdownCircleTimer>
     </div>
+    
 
     {
       drawer?
@@ -544,18 +546,24 @@ const Game = (props) => {
       </div>
       :null //hide if not drawer
     }
-      
-      <canvas id="canvas"
-        width={window.innerWidth/2}
-        height={window.innerHeight/2}
-        ref={canvasRef}
-        title="draw here"
+    <div className="drawing canvas-chatbox">
+    
+        <canvas id="canvas"
+            width={window.innerWidth/2}
+            height={window.innerHeight/2}
+            ref={canvasRef}
+            title="draw here"
 
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseUp}
-        onMouseMove={onMouseMove}
-      />
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            onMouseMove={onMouseMove}
+          />
+      <div className="drawing chatbox">
+        <Chatbox user={JSON.parse(localStorage.getItem('user'))} gameToken={gameToken} />
+      </div>
+    </div>
+        
      <br />
      {
       !drawer?
@@ -573,8 +581,10 @@ const Game = (props) => {
       </div>
       :null
       }
-      {ticking && <Chatbox user={JSON.parse(localStorage.getItem('user'))} gameToken={gameToken} />}
+      
+
     </BaseContainer>
+   
 
   );
 }

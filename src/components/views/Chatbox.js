@@ -68,6 +68,12 @@ const Chatbox = ({gameToken, user}) => {
         let Sock = new SockJS('http://localhost:8080/ws');
         stompClient = over(Sock);
         stompClient.connect({}, onConnected, onError);
+        // stompClient.connect({}, function(frame) {
+            
+        // }, function(message) {
+        //     console.log("disconnected")
+        //     // check message for disconnect
+        // });
         getUsernamesInGame();
     }
 
@@ -266,20 +272,8 @@ const Chatbox = ({gameToken, user}) => {
                 </div>
             </div>}
         </div>
-        :
-        <div className="register-text">
-            {/* <input
-                id="user-name"
-                placeholder="Enter your name"
-                name="username"
-                value={userData.username}
-                onChange={handleUsername}
-                margin="normal"
-              /> */}
-              {/* <button type="button" onClick={registerUser}>
-                    connect
-              </button>  */}
-        </div>}
+        : null
+        }
     </div>
     )
 }
