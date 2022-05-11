@@ -32,8 +32,7 @@ const CreateGame = () => {
         numberOfRounds,
         gameStatus,
         isPublic,
-        password,
-        playerTokens
+        password
       });
       console.log(requestBody);
       const response = await api.post("/games?userToken=" + playerTokens, requestBody);
