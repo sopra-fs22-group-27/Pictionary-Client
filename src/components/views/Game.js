@@ -93,9 +93,9 @@ const Game = (props) => {
         setOpenModal(true)
       }
     } */
-    if (roundLength===60){
-      setRoundLength(game.data.roundLength)
-    }
+    // if (roundLength===60){
+    setRoundLength(game.data.roundLength)
+    // }
 
     if (drawerToken === null){
       setDrawerToken(response.data.drawerToken);
@@ -458,7 +458,7 @@ const Game = (props) => {
   return (
     
     <BaseContainer className="drawing container">
-
+    
     <Modal
         open={openModal}
         //onClose={handleCloseModal} //would close if you click outside of the modal
@@ -484,10 +484,12 @@ const Game = (props) => {
     <div className="drawing timer">
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
        <CountdownCircleTimer
+          size="150"
+          strokeWidth="10"
           isPlaying={ticking}
           duration={roundLength} //here we can add the time which is selected
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[60, 30, 10, 0]}
+          colorsTime={[roundLength, ~~(roundLength/2), ~~(roundLength/4), 0]}
           // need to implement further
           onComplete={finishDrawing}>
           {({ remainingTime }) => remainingTime}
@@ -544,7 +546,7 @@ const Game = (props) => {
       <br />
 
       </div>
-      :null //hide if not drawer
+      :<h1 className="drawing h1">Guess the Word <h2 className="drawing h2">from the drawing</h2></h1> //hide if not drawer
     }
     <div className="drawing canvas-chatbox">
     
