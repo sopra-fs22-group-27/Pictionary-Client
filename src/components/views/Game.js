@@ -50,6 +50,7 @@ const Game = () => {
   const [roundLength, setRoundLength] = useState(60); //How long the round should be
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [users, setUsers] = useState(null); //for the score during the game
+  const [usernames, setUsernames] = useState([]); // for the usernames of chatbox
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -137,14 +138,20 @@ const Game = () => {
         setDrawer(true);
       }
   }
-  const user_score = api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
+  const user_score = await api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
   var arr = [];
-  for (const [key, value] of Object.entries((await user_score).data)) {
+  var username_array = [];
+  for (const [key, value] of Object.entries(user_score.data)) {
     arr.push(`${key}: ${value}`)
+    username_array.push(key);
   }
   setUsers(arr);
+  setUsernames(username_array);
   }, []);
 
+  useEffect(() => {  
+    console.log(usernames);
+  }, [usernames]);
 
   useEffect(() => {  
     localStorage.setItem('selectedWord', word);
@@ -605,9 +612,9 @@ const Game = () => {
             onMouseLeave={onMouseUp}
             onMouseMove={onMouseMove}
           />
-      <div className="drawing chatbox">
-        <Chatbox user={JSON.parse(localStorage.getItem('user'))} gameToken={gameToken} />
-      </div>
+        {usernames && ticking && <div className="drawing chatbox">
+        <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={usernames} gameToken={gameToken} />
+      </div>}
     </div>
         
      <br />

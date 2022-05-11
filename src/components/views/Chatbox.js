@@ -9,7 +9,7 @@ import SockJS from 'sockjs-client';
 
 
 var stompClient = null;
-const Chatbox = ({gameToken, user}) => {
+const Chatbox = ({usernames, gameToken, user}) => {
     const [privateChats, setPrivateChats] = useState(new Map());    
     const [publicChats, setPublicChats] = useState([]);
     const [unread, setUnread, unreadRef] = useState(new Map());
@@ -39,29 +39,23 @@ const Chatbox = ({gameToken, user}) => {
         registerUser();
     }, [])
 
-    const getUsernamesInGame = async() => {
-        try{
-            const response = await api.get('/games/' + gameToken + '/usernames');
-            const usernames = response.data;
-            usernames.forEach((playerUsername, index) => {
-                if (playerUsername !== userData.username){
-                    // initilize playerUsernames
-                    privateChats.set(playerUsername, []);
-                    setPrivateChats(new Map(privateChats));
-                    // initilize number of unread messages of users
-                    let munread = unread.set(playerUsername, 0);
-                    setUnread(new Map(munread));
-                    // console.log(unread);
-                }
-            // initilize number of unread messages of public chatroom
-            let munread = unread.set("CHATROOM", 0)
-            setUnread(munread);
-            });
-        } catch (error) {
-            console.error(`Something went wrong while fetching the usernames: \n${handleError(error)}`);
-            console.error("Details:", error);
-            alert("Something went wrong while fetching the usernames! See the console for details.");
-        }
+    const getUsernamesInGame = () => {
+    
+        usernames.forEach((playerUsername, index) => {
+            if (playerUsername !== userData.username){
+                // initilize playerUsernames
+                privateChats.set(playerUsername, []);
+                setPrivateChats(new Map(privateChats));
+                // initilize number of unread messages of users
+                let munread = unread.set(playerUsername, 0);
+                setUnread(new Map(munread));
+                // console.log(unread);
+            }
+        // initilize number of unread messages of public chatroom
+        let munread = unread.set("CHATROOM", 0)
+        setUnread(munread);
+        });
+        
     }
 
     const connect = () => {
