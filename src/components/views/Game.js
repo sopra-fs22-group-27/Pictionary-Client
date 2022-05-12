@@ -16,6 +16,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { FaUndo, FaRedo, FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
 import "styles/views/Game.scss";
+import Chatbox from "./Chatbox";
 // import { IconName } from "react-icons/fi";
 
 var randomPictionaryWords = require('word-pictionary-list');
@@ -49,6 +50,7 @@ const Game = () => {
   const [roundLength, setRoundLength] = useState(60); //How long the round should be
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [users, setUsers] = useState(null); //for the score during the game
+  const [usernames, setUsernames] = useState([]); // for the usernames of chatbox
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -125,6 +127,7 @@ const Game = () => {
           setDrawer(true);
         }
       }
+
     } else {
       setDrawerToken(localStorage.getItem("drawerToken")); 
       setWord(localStorage.getItem("selectedWord"));
@@ -135,14 +138,20 @@ const Game = () => {
         setDrawer(true);
       }
   }
-  const user_score = api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
+  const user_score = await api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
   var arr = [];
-  for (const [key, value] of Object.entries((await user_score).data)) {
+  var username_array = [];
+  for (const [key, value] of Object.entries(user_score.data)) {
     arr.push(`${key}: ${value}`)
+    username_array.push(key);
   }
   setUsers(arr);
+  setUsernames(username_array);
   }, []);
 
+  useEffect(() => {  
+    console.log(usernames);
+  }, [usernames]);
 
   useEffect(() => {  
     localStorage.setItem('selectedWord', word);
@@ -500,6 +509,7 @@ const Game = () => {
   };
 
   return (
+    
     <BaseContainer className="drawing container">
     <Modal
         open={openModal}
@@ -522,19 +532,22 @@ const Game = () => {
           </Button>
         </Box>
     </Modal>
-  
+
     <div className="drawing timer">
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
        <CountdownCircleTimer
+          size="150"
+          strokeWidth="10"
           isPlaying={ticking}
           duration={roundLength} //here we can add the time which is selected
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[60, 30, 10, 0]}
+          colorsTime={[roundLength, ~~(roundLength/2), ~~(roundLength/4), 0]}
           // need to implement further
           onComplete={finishDrawing}>
           {({ remainingTime }) => remainingTime}       
         </CountdownCircleTimer>
     </div>
+    
 
     {drawer ?
       <div>
@@ -584,20 +597,26 @@ const Game = () => {
       <br />
 
       </div>
-      :null //hide if not drawer
+      :<h1 className="drawing h1">Guess the Word <h2 className="drawing h2">from the drawing</h2></h1> //hide if not drawer
     }
-      
-      <canvas id="canvas"
-        width={window.innerWidth/2}
-        height={window.innerHeight/2}
-        ref={canvasRef}
-        title="draw here"
+    <div className="drawing canvas-chatbox">
+    
+        <canvas id="canvas"
+            width={window.innerWidth/2}
+            height={window.innerHeight/2}
+            ref={canvasRef}
+            title="draw here"
 
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
-        onMouseLeave={onMouseUp}
-        onMouseMove={onMouseMove}
-      />
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            onMouseMove={onMouseMove}
+          />
+        {usernames && ticking && <div className="drawing chatbox">
+        <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={usernames} gameToken={gameToken} />
+      </div>}
+    </div>
+        
      <br />
      {
       !drawer?
@@ -615,13 +634,14 @@ const Game = () => {
       </div>
       :null
       }
-
       <div className="drawing scores">
         <h2>Points:</h2>  
         {score} 
       </div>
 
+
     </BaseContainer>
+   
 
   );
 }

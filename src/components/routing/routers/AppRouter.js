@@ -1,16 +1,16 @@
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import Login from "components/views/Login";
-import Register from "components/views/Register"
-import Startingpage from "components/views/Startingpage"
-import Profile from "components/views/Profile"
-import PrivateRoute from "components/views/PrivateRoute"
+import Register from "components/views/Register";
+import Startingpage from "components/views/Startingpage";
+import Profile from "components/views/Profile";
+import PrivateRoute from "components/views/PrivateRoute";
 import EditProfile from "components/views/EditProfile";
 import ScoreBoard from "components/views/ScoreBoard";
 import Header from "components/views/Header";
 import CreateGame from "components/views/CreateGame";
 import HomePage from "components/views/HomePage";
 import Lobby from "components/views/Lobby";
-import Game from "components/views/Game"
+import Game from "components/views/Game";
 /**
  * Main router of your application.
  * In the following class, different routes are rendered. In our case, there is a Login Route with matches the path "/login"

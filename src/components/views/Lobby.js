@@ -14,12 +14,14 @@ const CreateGame = () => {
   const deleteGame = async () => {
     try {
       await api.delete(`/games/${gameToken}`);
-      history.push("/");
+      history.push("/homepage");
+      localStorage.removeItem("createdGame");
     } catch (error) {
       console.log(handleError(error));
       alert(
         `Something went wrong during the game deletion: \n${handleError(error)}`
       );
+      localStorage.removeItem("createdGame");
     }
   }
 
