@@ -59,7 +59,7 @@ const Chatbox = ({usernames, gameToken, user}) => {
     }
 
     const connect = () => {
-        let Sock = new SockJS('http://localhost:8080/chat');
+        let Sock = new SockJS('https://localhost:8081/chat');
         stompClient = over(Sock);
         stompClient.connect({}, onConnected, onError);
         // stompClient.connect({}, function(frame) {
