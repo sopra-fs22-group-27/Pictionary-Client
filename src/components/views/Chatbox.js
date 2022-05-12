@@ -59,7 +59,7 @@ const Chatbox = ({usernames, gameToken, user}) => {
     }
 
     const connect = () => {
-        let Sock = new SockJS('http://localhost:8080/ws');
+        let Sock = new SockJS('http://localhost:8080/wss');
         stompClient = over(Sock);
         stompClient.connect({}, onConnected, onError);
         // stompClient.connect({}, function(frame) {
@@ -135,14 +135,14 @@ const Chatbox = ({usernames, gameToken, user}) => {
                 let munread = unreadRef.current.set(payloadData.senderUsername, 0);
                 setUnread(new Map(munread));
             }else{
-                console.log("dsfsdddddddddddddddddddddddddddddddddddddddddddd");
+                console.log("error");
             }
         }else{
             // let list = [];
             // list.push(payloadData);
             // privateChats.set(payloadData.senderUsername, []);
             // setPrivateChats(new Map(privateChats));
-            console.log("dsfsdddddddddddddddddddddddddddddddddddddddddddd");
+            console.log("error");
         }
     }
 
