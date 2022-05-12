@@ -612,9 +612,9 @@ const Game = () => {
             onMouseLeave={onMouseUp}
             onMouseMove={onMouseMove}
           />
-//         {usernames && ticking && <div className="drawing chatbox">
+{/* //         {usernames && ticking && <div className="drawing chatbox">
 //         <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={usernames} gameToken={gameToken} />
-//       </div>}
+//       </div>} */}
     </div>
         
      <br />
