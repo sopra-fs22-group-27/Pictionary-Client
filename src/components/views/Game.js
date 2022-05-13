@@ -63,7 +63,7 @@ const Game = () => {
   const [word1, setWord1] = useState(null);
   const [word2, setWord2] = useState(null);
   const [word3, setWord3] = useState(null);
-
+  const [protocol, setProtocol] = useState('wss');
 
   const gameToken = window.location.pathname.split("/")[2];
   // const [currentGameRound, setCurrentGameRound] = useState(0);
@@ -137,16 +137,23 @@ const Game = () => {
         }
         setDrawer(true);
       }
-  }
-  const user_score = await api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
-  var arr = [];
-  var username_array = [];
-  for (const [key, value] of Object.entries(user_score.data)) {
-    arr.push(`${key}: ${value}`)
-    username_array.push(key);
-  }
-  setUsers(arr);
-  setUsernames(username_array);
+    }
+    const user_score = await api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
+    var arr = [];
+    var username_array = [];
+    for (const [key, value] of Object.entries(user_score.data)) {
+      arr.push(`${key}: ${value}`)
+      username_array.push(key);
+    }
+    setUsers(arr);
+    setUsernames(username_array);
+
+    if (window.location.href.indexOf('https://') === 0) {
+      setProtocol('wss');
+    } else if (window.location.href.indexOf('http://') === 0) {
+      setProtocol('ws');
+    }
+
   }, []);
 
   useEffect(() => {  
@@ -612,9 +619,9 @@ const Game = () => {
             onMouseLeave={onMouseUp}
             onMouseMove={onMouseMove}
           />
-{/* //         {usernames && ticking && <div className="drawing chatbox">
-//         <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={usernames} gameToken={gameToken} />
-//       </div>} */}
+       {usernames && ticking && <div className="drawing chatbox">
+         <Chatbox user={JSON.parse(localStorage.getItem('user'))} protocol={protocol} usernames={usernames} gameToken={gameToken} />
+       </div>}
     </div>
         
      <br />

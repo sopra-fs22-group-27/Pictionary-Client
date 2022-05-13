@@ -4,12 +4,12 @@ import { api, handleError } from "helpers/api";
 import "styles/views/Chatbox.scss";
 import Badge from '@mui/material/Badge';
 
-import {over} from 'stompjs';
+import {over, client} from 'stompjs';
 import SockJS from 'sockjs-client';
 
 
 var stompClient = null;
-const Chatbox = ({usernames, gameToken, user}) => {
+const Chatbox = ({usernames, gameToken, user, protocol}) => {
     const [privateChats, setPrivateChats] = useState(new Map());    
     const [publicChats, setPublicChats] = useState([]);
     const [unread, setUnread, unreadRef] = useState(new Map());
@@ -59,8 +59,10 @@ const Chatbox = ({usernames, gameToken, user}) => {
     }
 
     const connect = () => {
-        let Sock = new SockJS('https://localhost:8081/chat');
-        stompClient = over(Sock);
+        // let Sock = new SockJS('https://localhost:8080/chat');
+        // var header = {login: userData.username};
+        // stompClient = over(Sock);
+        stompClient = client( protocol + "://localhost:8080/chat");
         stompClient.connect({}, onConnected, onError);
         // stompClient.connect({}, function(frame) {
             
