@@ -62,7 +62,7 @@ const Chatbox = ({usernames, gameToken, user, protocol}) => {
         // let Sock = new SockJS('https://localhost:8080/chat');
         // var header = {login: userData.username};
         // stompClient = over(Sock);
-        stompClient = client( protocol + "://localhost:8080/chat");
+        stompClient = client( "ws" + "://localhost:8080/chat");
         stompClient.connect({}, onConnected, onError);
         // stompClient.connect({}, function(frame) {
             
