@@ -222,7 +222,7 @@ const Chatbox = ({usernames, gameToken, user}) => {
             <div className="member-list">
                 <ul>
                     
-                    <li onClick={()=>{ setTab("CHATROOM"); clearUnreadMessages("CHATROOM"); }} className={`member ${tab==="CHATROOM" && "active"}`}>Public Chatroom
+                    <li onClick={()=>{ setTab("CHATROOM"); clearUnreadMessages("CHATROOM"); }} className={`member ${tab==="CHATROOM" && "active"}`}>All Users
                         <Badge sx={{
                             float: "right",
                             marginTop: "1em",
@@ -231,7 +231,7 @@ const Chatbox = ({usernames, gameToken, user}) => {
                     </li>
 
                     {[...privateChats.keys()].map((name,index)=>(
-                        <li onClick={()=>{ setTab(name); clearUnreadMessages(name); }} className={`member ${tab===name && "active"}`} key={index}>User {name}
+                        <li onClick={()=>{ setTab(name); clearUnreadMessages(name); }} className={`member ${tab===name && "active"}`} key={index}>{name}
                             <Badge sx={{
                                 float: "right",
                                 marginTop: "1em",

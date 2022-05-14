@@ -504,12 +504,13 @@ const Game = () => {
   if (users!==null) {
     score = (
       users.map((item) =>
-      <h4>{item}</h4>)
+      <p>{item}</p>)
     );
   };
 
   return (
     
+    // Modal where the Word gets picked from the drawer
     <BaseContainer className="drawing container">
     <Modal
         open={openModal}
@@ -533,6 +534,8 @@ const Game = () => {
         </Box>
     </Modal>
 
+
+  {/* The timer */}
     <div className="drawing timer">
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
        <CountdownCircleTimer
@@ -635,7 +638,7 @@ const Game = () => {
       :null
       }
       <div className="drawing scores">
-        <h2>Points:</h2>  
+        <h4>Points:</h4>  
         {score} 
       </div>
 

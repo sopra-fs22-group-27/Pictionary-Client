@@ -173,12 +173,12 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-      {!games? <Spinner/> : 
+      {!games? <div className="spinner-container" align="center"><Spinner/></div> : 
       <div className='games-container'>
         <div className='game-title-container'>
           <div className='games-title'>Join a game</div>
           <button className="select-gametype-button" onClick={() => setSeeAllGames(!seeAllGames)}>{seeAllGames? "All Games" : "Joinable Games"}</button>
-          <input label='gameName' className='games-input' placeholder='Search a game by name' 
+          <input label='gameName' className='games-input' placeholder='Search Game' 
             onChange={(e) => setGameName(e.target.value)} value={gameName}></input>
         </div>
         {seeAllGames? display(games): display(joinableGames)}
