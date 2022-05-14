@@ -117,9 +117,25 @@
     width: 270px;
     // text-align: center;
     border: 2px solid transparent;
-    border-radius: 3px;
-    border-image-source: linear-gradient(to right, red, purple, green, blue, violet);
-    border-image-slice: 1;
+    border-radius: 10px;
+    text-align: center;
+    background: linear-gradient(
+          96.78deg,
+          #fef7f8 -6.3%,
+          #fbf6fa 35.9%,
+          #e9f2f5 100.12%
+        )
+        padding-box,
+      linear-gradient(
+          114.59deg,
+          #f06464 1.6%,
+          #f277d0 32.79%,
+          #9489db 71.64%,
+          #37d1e5 101.91%,
+          #5acfb9 131.52%
+        )
+        border-box;
+  
   }
   .game-title-container {
     // margin-bottom: 1.5em;
