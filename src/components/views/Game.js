@@ -510,6 +510,7 @@ const Game = () => {
 
   return (
     
+    // Modal where the Word gets picked from the drawer
     <BaseContainer className="drawing container">
     <Modal
         open={openModal}
@@ -533,6 +534,8 @@ const Game = () => {
         </Box>
     </Modal>
 
+
+  {/* The timer */}
     <div className="drawing timer">
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
        <CountdownCircleTimer
