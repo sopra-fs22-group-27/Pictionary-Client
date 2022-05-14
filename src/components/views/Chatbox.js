@@ -9,7 +9,7 @@ import SockJS from 'sockjs-client';
 
 
 var stompClient = null;
-const Chatbox = ({usernames, gameToken, user, protocol}) => {
+const Chatbox = ({usernames, gameToken, user}) => {
     const [privateChats, setPrivateChats] = useState(new Map());    
     const [publicChats, setPublicChats] = useState([]);
     const [unread, setUnread, unreadRef] = useState(new Map());
@@ -62,7 +62,14 @@ const Chatbox = ({usernames, gameToken, user, protocol}) => {
         // let Sock = new SockJS('https://localhost:8080/chat');
         // var header = {login: userData.username};
         // stompClient = over(Sock);
-        stompClient = client( "ws" + "://localhost:8080/chat");
+        stompClient = client("ws" + "://localhost:8080/chat",
+            // reconnect_delay = 5000,
+            // heartbeat_incoming: 4000,
+            // heartbeat_outgoing: 4000,
+            // logRawCommunication: true,
+            
+        );
+        stompClient.reconnect_delay = 2000;
         stompClient.connect({}, onConnected, onError);
         // stompClient.connect({}, function(frame) {
             

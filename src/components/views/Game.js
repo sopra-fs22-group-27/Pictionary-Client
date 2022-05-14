@@ -63,7 +63,6 @@ const Game = () => {
   const [word1, setWord1] = useState(null);
   const [word2, setWord2] = useState(null);
   const [word3, setWord3] = useState(null);
-  const [protocol, setProtocol] = useState('wss');
 
   const gameToken = window.location.pathname.split("/")[2];
   // const [currentGameRound, setCurrentGameRound] = useState(0);
@@ -147,12 +146,6 @@ const Game = () => {
     }
     setUsers(arr);
     setUsernames(username_array);
-
-    if (window.location.href.indexOf('https://') === 0) {
-      setProtocol('wss');
-    } else if (window.location.href.indexOf('http://') === 0) {
-      setProtocol('ws');
-    }
 
   }, []);
 
@@ -620,7 +613,7 @@ const Game = () => {
             onMouseMove={onMouseMove}
           />
        {usernames && ticking && <div className="drawing chatbox">
-         <Chatbox user={JSON.parse(localStorage.getItem('user'))} protocol={protocol} usernames={usernames} gameToken={gameToken} />
+         <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={usernames} gameToken={gameToken} />
        </div>}
     </div>
         
