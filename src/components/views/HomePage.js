@@ -173,7 +173,7 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-      {!games? <Spinner/> : 
+      {!games? <div className="spinner-container" align="center"><Spinner/></div> : 
       <div className='games-container'>
         <div className='game-title-container'>
           <div className='games-title'>Join a game</div>
