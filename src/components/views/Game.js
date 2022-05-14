@@ -504,7 +504,7 @@ const Game = () => {
   if (users!==null) {
     score = (
       users.map((item) =>
-      <h4>{item}</h4>)
+      <p>{item}</p>)
     );
   };
 
@@ -638,7 +638,7 @@ const Game = () => {
       :null
       }
       <div className="drawing scores">
-        <h2>Points:</h2>  
+        <h4>Points:</h4>  
         {score} 
       </div>
 
