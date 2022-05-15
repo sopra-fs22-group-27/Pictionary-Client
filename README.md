@@ -1,4 +1,6 @@
-# Pictionary - Client
+![Pictionary_logo](https://user-images.githubusercontent.com/45404885/168472154-48f812ac-7ab4-4b09-8586-1145cedabcc3.png)
+
+
 ## Infromation about the project
 
 https://pictionary-client-22.herokuapp.com/login
