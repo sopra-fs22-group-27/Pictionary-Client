@@ -13,7 +13,7 @@ https://pictionary-client-22.herokuapp.com/login
 
 
 ## Introduction: 
-We decided together that we would implement the drawing and guessing game Pictionary. The rules of this game are amazingly simple. A game consists of custom number of rounds where someone must draw an offered word and the others must guess it. If someone guesses the word correctly, the player gets one point. The player with the most points at the end wins the game.
+The game Pictionary is an interactive drawing game. The rules of this game are amazingly simple. A game consists of custom number of rounds where someone must draw an offered word and the others must guess it. If someone guesses the word correctly, the player gets one point. The player with the most points at the end wins the game.
 
 ## Technologies
 Cloudinary,
