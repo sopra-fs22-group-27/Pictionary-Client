@@ -41,28 +41,34 @@ After logging in, the Player can interact with the program using this component.
 [Scoreboard](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/ScoreBoard.js)
 On the scoreboard, logged in users are able to view their and others overall scores. From the scoreboard users are able to look at their profile and change their information. 
 
+[Chat](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/Chatbox.js)
+The chat is made to send messages during the game. In the chat the player is able to message a single person or the whole lobby. This brings another interaction component to the application. 
 
-## Launch & Deployment
+[Create Game](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/CreateGame.js)
+In the create game component the user is able to customize a game. The user can set different parameters like: name, roundlength, maximal playercount, round quantity, and a password to make a private game with friends. 
 
-For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
+## Launch and Deployment
+For your local development environment, you will need Node.js. You can download it [here](https://nodejs.org). All other dependencies, including React, get installed with:
 
 ```
-// Install all necessary modules (first time running app)
 npm install
 ```
 
-This has to be done before starting the application for the first time (only once).
+Run this command before you start your application for the first time. Next, you can start the app with:
 
 ```
-// Start
 npm run dev
 ```
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Now you can open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console (use Google Chrome!).
+Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use Google Chrome).
+
+### Build
+Finally, `npm run build` builds the app for production to the `build` folder.<br>
+It correctly bundles React in production mode and optimizes the build for the best performance: the build is minified, and the filenames include hashes.<br>
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ## Illustrations
 
