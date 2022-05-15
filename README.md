@@ -41,33 +41,22 @@ After logging in, the Player can interact with the program using this component.
 [Scoreboard](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/ScoreBoard.js)
 On the scoreboard, logged in users are able to view their and others overall scores. From the scoreboard users are able to look at their profile and change their information. 
 
+
 ## Launch & Deployment
 
-Prerequisites install [npm](https://www.npmjs.com/)
+For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
 
 ```
 // Install all necessary modules (first time running app)
 npm install
-
-// Start
-npm run dev
 ```
-Open http://localhost:3000 in Chrome.
-
-```
-// Build app to the `build` folder for production
-npm run build
-```
-
-## Prerequisites and Installation
-
-For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org). All other dependencies including React get installed with:
-
-### `npm install`
 
 This has to be done before starting the application for the first time (only once).
 
-### `npm run dev`
+```
+// Start
+npm run dev
+```
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
