@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { api, handleError } from "helpers/api";
+import { useEffect } from "react";
+import { handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
-import User from "models/User";
 import { Button } from "components/ui/Button";
 import { useHistory } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
 import "styles/views/Profile.scss";
 import { useLocation } from "react-router-dom";
 
@@ -20,8 +18,8 @@ const Profile = (props) => {
   // more information can be found under https://reactjs.org/docs/hooks-state.html
 
   const location = useLocation();
-  //console.log(location)
-  var { user } = location.state;
+  const { user } = location.state;
+  const username = user.username;
 
   const myuser = JSON.parse(localStorage.getItem("user"));
 
@@ -40,13 +38,8 @@ const Profile = (props) => {
   //  use userLocation to pass paras, use history.push to redirect
   //logout function
   // const [birthday, setBirthday] = useState(yourDate.toISOString().split('T')[0]);
-  const [username, setUsername] = useState(user.username);
 
-  // const changeBirthday = (e) =>{
 
-  //   setBirthday(e.target.value);
-  // }
-  //update function
   useEffect(() => {
     if (performance.navigation.type === 1) {
       props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
