@@ -65,8 +65,8 @@ const Chatbox = ({usernames, gameToken, user}) => {
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
             stompClient = client("ws://localhost:8080/chat");
         } else {
-            let port = process.env.PORT || 80;
-            stompClient = client("ws://pictionary-client-22.herokuapp.com:" + port + "/chat");
+            // let port = process.env.PORT || 80;
+            stompClient = client("ws://pictionary-client-22.herokuapp.com/chat");
         }
         
         stompClient.reconnect_delay = 2000;
