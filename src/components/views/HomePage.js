@@ -149,6 +149,7 @@ const HomePage = (props) => {
 
   return (
     <div>
+      <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={[JSON.parse(localStorage.getItem('user')).username]} gameToken={gameToken}/>
       <BaseContainer>
         <div className="create-game-container">
           <div className="create-game-banner">
