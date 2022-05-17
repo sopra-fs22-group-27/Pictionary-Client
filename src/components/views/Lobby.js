@@ -17,7 +17,6 @@ const CreateGame = () => {
       history.push("/homepage");
       localStorage.removeItem("createdGame");
     } catch (error) {
-      console.log(handleError(error));
       alert(
         `Something went wrong during the game deletion: \n${handleError(error)}`
       );
@@ -29,7 +28,6 @@ const CreateGame = () => {
     try {
       const response = await api.get(`/games/${gameToken}`);
       const full = await api.get(`/games/${gameToken}/full`);
-      console.log(full);
       setCurrentPlayers(response.data.numberOfPlayers);
       setTotalPlayers(response.data.numberOfPlayersRequired);
 
@@ -57,7 +55,7 @@ const CreateGame = () => {
 
   useEffect(() => {
     const createdGame = localStorage.getItem("createdGame");
-    if (createdGame == gameToken) {
+    if (createdGame === gameToken) {
       setAllowedToCancelLobby(true);
     }
     getGame(gameToken);
