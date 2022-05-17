@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import { api, handleError } from "helpers/api";
@@ -34,10 +34,12 @@ const CreateGame = () => {
         isPublic,
         password
       });
+      console.log(requestBody);
       const response = await api.post("/games?userToken=" + playerTokens, requestBody);
       history.push({ pathname: `/lobby/${response.data.gameToken}` });
       localStorage.setItem("createdGame", response.data.gameToken);
     } catch (error) {
+      console.log(handleError(error));
       alert(
         `Something went wrong during the game creation: \n${handleError(error)}`
       );

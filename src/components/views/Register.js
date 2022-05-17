@@ -8,6 +8,7 @@ import "styles/views/Register.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import validator from "validator";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -95,6 +96,7 @@ const Register = (props) => {
         email,
       });
       const response = await api.post("/users", requestBody);
+      //console.log(response)
       // Get the returned user and update a new object.
       const user = new User(response.data);
       props.setCurrentUser(user);
