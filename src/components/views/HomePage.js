@@ -11,7 +11,6 @@ import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import Chatbox from "./Chatbox";
 
 const HomePage = (props) => {  
   const history = useHistory();
@@ -149,7 +148,6 @@ const HomePage = (props) => {
 
   return (
     <div>
-      <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={[JSON.parse(localStorage.getItem('user')).username]} gameToken={gameToken}/>
       <BaseContainer>
         <div className="create-game-container">
           <div className="create-game-banner">
