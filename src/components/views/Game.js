@@ -45,7 +45,7 @@ const Game = () => {
   const [drawer, setDrawer] = useState(false); //If true then you are the drawer
   const [drawerToken, setDrawerToken] = useState(null); //Token of the drawer
   const [guessedWord, setGuessedWord] = useState(""); 
-  const [roundLength, setRoundLength] = useState(60); //How long the round should be
+  const [roundLength, setRoundLength] = useState(null); //How long the round should be
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [users, setUsers] = useState(null); //for the score during the game
   const [usernames, setUsernames] = useState([]); // for the usernames of chatbox
@@ -87,33 +87,40 @@ const Game = () => {
       setWord2(randomWords[1]);
       setWord3(randomWords[2]);
       localStorage.setItem("words", randomWords);
+     
     }
-  
-    const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
 
-    setRoundLength(game.data.roundLength)
+    if (localStorage.getItem("roundLength") !== null && localStorage.getItem("roundLength") !== 'null' && localStorage.getItem("roundLength") > 0) {
+      setRoundLength(localStorage.getItem("roundLength"));
+    } else {
+      const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
+      setRoundLength(game.data.roundLength)
+      localStorage.setItem("roundLength", game.data.roundLength);
+    }
 
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
     }
 
-    if (localStorage.getItem("drawerToken") == 'null') {
+
+    if (localStorage.getItem("drawerToken") == 'null' || localStorage.getItem("drawerToken") == null) {
       const response = await api.get('/gameRound/' + window.location.pathname.split("/")[2]);
+      
       setDrawerToken(response.data.drawerToken);
       localStorage.setItem("drawerToken", response.data.drawerToken);
-      
-      if (word === null){
+
+      if (localStorage.getItem("selectedWord") === null || localStorage.getItem("selectedWord") === 'null') {
         if (localStorage.getItem("token") === response.data.drawerToken){ 
           setOpenModal(true)
           setDrawer(true);
         }
       }
-
     } else {
       setDrawerToken(localStorage.getItem("drawerToken")); 
       setWord(localStorage.getItem("selectedWord"));
       if (localStorage.getItem("token") === localStorage.getItem("drawerToken")){
-        if (localStorage.getItem("selectedWord") === 'null') {
+
+        if (localStorage.getItem("selectedWord") == 'null' || localStorage.getItem("selectedWord") == null) {
           setOpenModal(true)
         }
         setDrawer(true);
@@ -159,12 +166,14 @@ const Game = () => {
   // get current round
   useEffect(() => {
     const interval = setInterval(() => {
+      if(drawer && localStorage.getItem('selectedWord') !== 'null' && localStorage.getItem('selectedWord') !== null){
+        setTicking(true);
+      }
       if(!drawer && !ticking){
         fetchRound();
       }
     }, 100);
     return () => clearInterval(interval);
-    
   });
 
   const fetchRound = async() => {
@@ -175,9 +184,11 @@ const Game = () => {
       if(localStorage.getItem('currentGameRound')===null){
         localStorage.setItem('currentGameRound', 0);
       }
-          if(!drawer && localStorage.getItem('currentGameRound') !== round.toString() && round !== 0){
-            setTicking(true);
-        }      
+
+      if(!drawer && localStorage.getItem('currentGameRound') !== round.toString() && round != 0){
+        setTicking(true);
+      }         
+
     }
     catch (error) {
       console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
@@ -241,11 +252,26 @@ const Game = () => {
   const changeWidth = (e) =>{
     setSelectedWidth(e)
   }
-  
+
+  // const startRound = async() => {
+  //   try{
+  //     await api.put('/nextRound/' + gameToken);
+      
+  //   }
+  //   catch (error) {
+  //     console.error(`Something went wrong while going to other GameRound: \n${handleError(error)}`);
+  //     console.error("Details:", error);
+  //     alert("Something went wrong while going to other GameRound! See the console for details.");
+  //   }
+  // }
+
   const finishDrawing = async() => {
     setCanDraw(false)
+    localStorage.setItem('words', null);
     localStorage.setItem('drawerToken', null);
     localStorage.setItem('selectedWord', null);
+    localStorage.setItem('ticking', false);
+    localStorage.setItem('timePassed', 0);
     try{
       const response = await api.get('/games/' + gameToken);
       const game = response.data;
@@ -415,8 +441,8 @@ const Game = () => {
     setOpenModal(false);
     setWord(word1)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1);
+    localStorage.setItem('ticking', true);
     setTicking(true)
-    localStorage.setItem('words', null);
     await api.put('/nextRound/' + gameToken);
   }  
 
@@ -424,8 +450,8 @@ const Game = () => {
     setOpenModal(false);
     setWord(word2)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2);
+    localStorage.setItem('ticking', true);
     setTicking(true)
-    localStorage.setItem('words', null);
     await api.put('/nextRound/' + gameToken);
   }  
 
@@ -433,8 +459,8 @@ const Game = () => {
     setOpenModal(false);
     setWord(word3)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3);
+    localStorage.setItem('ticking', true);
     setTicking(true)
-    localStorage.setItem('words', null);
     await api.put('/nextRound/' + gameToken);
   }  
 
@@ -496,7 +522,7 @@ const Game = () => {
   {/* The timer */}
     <div className="drawing timer">
         {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
-       <CountdownCircleTimer
+       {roundLength != null && <CountdownCircleTimer
           size="150"
           strokeWidth="10"
           isPlaying={ticking}
@@ -504,9 +530,18 @@ const Game = () => {
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
           colorsTime={[roundLength, ~~(roundLength/2), ~~(roundLength/4), 0]}
           // need to implement further
-          onComplete={finishDrawing}>
-          {({ remainingTime }) => remainingTime}       
-        </CountdownCircleTimer>
+          onComplete= {() => {
+            setTicking(false);
+            if(localStorage.getItem("roundLength") == 0){
+            finishDrawing();
+            setRoundLength(null);
+            }
+          }}>
+          {({ remainingTime }) => {
+            localStorage.setItem("roundLength", remainingTime)
+            return (remainingTime)
+          }}       
+        </CountdownCircleTimer>}
     </div>
     
 
