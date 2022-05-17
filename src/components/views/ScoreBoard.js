@@ -3,10 +3,9 @@ import { api, handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
 import { Button } from "components/ui/Button";
 import { useHistory } from "react-router-dom";
-import User from "models/User";
 import BaseContainer from "components/ui/BaseContainer";
 import "styles/views/ScoreBoard.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // use useEffect to update users, use userLocation to pass paras
 const ScoreBoard = (props) => {
@@ -20,7 +19,6 @@ const ScoreBoard = (props) => {
   const [users, setUsers] = useState(null);
   const myuser = JSON.parse(localStorage.getItem('user'));
 
-  // console.log(myuser);
   const back = async () => {
     history.push("/homepage");
   };

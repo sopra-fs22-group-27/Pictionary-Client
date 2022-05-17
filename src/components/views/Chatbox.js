@@ -1,6 +1,5 @@
-import React, { useEffect, useRef} from "react";
+import React, { useEffect} from "react";
 import useState from 'react-usestateref';
-import { api, handleError } from "helpers/api";
 import "styles/views/Chatbox.scss";
 import Badge from '@mui/material/Badge';
 
@@ -59,18 +58,18 @@ const Chatbox = ({usernames, gameToken, user}) => {
     }
 
     const connect = () => {
-        // let Sock = new SockJS('https://localhost:8080/chat');
-        // var header = {login: userData.username};
+        // let Sock = new SockJS('https://localhost:8080/chat?token=AAA');
+        var header = {login: userData.username};
         // stompClient = over(Sock);
-        stompClient = client("ws" + "://localhost:8080/chat",
-            // reconnect_delay = 5000,
-            // heartbeat_incoming: 4000,
-            // heartbeat_outgoing: 4000,
-            // logRawCommunication: true,
-            
-        );
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+            stompClient = client("ws://localhost:8080/chat");
+        } else {
+            // let port = process.env.PORT || 80;
+            stompClient = client("wss://pictionary-client-22.herokuapp.com/chat");
+        }
+        
         stompClient.reconnect_delay = 2000;
-        stompClient.connect({}, onConnected, onError);
+        stompClient.connect(header, onConnected, onError);
         // stompClient.connect({}, function(frame) {
             
         // }, function(message) {
