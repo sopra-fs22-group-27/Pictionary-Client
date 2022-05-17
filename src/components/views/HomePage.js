@@ -5,18 +5,20 @@ import "styles/views/HomePage.scss";
 import { api, handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
 import arrowRight from "resources/arrow-right.svg";
+import { useLocation } from "react-router-dom";
 import {BsFillUnlockFill, BsFillLockFill} from 'react-icons/bs';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
+import Chatbox from "./Chatbox";
 
 const HomePage = (props) => {  
   const history = useHistory();
   const [games, setGames] = useState(null);
   const [joinableGames, setJoinableGames] = useState(null);
-  const [, setIsLoading] = useState(true);
-  const [, setIsLoadingPartial] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingPartial, setIsLoadingPartial] = useState(true);
   const [gameName, setGameName] = useState("");
   const [password, setPassword] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -24,6 +26,7 @@ const HomePage = (props) => {
   const [seeAllGames, setSeeAllGames] = useState(true);
   
   const myuser = JSON.parse(localStorage.getItem("user"));
+  // console.log(myuser);
 
   const fetchGames = async () => {
     try {
@@ -64,7 +67,12 @@ const HomePage = (props) => {
   const joinGame = async (gameToken) => {
     try {
       const requestBody = JSON.stringify({password})
-      await api.put(`/games/${gameToken}/player/${localStorage.getItem("token")}`, requestBody);
+      console.log(requestBody)
+      const response = await api.put(
+        `/games/${gameToken}/player/${localStorage.getItem("token")}`, requestBody
+      );
+      console.log(response);
+
       history.push({ pathname: `/lobby/${gameToken}` });
     } catch (error) {
       alert(
@@ -75,12 +83,11 @@ const HomePage = (props) => {
   };
 
   const display = (games) => {
-    let filteredGames = "";
     if (gameName === ""){
-      filteredGames = games;
+      var filteredGames = games;
     }
     else {
-      filteredGames = games.filter((game) =>{
+      var filteredGames = games.filter((game) =>{
         return game.gameName.toUpperCase().startsWith(gameName.toUpperCase());
       })
     }
@@ -103,16 +110,13 @@ const HomePage = (props) => {
                 ? <BsFillUnlockFill title="this game doesn't need password to enter" style={{ marginLeft:"2em", color:"green"}} size={"2.2em"} /> 
                 : <BsFillLockFill title="this game needs password to enter" style={{marginLeft: "2em", color:"red"}} size={"2.2em"} />}
               <div className="game-status">{game.gameStatus}</div>
-              {game.gameStatus === "waiting" ?
               <div className="game-players-wrapper">
+                
                 <div className="game-players">
+                  
                   {game.numberOfPlayers}/{game.numberOfPlayersRequired}
                 </div>
-              </div> : 
-              <div className="game-players-none">
-                </div>
-                
-              }
+              </div>
               <img className="game-icon" src={arrowRight} alt="arrow-right" />
             </div>
           ))
@@ -131,6 +135,11 @@ const HomePage = (props) => {
       clearTimeout(timer);
     };
   }, [joinableGames]);
+
+  useEffect(() => {
+    console.log(gameName);
+    console.log(gameToken);
+  }, [gameName, gameToken]);
 
   useEffect(() => {
     if (performance.navigation.type === 1) {
