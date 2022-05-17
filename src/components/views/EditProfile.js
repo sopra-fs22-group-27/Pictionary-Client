@@ -3,8 +3,6 @@ import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { useHistory } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
-import { useLocation } from "react-router-dom";
-import validator from "validator";
 import "styles/views/EditProfile.scss";
 
 const FormField1 = (props) => {
@@ -81,13 +79,9 @@ const EditProfile = (props) => {
       if (password == null) {
         password = myuser.password;
       }
+      
       const requestBody = JSON.stringify({ username, password, email });
-      console.log(requestBody);
-      const response = await api.put(
-        `/users/${localStorage.getItem("token")}`,
-        requestBody
-      );
-      console.log(response);
+      await api.put(`/users/${localStorage.getItem("token")}`, requestBody);
 
       if (username) {
         myuser.username = username;

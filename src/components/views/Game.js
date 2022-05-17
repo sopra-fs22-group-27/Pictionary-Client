@@ -1,7 +1,7 @@
 import BaseContainer from "components/ui/BaseContainer";
 import { api, handleError } from "helpers/api";
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { CirclePicker } from 'react-color';
 import { Spinner } from "components/ui/Spinner";
 import LineWidthPicker from 'react-line-width-picker'
@@ -17,7 +17,6 @@ import Box from '@mui/material/Box';
 import { FaUndo, FaRedo, FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
 import "styles/views/Game.scss";
 import Chatbox from "./Chatbox";
-// import { IconName } from "react-icons/fi";
 
 var randomPictionaryWords = require('word-pictionary-list');
 
@@ -27,7 +26,6 @@ const Game = () => {
   const canvasRef = useRef(null);
   const ctx = useRef(null);
 
-  const [gameData, setGameData] = useState(null);
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [selectedWidth, setSelectedWidth] = useState(5);
   const [mouseDown, setMouseDown] = useState(false);
@@ -65,16 +63,12 @@ const Game = () => {
   const [word3, setWord3] = useState(null);
 
   const gameToken = window.location.pathname.split("/")[2];
-  // const [currentGameRound, setCurrentGameRound] = useState(0);
-  // const [gameIsOver, setGameIsOver] = useState(false);
+ 
   
   const history = useHistory();
 
   useEffect(() => {
-    console.log(undoArray);
-    console.log(redoArray);
-    console.log(undoIndex);
-    console.log(redoIndex);
+
   }, [undoArray, redoArray, undoIndex, redoIndex])
 
   // Only if the page mounts
@@ -96,27 +90,15 @@ const Game = () => {
     }
   
     const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
-    // if (roundLength===60){
-      setRoundLength(game.data.roundLength)
-    // }
+
+    setRoundLength(game.data.roundLength)
+
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
     }
 
     if (localStorage.getItem("drawerToken") == 'null') {
-      const response = await api.get('/gameRound/'+window.location.pathname.split("/")[2]);
-      //const gameInfo = await api.get('/game/'+window.location.pathname.split("/")[2]);
-      //const currentDrawer = window.location.pathname.split("/")[4];
-      //const currentUser = localStorage.getItem("token");
-          
-   
-  /*     setDrawerToken(currentDrawer);
-      if (currentUser === currentDrawer) {
-        setDrawer(true);
-        if (word === null){
-          setOpenModal(true)
-        }
-      } */
+      const response = await api.get('/gameRound/' + window.location.pathname.split("/")[2]);
       setDrawerToken(response.data.drawerToken);
       localStorage.setItem("drawerToken", response.data.drawerToken);
       
@@ -131,7 +113,7 @@ const Game = () => {
       setDrawerToken(localStorage.getItem("drawerToken")); 
       setWord(localStorage.getItem("selectedWord"));
       if (localStorage.getItem("token") === localStorage.getItem("drawerToken")){
-        if (localStorage.getItem("selectedWord") == 'null') {
+        if (localStorage.getItem("selectedWord") === 'null') {
           setOpenModal(true)
         }
         setDrawer(true);
@@ -150,7 +132,7 @@ const Game = () => {
   }, []);
 
   useEffect(() => {  
-    console.log(usernames);
+
   }, [usernames]);
 
   useEffect(() => {  
@@ -174,14 +156,6 @@ const Game = () => {
     }
   });
 
-  //
-  // useEffect(() => {
-  //   if(drawer && ticking){
-  //     console.log("dsfsdfsd")
-  //     startRound();
-  //   }
-  // }, [])
-
   // get current round
   useEffect(() => {
     const interval = setInterval(() => {
@@ -198,11 +172,10 @@ const Game = () => {
       const response = await api.get('/games/' + gameToken);
       const game = response.data;
       const round = game.currentGameRound;
-      // setCurrentGameRound(round);
       if(localStorage.getItem('currentGameRound')===null){
         localStorage.setItem('currentGameRound', 0);
       }
-          if(!drawer && localStorage.getItem('currentGameRound') !== round.toString() && round != 0){
+          if(!drawer && localStorage.getItem('currentGameRound') !== round.toString() && round !== 0){
             setTicking(true);
         }      
     }
@@ -213,8 +186,6 @@ const Game = () => {
     }
   }
 
- 
-  
   const sendImage = async() => {
     const canvas = document.getElementById("canvas");
     const img = canvas.toDataURL();
@@ -270,17 +241,6 @@ const Game = () => {
   const changeWidth = (e) =>{
     setSelectedWidth(e)
   }
-  // const startRound = async() => {
-  //   try{
-  //     await api.put('/nextRound/' + gameToken);
-      
-  //   }
-  //   catch (error) {
-  //     console.error(`Something went wrong while going to other GameRound: \n${handleError(error)}`);
-  //     console.error("Details:", error);
-  //     alert("Something went wrong while going to other GameRound! See the console for details.");
-  //   }
-  // }
   
   const finishDrawing = async() => {
     setCanDraw(false)
@@ -290,7 +250,7 @@ const Game = () => {
       const response = await api.get('/games/' + gameToken);
       const game = response.data;
       const round = game.currentGameRound;
-      // console.log(round);
+
       localStorage.setItem('currentGameRound', round);
       console.log(game.numberOfRounds);
       if(round === game.numberOfRounds){
@@ -381,7 +341,7 @@ const Game = () => {
       if(undoIndex <= 0){
         setUndoIndex(-1);
         setUndoArray([]);
-        if(undoIndex == 0){
+        if(undoIndex === 0){
           setRedoArray([...redoArray, undoArray.pop()]);
           setUndoArray([]);
           setUndoIndex(-1);
@@ -426,17 +386,16 @@ const Game = () => {
   const changeColor_CirclePicker = (e) => {
     setSelectedColor(e.hex)
     
-    // ctx.current.globalCompositeOperation = 'source-over'
   }
 
-  const changeColor_ColorPicker = (e) => {
-    setSelectedColor(e)
-    setOpenColorPicker(false)
-    ctx.current.globalCompositeOperation = 'source-over'
-  }
+  // const changeColor_ColorPicker = (e) => {
+  //   setSelectedColor(e)
+  //   setOpenColorPicker(false)
+  //   ctx.current.globalCompositeOperation = 'source-over'
+  // }
 
   const closeColorPicker = (event, reason) => {
-    if (reason && reason == "backdropClick") 
+    if (reason && reason === "backdropClick") 
         return;
     setOpenColorPicker(false)
   }
@@ -483,7 +442,6 @@ const Game = () => {
     e.preventDefault();
     try{
       const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
-      //console.log(response.data)
       if (response.data){
         alert("Your guess is correct! You get 10p")
         setGuessed(true);
@@ -641,8 +599,6 @@ const Game = () => {
         <h4>Points:</h4>  
         {score} 
       </div>
-
-
     </BaseContainer>
    
 

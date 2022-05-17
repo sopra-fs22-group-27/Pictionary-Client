@@ -2,15 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
-import * as FiIcons from "react-icons/fi";
 import "bootstrap/dist/css/bootstrap.css";
-import ScoreBoard from "components/views/ScoreBoard";
 import { Link, BrowserRouter } from "react-router-dom";
-
-import { useEffect, useState } from "react";
 import { api, handleError } from "helpers/api";
-import { useHistory } from "react-router-dom";
-import User from "models/User";
+
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -24,10 +19,7 @@ import User from "models/User";
 const logout = async (props) => {
   if (props.currentUser != null) {
     try {
-      const response = await api.put(
-        `/status/${localStorage.getItem("token")}`
-      );
-      console.log(response);
+      await api.put(`/status/${localStorage.getItem("token")}`);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     } catch (error) {

@@ -1,6 +1,5 @@
-import React, { useEffect, useRef} from "react";
+import React, { useEffect} from "react";
 import useState from 'react-usestateref';
-import { api, handleError } from "helpers/api";
 import "styles/views/Chatbox.scss";
 import Badge from '@mui/material/Badge';
 
@@ -66,7 +65,7 @@ const Chatbox = ({usernames, gameToken, user}) => {
             stompClient = client("ws://localhost:8080/chat");
         } else {
             // let port = process.env.PORT || 80;
-            stompClient = client("wss://pictionary-client-22.herokuapp.com");
+            stompClient = client("wss://pictionary-client-22.herokuapp.com/chat");
         }
         
         stompClient.reconnect_delay = 2000;
