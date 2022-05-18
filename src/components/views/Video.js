@@ -37,9 +37,9 @@ const Video = (props) => {
             <div className='hero2'>
 
             <div className='content'>
-            <p></p> {/*sorry lol*/}
+
             <h1>How to play</h1>
-            <p></p> {/*sorry lol*/}
+
 
             <Container>
             <Row>
@@ -68,6 +68,7 @@ const Video = (props) => {
                 </text>
                 </Col>
                 <Col><img src={secondgif} alt="loading..." /></Col>
+                <p></p><p></p><p></p> {/*sorry lol*/}
             </Row>
             </Container>
             </div>
