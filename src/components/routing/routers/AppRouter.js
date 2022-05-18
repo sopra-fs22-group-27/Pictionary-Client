@@ -7,6 +7,7 @@ import PrivateRoute from "components/views/PrivateRoute";
 import EditProfile from "components/views/EditProfile";
 import ScoreBoard from "components/views/ScoreBoard";
 import Header from "components/views/Header";
+import LeaveGame from "components/views/LeaveGame";
 import CreateGame from "components/views/CreateGame";
 import HomePage from "components/views/HomePage";
 import Lobby from "components/views/Lobby";
@@ -60,6 +61,7 @@ const AppRouter = (props) => {
           <Lobby/>
         </Route>
         <Route exact path="/game/:token"> 
+        <LeaveGame></LeaveGame>
 
             <Game/>
         </Route>
