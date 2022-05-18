@@ -25,7 +25,6 @@ import Game from "components/views/Game";
 const AppRouter = (props) => {
   return (
     <BrowserRouter>
-      <Header currentUser={props.currentUser} height="100%" />
       <Switch>
         <PrivateRoute exact path="/profile/:token" component={Profile} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         <PrivateRoute exact path="/creategame" component={CreateGame} currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
@@ -33,9 +32,11 @@ const AppRouter = (props) => {
         {/* <Route exact path="/scoreboard" component={ScoreBoard}/> */}
 
         <Route exact path="/login">
+        <Header currentUser={props.currentUser} height="100%" />
           <Login currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/register">
+        <Header currentUser={props.currentUser} height="100%" />
           <Register currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/startingpage">
@@ -45,15 +46,21 @@ const AppRouter = (props) => {
           <Redirect to="/startingpage" />
         </Route>
         <Route exact path="/editProfile/:token" component={EditProfile} >
+        <Header currentUser={props.currentUser} height="100%" />
           <EditProfile currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/scoreboard">
+        <Header currentUser={props.currentUser} height="100%" />
+
           <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/lobby/:token">
+        <Header currentUser={props.currentUser} height="100%" />
+
           <Lobby/>
         </Route>
         <Route exact path="/game/:token"> 
+
             <Game/>
         </Route>
 
