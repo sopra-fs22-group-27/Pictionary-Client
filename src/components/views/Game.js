@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { FaUndo, FaRedo, FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
+import * as tf from "@tensorflow/tfjs";
 import "styles/views/Game.scss";
 // import { IconName } from "react-icons/fi";
 
@@ -21,6 +22,8 @@ var randomPictionaryWords = require('word-pictionary-list');
 var word1 = randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()})
 var word2 = randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()})
 var word3 = randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()})
+
+const CLASSES = ['flashlight', 'belt', 'mushroom', 'pond', 'strawberry', 'pineapple', 'sun', 'cow', 'ear', 'bush', 'pliers', 'watermelon', 'apple', 'baseball', 'feather', 'shoe', 'leaf', 'lollipop', 'crown', 'ocean', 'horse', 'mountain', 'mosquito', 'mug', 'hospital', 'saw', 'castle', 'angel', 'underwear', 'traffic_light', 'cruise_ship', 'marker', 'blueberry', 'flamingo', 'face', 'hockey_stick', 'bucket', 'campfire', 'asparagus', 'skateboard', 'door', 'suitcase', 'skull', 'cloud', 'paint_can', 'hockey_puck', 'steak', 'house_plant', 'sleeping_bag', 'bench', 'snowman', 'arm', 'crayon', 'fan', 'shovel', 'leg', 'washing_machine', 'harp', 'toothbrush', 'tree', 'bear', 'rake', 'megaphone', 'knee', 'guitar', 'calculator', 'hurricane', 'grapes', 'paintbrush', 'couch', 'nose', 'square', 'wristwatch', 'penguin', 'bridge', 'octagon', 'submarine', 'screwdriver', 'rollerskates', 'ladder', 'wine_bottle', 'cake', 'bracelet', 'broom', 'yoga', 'finger', 'fish', 'line', 'truck', 'snake', 'bus', 'stitches', 'snorkel', 'shorts', 'bowtie', 'pickup_truck', 'tooth', 'snail', 'foot', 'crab', 'school_bus', 'train', 'dresser', 'sock', 'tractor', 'map', 'hedgehog', 'coffee_cup', 'computer', 'matches', 'beard', 'frog', 'crocodile', 'bathtub', 'rain', 'moon', 'bee', 'knife', 'boomerang', 'lighthouse', 'chandelier', 'jail', 'pool', 'stethoscope', 'frying_pan', 'cell_phone', 'binoculars', 'purse', 'lantern', 'birthday_cake', 'clarinet', 'palm_tree', 'aircraft_carrier', 'vase', 'eraser', 'shark', 'skyscraper', 'bicycle', 'sink', 'teapot', 'circle', 'tornado', 'bird', 'stereo', 'mouth', 'key', 'hot_dog', 'spoon', 'laptop', 'cup', 'bottlecap', 'The_Great_Wall_of_China', 'The_Mona_Lisa', 'smiley_face', 'waterslide', 'eyeglasses', 'ceiling_fan', 'lobster', 'moustache', 'carrot', 'garden', 'police_car', 'postcard', 'necklace', 'helmet', 'blackberry', 'beach', 'golf_club', 'car', 'panda', 'alarm_clock', 't-shirt', 'dog', 'bread', 'wine_glass', 'lighter', 'flower', 'bandage', 'drill', 'butterfly', 'swan', 'owl', 'raccoon', 'squiggle', 'calendar', 'giraffe', 'elephant', 'trumpet', 'rabbit', 'trombone', 'sheep', 'onion', 'church', 'flip_flops', 'spreadsheet', 'pear', 'clock', 'roller_coaster', 'parachute', 'kangaroo', 'duck', 'remote_control', 'compass', 'monkey', 'rainbow', 'tennis_racquet', 'lion', 'pencil', 'string_bean', 'oven', 'star', 'cat', 'pizza', 'soccer_ball', 'syringe', 'flying_saucer', 'eye', 'cookie', 'floor_lamp', 'mouse', 'toilet', 'toaster', 'The_Eiffel_Tower', 'airplane', 'stove', 'cello', 'stop_sign', 'tent', 'diving_board', 'light_bulb', 'hammer', 'scorpion', 'headphones', 'basket', 'spider', 'paper_clip', 'sweater', 'ice_cream', 'envelope', 'sea_turtle', 'donut', 'hat', 'hourglass', 'broccoli', 'jacket', 'backpack', 'book', 'lightning', 'drums', 'snowflake', 'radio', 'banana', 'camel', 'canoe', 'toothpaste', 'chair', 'picture_frame', 'parrot', 'sandwich', 'lipstick', 'pants', 'violin', 'brain', 'power_outlet', 'triangle', 'hamburger', 'dragon', 'bulldozer', 'cannon', 'dolphin', 'zebra', 'animal_migration', 'camouflage', 'scissors', 'basketball', 'elbow', 'umbrella', 'windmill', 'table', 'rifle', 'hexagon', 'potato', 'anvil', 'sword', 'peanut', 'axe', 'television', 'rhinoceros', 'baseball_bat', 'speedboat', 'sailboat', 'zigzag', 'garden_hose', 'river', 'house', 'pillow', 'ant', 'tiger', 'stairs', 'cooler', 'see_saw', 'piano', 'fireplace', 'popsicle', 'dumbbell', 'mailbox', 'barn', 'hot_tub', 'teddy-bear', 'fork', 'dishwasher', 'peas', 'hot_air_balloon', 'keyboard', 'microwave', 'wheel', 'fire_hydrant', 'van', 'camera', 'whale', 'candle', 'octopus', 'pig', 'swing_set', 'helicopter', 'saxophone', 'passport', 'bat', 'ambulance', 'diamond', 'goatee', 'fence', 'grass', 'mermaid', 'motorbike', 'microphone', 'toe', 'cactus', 'nail', 'telephone', 'hand', 'squirrel', 'streetlight', 'bed', 'firetruck'];
 
 
 const Game = (props) => {
@@ -60,6 +63,8 @@ const Game = (props) => {
   const [undoArray, setUndoArray] = useState([]);
   const [redoArray, setRedoArray] = useState([]);
 
+  const [model, setModel] = useState();
+
   const gameToken = window.location.pathname.split("/")[2];
   // const [currentGameRound, setCurrentGameRound] = useState(0);
   // const [gameIsOver, setGameIsOver] = useState(false);
@@ -83,6 +88,14 @@ const Game = (props) => {
         
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
+      var imageData = ctx.current.getImageData(0, 0, ctx.current.canvas.width, ctx.current.canvas.height);
+
+      for (var i = 0; i < imageData.data.length; i++) {
+        imageData[i] = 255;
+      }
+
+      // Update the canvas with the new data
+      ctx.current.putImageData(imageData, 0, 0);
     }
 /*     setDrawerToken(currentDrawer);
 
@@ -108,6 +121,10 @@ const Game = (props) => {
   if (localStorage.getItem("token")===response.data.drawerToken){
     setDrawer(true);
   }
+
+  tf.ready().then(() => {
+    loadModel();
+    });
   }, []);
 
   // Every second --> getting image from backend if guesser
@@ -116,6 +133,7 @@ const Game = (props) => {
       if (!drawer){
         getImage();
       }
+      //guess();
     }, 1000);
     return () => clearInterval(interval);
   });
@@ -123,7 +141,7 @@ const Game = (props) => {
   // Always if there is a change in the drawing --> sending image to backend
   useEffect(() => {
     if(drawer){
-      sendImage();
+      //sendImage();
     }
   });
 
@@ -145,6 +163,106 @@ const Game = (props) => {
     return () => clearInterval(interval);
     
   });
+
+  //DoodleDraw Model
+  async function loadModel() {
+    try {
+    let puburl = process.env.PUBLIC_URL;
+    console.log(puburl)
+    let url = "/model/model.json";
+    console.log(url);
+    const model = await tf.loadLayersModel(url);
+    setModel(model);
+    console.log("set loaded Model");
+    } 
+    catch (err) {
+    console.log(err);
+    console.log("failed load model");
+    }
+    }
+
+  function guess() {
+    // Get input image from the canvas
+    getInputImage();
+    // Predict
+    //let guess = model.predict(inputs);
+
+    // Format res to an array
+    /* const rawProb = Array.from(guess.dataSync());
+  
+    // Get top K res with index and probability
+    const rawProbWIndex = rawProb.map((probability, index) => {
+      return {
+        index,
+        probability
+      }
+    });
+  
+    const sortProb = rawProbWIndex.sort((a, b) => b.probability - a.probability);
+    const topKClassWIndex = sortProb.slice(0, 10);
+    const topKRes = topKClassWIndex.map(i => `<br>${CLASSES[i.index]} (${(i.probability.toFixed(2) * 100)}%)`);
+    //select('#res').html(`I see: ${topKRes.toString()}`);
+    console.log(topKRes) */
+  }
+
+
+  const getInputImage =  async() => {
+    let inputs = [];
+
+    const SIZE = 28;
+    const COL_CHANNEL = 3;
+    const BIN_CHANNEL = 1;
+    var canvas2 = document.createElement('canvas');
+    var ctx2 = canvas2.getContext('2d');
+    const scaled = ctx2.drawImage(canvasRef.current, 0, 0, 28, 28);
+    var imageData = ctx2.getImageData(0, 0, 28, 28);
+    
+    const pred = await tf.tidy(() => {
+      let tensor = tf.browser.fromPixels(imageData, 1);
+      //tensor = tensor.resizeBilinear([SIZE, SIZE]).divNoNan(tf.scalar(255));
+      tensor= tf.cast(tensor, "float32").divNoNan(tf.scalar(255));
+      tensor = tensor.reshape([1,28,28,1]);
+      tensor.print(true);
+      const guess = model.predict(tensor);
+
+      // Format res to an array
+      const rawProb = Array.from(guess.dataSync());
+    
+      // Get top K res with index and probability
+      const rawProbWIndex = rawProb.map((probability, index) => {
+        return {
+          index,
+          probability
+        }
+      });
+    
+      const sortProb = rawProbWIndex.sort((a, b) => b.probability - a.probability);
+      const topKClassWIndex = sortProb.slice(0, 10);
+      const topKRes = topKClassWIndex.map(i => `<br>${CLASSES[i.index]} (${(i.probability.toFixed(2) * 100)}%)`);
+      //select('#res').html(`I see: ${topKRes.toString()}`);
+      console.log(topKRes)
+
+      })
+
+    
+                          //.expandDims(0)
+                          //.expandDims(-1);
+    //tensor.print(true)
+    //let tensorResized = tensor.resizeBilinear([SIZE, SIZE]).div(tf.scalar(255));
+    // Group data into [[[i00] [i01], [i02], [i03], ..., [i027]], .... [[i270], [i271], ... , [i2727]]]]
+    //tensorResized = tf.expandDims(tensorResized, 0);
+    //console.log(tensorResized.shape);
+    //tensorResized = tensorResized.expandDims(0);
+    //console.log(tensorResized.shape);
+    //tensorResized.print(true)
+    
+
+
+
+    
+    console.log(inputs)
+    //return inputs;
+  }
 
   const fetchRound = async() => {
     try{
@@ -456,7 +574,6 @@ const Game = (props) => {
     
   return (
     <BaseContainer className="drawing container">
-
     <Modal
         open={openModal}
         //onClose={handleCloseModal} //would close if you click outside of the modal
@@ -572,6 +689,7 @@ const Game = (props) => {
       </div>
       :null
       }
+      <Button onClick={() => {guess()}}>AI</Button>
     </BaseContainer>
 
   );
