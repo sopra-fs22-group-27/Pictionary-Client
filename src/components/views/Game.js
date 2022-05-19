@@ -227,7 +227,7 @@ const Game = () => {
     catch (error) {
     console.error(`Something went wrong while fetching the images: \n${handleError(error)}`);
     console.error("Details:", error);
-    alert("Something went wrong while fetching the images! See the console for details.");
+    //alert("Something went wrong while fetching the images! See the console for details.");
     }
   }
 
@@ -289,7 +289,7 @@ const Game = () => {
           console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
           console.error("Details:", error);
         }
-        alert("This game is over because someone left the game. The Leaver gets -100p and all of you gets +2p");
+        alert("This game is over because one player left the game. This player gets -100p and all others gets +2p");
         localStorage.removeItem('currentGameRound');
         history.push({pathname: "/homepage",});
       }
