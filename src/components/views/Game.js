@@ -265,6 +265,7 @@ const Game = () => {
   //   }
   // }
 
+  // Finish round
   const finishDrawing = async() => {
     setCanDraw(false)
     localStorage.setItem('words', null);
@@ -279,7 +280,20 @@ const Game = () => {
 
       localStorage.setItem('currentGameRound', round);
       console.log(game.numberOfRounds);
-      if(round === game.numberOfRounds){
+
+      // If someone left the game
+      if (game.gameStatus === "finished"){
+        try {
+          await api.put(`/games/${localStorage.getItem("token")}/points?points=`+ 2)
+        } catch(error) {
+          console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
+          console.error("Details:", error);
+        }
+        alert("This game is over because someone left the game. The Leaver gets -100p and all of you gets +2p");
+        localStorage.removeItem('currentGameRound');
+        history.push({pathname: "/homepage",});
+      }
+      else if(round === game.numberOfRounds){
         if(drawer){
           try{
             await api.put(`/games/${gameToken}/updateStatus`);

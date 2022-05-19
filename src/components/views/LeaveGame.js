@@ -14,6 +14,24 @@ import { api, handleError } from "helpers/api";
  * https://reactjs.org/docs/components-and-props.html
  * @FunctionalComponent
  */
+const removePoints = async() => {
+  const gameToken = window.location.pathname.split("/")[2];
+  try{ 
+    await api.put(`/games/${gameToken}/updateStatus`); //change to finish
+  } catch(error) {
+    console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
+    console.error("Details:", error);
+    alert("Something went wrong while updating game status! See the console for details.");
+  }
+
+  try{ 
+    await api.put(`/games/${localStorage.getItem("token")}/points?points=`+ -100); 
+  } catch(error) {
+    console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
+    console.error("Details:", error);
+    alert("Something went wrong while updating game status! See the console for details.");
+  }
+} 
 
 const LeaveGame = (props) => (
   <div className="header">
@@ -34,12 +52,13 @@ const LeaveGame = (props) => (
             variant="outline-light"
             style={{bg:"blue"}}
             as={Link}
+            onClick={removePoints}
             to={{
               pathname: "/homepage",
               state: { myuser: JSON.parse(localStorage.getItem("user")) },
             }}
           >
-            Leave Game
+            Leave Game (-100p)
           </Button>
         </Nav>
       </Navbar.Collapse>
