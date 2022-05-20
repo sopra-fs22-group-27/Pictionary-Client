@@ -88,6 +88,17 @@
       // flex: 1;
     }
 
+    &.bubble {
+      width: 120px; 
+      height: 80px; 
+      background: #5ac4ed;
+      position: absolute;
+      left:100px;
+      -moz-border-radius: 10px; 
+      -webkit-border-radius: 10px; 
+      border-radius: 10px;
+   }
+
     &.scores {
       flex-direction: row;
       justify-content: space-between;
@@ -96,6 +107,35 @@
       position: absolute;
       left: 5%;
       top: 10%;
+      padding: 1.5em;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      background: linear-gradient(
+            96.78deg,
+            #fef7f8 -6.3%,
+            #fbf6fa 35.9%,
+            #e9f2f5 100.12%
+          )
+          padding-box,
+        linear-gradient(
+            114.59deg,
+            #f06464 1.6%,
+            #f277d0 32.79%,
+            #9489db 71.64%,
+            #37d1e5 101.91%,
+            #5acfb9 131.52%
+          )
+          border-box;    
+      
+    }
+    &.classification {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px;
+      position: absolute;
+      left: 80%;
+      top: 40%;
       padding: 1.5em;
       border: 1px solid transparent;
       border-radius: 10px;

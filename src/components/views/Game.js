@@ -40,6 +40,7 @@ const Game = () => {
   const [isSelectingWidth, setIsSelectingWidth] = useState("outset");
   const [openModal, setOpenModal] = useState(false);
   const [word, setWord] = useState(null);  
+  const [drawingClassification, setDrawingClassification] = useState(null);
   const [ticking, setTicking] = useState(false);
   const [canDraw, setCanDraw] = useState(true);
   const [drawer, setDrawer] = useState(false); //If true then you are the drawer
@@ -149,6 +150,7 @@ const Game = () => {
   // Every second --> getting image from backend if guesser
   useEffect(() => {
     const interval = setInterval(() => {
+      fetchClassification();
       if (!drawer){
         getImage();
       }
@@ -194,6 +196,25 @@ const Game = () => {
       console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
       console.error("Details:", error);
       alert("Something went wrong while fetching the round! See the console for details.");
+    }
+  }
+
+  const fetchClassification = async() => {
+    try{
+      const response = await api.get('/vision/' + gameToken);
+      if (response !== null){
+        var arr = [];
+      var username_array = [];
+      for (const [key, value] of Object.entries(response.data.annotations)) {
+        arr.push(`${key}: ${value}`)
+        username_array.push(key);
+      }
+        setDrawingClassification(arr);
+      }
+    }
+    catch (error) {
+      console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
+      console.error("Details:", error);
     }
   }
 
@@ -506,6 +527,17 @@ const Game = () => {
     );
   };
 
+  let classification = <Spinner />;
+
+  if (drawingClassification!==null) {
+    classification = (
+      drawingClassification.map((item) =>
+      <p>{item}</p>)
+    );
+  };
+
+
+
   return (
     
     // Modal where the Word gets picked from the drawer
@@ -647,6 +679,10 @@ const Game = () => {
       <div className="drawing scores">
         <h4>Points:</h4>  
         {score} 
+      </div>
+      <div className="drawing classification">
+        <h4>I see</h4>  
+        {classification} 
       </div>
     </BaseContainer>
    
