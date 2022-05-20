@@ -8,6 +8,8 @@ import EditProfile from "components/views/EditProfile";
 import ScoreBoard from "components/views/ScoreBoard";
 import Header from "components/views/Header";
 import LeaveGame from "components/views/LeaveGame";
+import CancelGame from "components/views/CancelGame";
+
 import CreateGame from "components/views/CreateGame";
 import HomePage from "components/views/HomePage";
 import Lobby from "components/views/Lobby";
@@ -56,7 +58,7 @@ const AppRouter = (props) => {
           <ScoreBoard currentUser={props.currentUser} setCurrentUser={props.setCurrentUser}/>
         </Route>
         <Route exact path="/lobby/:token">
-        <Header currentUser={props.currentUser} height="100%" />
+        <CancelGame></CancelGame>
 
           <Lobby/>
         </Route>
