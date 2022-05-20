@@ -22,6 +22,7 @@ const logout = async (props) => {
       await api.put(`/status/${localStorage.getItem("token")}`);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      window.location.reload();
     } catch (error) {
       alert(
         `Something went wrong during updating the logged_out status: \n${handleError(

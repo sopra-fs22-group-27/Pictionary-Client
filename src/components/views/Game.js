@@ -229,7 +229,8 @@ const Game = () => {
     catch (error) {
       console.error(`Something went wrong while sending the images: \n${handleError(error)}`);
       console.error("Details:", error);
-      alert("Something went wrong while sending the images! See the console for details.");
+      // Don't alert, because this is called every second
+      //alert("Something went wrong while sending the images! See the console for details.");
     }
   }
 
