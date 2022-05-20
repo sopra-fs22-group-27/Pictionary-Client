@@ -329,7 +329,7 @@ const Game = () => {
         localStorage.removeItem('currentGameRound');
         history.push({pathname: "/homepage",});
       } else{
-        alert("This Round is finished")
+        //alert("This Round is finished")
         //refresh because of timer
         //also statement because the backend makes 409 if there arent rounds left! we should recognize in the fronted beforehand
       
