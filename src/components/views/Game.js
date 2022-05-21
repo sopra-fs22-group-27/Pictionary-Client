@@ -303,19 +303,7 @@ const Game = () => {
       localStorage.setItem('currentGameRound', round);
       console.log(game.numberOfRounds);
 
-      // If someone left the game
-      if (game.gameStatus === "finished"){
-        try {
-          await api.put(`/games/${localStorage.getItem("token")}/points?points=`+ 2)
-        } catch(error) {
-          console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
-          console.error("Details:", error);
-        }
-        alert("This game is over because one player left the game. This player gets -100p and all others gets +2p");
-        localStorage.removeItem('currentGameRound');
-        history.push({pathname: "/homepage",});
-      }
-      else if(round === game.numberOfRounds){
+      if(round === game.numberOfRounds){
         if(drawer){
           try{
             await api.put(`/games/${gameToken}/updateStatus`);
@@ -328,7 +316,20 @@ const Game = () => {
         alert("This game is over");
         localStorage.removeItem('currentGameRound');
         history.push({pathname: "/homepage",});
-      } else{
+      }
+      // If someone left the game
+      else if (game.gameStatus === "finished"){
+        try {
+          await api.put(`/games/${localStorage.getItem("token")}/points?points=`+ 2)
+        } catch(error) {
+          console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
+          console.error("Details:", error);
+        }
+        alert("This game is over because one player left the game. This player gets -100p and all others gets +2p");
+        localStorage.removeItem('currentGameRound');
+        history.push({pathname: "/homepage",});
+      } 
+      else{
         //alert("This Round is finished")
         //refresh because of timer
         //also statement because the backend makes 409 if there arent rounds left! we should recognize in the fronted beforehand

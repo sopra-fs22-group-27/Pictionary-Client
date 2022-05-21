@@ -28,7 +28,7 @@
     "word-pictionary-list": "^1.0.4"
   },
   "scripts": {
-    "dev": "react-scripts start",
+    "dev": "react-scripts --openssl-legacy-provider start",
     "start": "serve -s build",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
