@@ -49,7 +49,9 @@ const Video = (props) => {
                 <text class="text-justify">
                 As a guesser, you can see the drawing of the drawer. 
                 Your goal should be to be as fast as possible in guessing the correct word for the drawing. 
-                If you guess the drawing, you will receive points. If your guess is wrong you loose points. 
+                If you guess the drawing, you will receive 10 points. The player with the most points at the end of the game is the winner 
+                of the game and gets 10 ranking points. If someone leaves the game, then the game will stop after the round and every player
+                gets 2 ranking points. The leaver of the game will receive -100 ranking point.  
                 Guess fast, time is your enemy.
                 </text>
                 </Col>
