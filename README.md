@@ -43,8 +43,8 @@ After logging in, the Player can interact with the program using this component.
 [Scoreboard](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/ScoreBoard.js)
 On the scoreboard, logged in users are able to view their and others overall scores. From the scoreboard users are able to look at their profile and change their information. 
 
-[Chat](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/Chatbox.js)
-The chat is made to send messages during the game. In the chat the player is able to message a single person or the whole lobby. This brings another interaction component to the application. 
+~~[Chat](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/Chatbox.js)
+The chat is made to send messages during the game. In the chat the player is able to message a single person or the whole lobby. This brings another interaction component to the application.~~ Since chatbox can only work locally, and always fail when being deployed to heroku, so we remove it.
 
 [Create Game](https://github.com/sopra-fs22-group-27/Pictionary-Client/blob/master/src/components/views/CreateGame.js)
 In the create game component the user is able to customize a game. The user can set different parameters like: name, roundlength, maximal playercount, round quantity, and a password to make a private game with friends. 
