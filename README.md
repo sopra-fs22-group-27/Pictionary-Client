@@ -15,7 +15,7 @@ https://pictionary-client-22.herokuapp.com/login
 
 
 ## Introduction: 
-The game Pictionary is an interactive drawing game. The rules of this game are amazingly simple. A game consists of custom number of rounds where someone must draw an offered word and the others must guess it. If someone guesses the word correctly, the player gets 10 points. The player with the most points at the end wins the game and receive ranking points. One difference between our application and other Pictionary games is that the drawer can also get points. This is possible because we use the Google Vision API which recognizes what the player is drawing. The problem is that the Google Vision API is not trained for drawings which is the reason that sometimes the API makes it very hard that the drawing matches with the word. 
+The game Pictionary is an interactive drawing game. The rules of this game are amazingly simple. A game consists of custom number of rounds where someone must draw an offered word and the others must guess it. If someone guesses the word correctly, the player gets 10 points. The player with the most points at the end wins the game and receive ranking points. One difference between our application and other Pictionary games is that the drawer can also get points. This is possible because we use the Google Vision API which recognizes what the player is drawing.
 
 ## Technologies
 Cloudinary,
