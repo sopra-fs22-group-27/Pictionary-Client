@@ -13,12 +13,12 @@ const App = () => {
     });
   }, []);
 
-  useEffect(() => {
-    const unloadCallback = async (event) => {
-      event.preventDefault();
+  const logout = async () => {
+    
       try {
         await api.put(`/status/${localStorage.getItem("token")}`);
-        window.localStorage.clear();
+        localStorage.clear();
+        window.location.reload();
       } catch (error) {
         alert(
           `Something went wrong during updating the logged_out status: \n${handleError(
@@ -26,16 +26,11 @@ const App = () => {
           )}`
         );
       }
-      
-    };
-
-    window.addEventListener("unload", unloadCallback);
-    return () => window.removeEventListener("unload", unloadCallback);
-  }, []);
+  };
 
   return (
     <div>
-      <AppRouter currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <AppRouter currentUser={currentUser} setCurrentUser={setCurrentUser} logout={logout}/>
     </div>
   );
 };

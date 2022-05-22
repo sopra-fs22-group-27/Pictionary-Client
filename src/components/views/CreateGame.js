@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import { api, handleError } from "helpers/api";
@@ -14,6 +14,7 @@ const CreateGame = () => {
   const gameStatus = "waiting"; //possile values: waiting, started, finished
   const [isPublic, setIsPublic] = useState(true);
   const [password, setPassword] = useState("");
+  const [anyOperation, setAnyOperation] = useState(false);
 
   const createGame = async () => {
     try {
@@ -47,6 +48,54 @@ const CreateGame = () => {
     }
   };
 
+  const syncActiveTime = async () => {
+    if (anyOperation) {
+      try {
+        await api.put(`/synctime/${localStorage.getItem("token")}`);
+        console.log("sync");
+        setAnyOperation(false);
+      } catch (error) {
+        alert(
+          `Something went wrong during fetching the active time: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+  }
+
+  const logout = async () => {
+    if(!anyOperation){
+      try {
+        await api.put(`/status/${localStorage.getItem("token")}`);
+        localStorage.clear();
+        alert("Since you did not do any operation in about 1 min, so you are forced to log out!");
+        history.push('/login')
+      } catch (error) {
+        alert(
+          `Something went wrong during updating the logged_out status: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+    
+  };
+
+  useEffect(() => {
+    let timer = setTimeout(() => syncActiveTime(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => logout(),  30000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
   return (
     <BaseContainer>
       <div className="form-container">
@@ -61,6 +110,7 @@ const CreateGame = () => {
             style={{ width: "70%" }}
             onChange={(e) => {
               setGameName(e.target.value);
+              setAnyOperation(true);
             }}
           />
         </div>
@@ -74,6 +124,7 @@ const CreateGame = () => {
               value={numberOfPlayersRequired}
               onChange={(e) => {
                 setnumberOfPlayersRequired(e.target.value);
+                setAnyOperation(true);
               }}
             />
             <button
@@ -81,6 +132,7 @@ const CreateGame = () => {
               onClick={() => {
                 if (numberOfPlayersRequired > 1) {
                   setnumberOfPlayersRequired(numberOfPlayersRequired - 1);
+                  setAnyOperation(true);
                 }
               }}
             >
@@ -90,6 +142,7 @@ const CreateGame = () => {
               className="form-text-button"
               onClick={() => {
                 setnumberOfPlayersRequired(numberOfPlayersRequired + 1);
+                setAnyOperation(true);
               }}
             >
               +
@@ -106,6 +159,7 @@ const CreateGame = () => {
               value={roundLength}
               onChange={(e) => {
                 setRoundLength(e.target.value);
+                setAnyOperation(true);
               }}
             />
             <button
@@ -113,6 +167,7 @@ const CreateGame = () => {
               onClick={() => {
                 if (roundLength > 5) {
                   setRoundLength(roundLength - 5);
+                  setAnyOperation(true);
                 }
               }}
             >
@@ -122,6 +177,7 @@ const CreateGame = () => {
               className="form-text-button"
               onClick={() => {
                 setRoundLength(roundLength + 5);
+                setAnyOperation(true);
               }}
             >
               +
@@ -138,6 +194,7 @@ const CreateGame = () => {
               value={numberOfRounds}
               onChange={(e) => {
                 setNumberOfRounds(e.target.value);
+                setAnyOperation(true);
               }}
             />
             <button
@@ -145,6 +202,7 @@ const CreateGame = () => {
               onClick={() => {
                 if (numberOfRounds > 1) {
                   setNumberOfRounds(numberOfRounds - 1);
+                  setAnyOperation(true);
                 }
               }}
             >
@@ -154,6 +212,7 @@ const CreateGame = () => {
               className="form-text-button"
               onClick={() => {
                 setNumberOfRounds(numberOfRounds + 1);
+                setAnyOperation(true);
               }}
             >
               +
@@ -170,6 +229,7 @@ const CreateGame = () => {
               value={isPublic}
               onChange={() => {
                 setIsPublic(!isPublic);
+                setAnyOperation(true);
                 if(isPublic){
                   setPassword("");
                 }
@@ -186,6 +246,7 @@ const CreateGame = () => {
                   style={{ width: "100%", fontSize:"14px" }}
                   onChange={(e) => {
                     setPassword(e.target.value);
+                    setAnyOperation(true);
                   }}
                 />
               : null}
@@ -215,6 +276,15 @@ const CreateGame = () => {
             }}
           >
             Start
+          </button>
+          <button
+            style={{marginLeft:"2em"}}
+            className="form-button-start"
+            onClick={() => {
+              history.push(`/homepage`);
+            }}
+          >
+            Back
           </button>
         </div>
       </div>

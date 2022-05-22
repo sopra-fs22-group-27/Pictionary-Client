@@ -20,7 +20,8 @@ const HomePage = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [gameToken, setGameToken] = useState(null);
   const [seeAllGames, setSeeAllGames] = useState(true);
-  
+  const [anyOperation, setAnyOperation] = useState(false);
+
   const myuser = JSON.parse(localStorage.getItem("user"));
 
   const fetchGames = async () => {
@@ -52,6 +53,22 @@ const HomePage = (props) => {
       );
     }
   };
+
+  const syncActiveTime = async () => {
+    if (anyOperation) {
+      try {
+        await api.put(`/synctime/${localStorage.getItem("token")}`);
+        console.log("sync");
+        setAnyOperation(false);
+      } catch (error) {
+        alert(
+          `Something went wrong during fetching the active time: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+  }
 
   const joinGame = async (gameToken) => {
     try {
@@ -109,6 +126,24 @@ const HomePage = (props) => {
           ))
   }
 
+  const logout = async () => {
+    if(!anyOperation){
+      try {
+        await api.put(`/status/${localStorage.getItem("token")}`);
+        localStorage.clear();
+        alert("Since you did not do any operation in about 1 min, so you are forced to log out!");
+        history.push('/login')
+      } catch (error) {
+        alert(
+          `Something went wrong during updating the logged_out status: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+    
+  };
+
   useEffect(() => {
     let timer = setTimeout(() => fetchGames(),  1000);
     return () => {
@@ -122,6 +157,20 @@ const HomePage = (props) => {
       clearTimeout(timer);
     };
   }, [joinableGames]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => syncActiveTime(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => logout(),  10000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
 
   useEffect(() => {
     if (performance.navigation.type === 1) {
@@ -159,9 +208,9 @@ const HomePage = (props) => {
       <div className='games-container'>
         <div className='game-title-container'>
           <div className='games-title'>Join a game</div>
-          <button className="select-gametype-button" onClick={() => setSeeAllGames(!seeAllGames)}>{seeAllGames? "All Games" : "Joinable Games"}</button>
+          <button className="select-gametype-button" onClick={() => {setSeeAllGames(!seeAllGames); setAnyOperation(true);}}>{seeAllGames? "All Games" : "Joinable Games"}</button>
           <input label='gameName' className='games-input' placeholder='Search Game' 
-            onChange={(e) => setGameName(e.target.value)} value={gameName}></input>
+            onChange={(e) => {setGameName(e.target.value); setAnyOperation(true);}} value={gameName}></input>
         </div>
         {seeAllGames? display(games): display(joinableGames)}
       </div>}
