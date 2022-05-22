@@ -42,12 +42,14 @@ const EditProfile = (props) => {
   let [password, setPassword] = useState(null);
   const [emailError, setEmailError] = useState("");
   let [email, setEmail] = useState(null);
+  const [anyOperation, setAnyOperation] = useState(false);
 
   const emailValidator =
     /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
   const validateEmail = (e) => {
     setEmail(e.target.value);
+    setAnyOperation(true);
     if (email.match(emailValidator)) {
       setEmailError("Valid Email");
     } else {
@@ -61,11 +63,59 @@ const EditProfile = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    let timer = setTimeout(() => syncActiveTime(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => logout(),  10000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
   const back = () => {
     history.push({
       pathname: `/profile/${myuser.token}`,
       state: { user: myuser },
     });
+  };
+
+  const syncActiveTime = async () => {
+    if (anyOperation) {
+      try {
+        await api.put(`/synctime/${localStorage.getItem("token")}`);
+        console.log("sync");
+        setAnyOperation(false);
+      } catch (error) {
+        alert(
+          `Something went wrong during fetching the active time: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+  }
+
+  const logout = async () => {
+    if(!anyOperation){
+      try {
+        await api.put(`/status/${localStorage.getItem("token")}`);
+        localStorage.clear();
+        alert("Since you did not do any operation in about 1 min, so you are forced to log out!");
+        history.push('/login')
+      } catch (error) {
+        alert(
+          `Something went wrong during updating the logged_out status: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+    
   };
 
   const edit = async () => {
@@ -118,13 +168,13 @@ const EditProfile = (props) => {
           <FormField1
             label="Username"
             value={username}
-            onChange={(username) => setUsername(username)}
+            onChange={(username) => {setUsername(username); setAnyOperation(true);}}
             emailerror={emailError}
           />
           <FormField2
             label="Password"
             value={password}
-            onChange={(password) => setPassword(password)}
+            onChange={(password) => {setPassword(password); setAnyOperation(true);}}
             emailerror={emailError}
           />
           <div className="register field">

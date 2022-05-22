@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { handleError } from "helpers/api";
+import { useEffect, useState } from "react";
+import { api, handleError } from "helpers/api";
 import { Spinner } from "components/ui/Spinner";
 import { Button } from "components/ui/Button";
 import { useHistory } from "react-router-dom";
@@ -20,7 +20,7 @@ const Profile = (props) => {
   const location = useLocation();
   const { user } = location.state;
   const username = user.username;
-
+  const [anyOperation, setAnyOperation] = useState(false);
   const myuser = JSON.parse(localStorage.getItem("user"));
 
   const myToken = myuser.token;
@@ -38,6 +38,53 @@ const Profile = (props) => {
   //  use userLocation to pass paras, use history.push to redirect
   //logout function
   // const [birthday, setBirthday] = useState(yourDate.toISOString().split('T')[0]);
+  const syncActiveTime = async () => {
+    if (anyOperation) {
+      try {
+        await api.put(`/synctime/${localStorage.getItem("token")}`);
+        console.log("sync");
+        setAnyOperation(false);
+      } catch (error) {
+        alert(
+          `Something went wrong during fetching the active time: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+  }
+
+  const logout = async () => {
+    if(!anyOperation){
+      try {
+        await api.put(`/status/${localStorage.getItem("token")}`);
+        localStorage.clear();
+        alert("Since you did not do any operation in about 1 min, so you are forced to log out!");
+        history.push('/login')
+      } catch (error) {
+        alert(
+          `Something went wrong during updating the logged_out status: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+    
+  };
+
+  useEffect(() => {
+    let timer = setTimeout(() => syncActiveTime(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => logout(),  10000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
 
   useEffect(() => {
     if (performance.navigation.type === 1) {
