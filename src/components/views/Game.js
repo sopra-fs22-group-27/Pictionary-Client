@@ -16,7 +16,6 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { FaUndo, FaRedo, FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
 import "styles/views/Game.scss";
-import Chatbox from "./Chatbox";
 
 var randomPictionaryWords = require('word-pictionary-list');
 
@@ -49,7 +48,6 @@ const Game = () => {
   const [roundLength, setRoundLength] = useState(null); //How long the round should be
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [users, setUsers] = useState(null); //for the score during the game
-  const [usernames, setUsernames] = useState([]); // for the usernames of chatbox
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -129,19 +127,12 @@ const Game = () => {
     }
     const user_score = await api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
     var arr = [];
-    var username_array = [];
     for (const [key, value] of Object.entries(user_score.data)) {
       arr.push(`${key}: ${value}`)
-      username_array.push(key);
     }
     setUsers(arr);
-    setUsernames(username_array);
-
   }, []);
 
-  useEffect(() => {  
-
-  }, [usernames]);
 
   useEffect(() => {  
     localStorage.setItem('selectedWord', word);
@@ -643,24 +634,19 @@ const Game = () => {
       </div>
       :<h1 className="drawing h1">Guess the Word <h2 className="drawing h2">from the drawing</h2></h1> //hide if not drawer
     }
-    <div className="drawing canvas-chatbox">
-    
-        <canvas id="canvas"
-            width={window.innerWidth/2}
-            height={window.innerHeight/2}
-            ref={canvasRef}
-            title="draw here"
 
-            onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
-            onMouseMove={onMouseMove}
-          />
-       {usernames && ticking && <div className="drawing chatbox">
-         <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={usernames} gameToken={gameToken} />
-       </div>}
-    </div>
-        
+    <canvas id="canvas"
+        width={window.innerWidth/2}
+        height={window.innerHeight/2}
+        ref={canvasRef}
+        title="draw here"
+
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+        onMouseMove={onMouseMove}
+    />
+
      <br />
      {
       !drawer?

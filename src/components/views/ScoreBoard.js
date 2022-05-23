@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import "styles/views/ScoreBoard.scss";
 import { Link } from "react-router-dom";
+import { Alert, IconButton, Collapse, } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 // use useEffect to update users, use userLocation to pass paras
 const ScoreBoard = (props) => {
@@ -17,16 +19,74 @@ const ScoreBoard = (props) => {
   // a component can have as many state variables as you like.
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
+  const [anyOperation, setAnyOperation] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
   const myuser = JSON.parse(localStorage.getItem('user'));
 
   const back = async () => {
     history.push("/homepage");
   };
 
+  const syncActiveTime = async () => {
+    if (anyOperation) {
+      try {
+        await api.put(`/synctime/${localStorage.getItem("token")}`);
+        console.log("sync");
+        setAnyOperation(false);
+      } catch (error) {
+        alert(
+          `Something went wrong during fetching the active time: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+  }
+
+  const logout = async () => {
+    if(!anyOperation){
+      try {
+        await api.put(`/status/${localStorage.getItem("token")}`);
+        localStorage.clear();
+        alert("Since you did not do any operation in about 1 min, so you are forced to log out!");
+        history.push('/login');
+        window.location.reload();
+      } catch (error) {
+        alert(
+          `Something went wrong during updating the logged_out status: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+    
+  };
+
   // the effect hook can be used to react to change in your component.
   // in this case, the effect hook is only run once, the first time the component is mounted
   // this can be achieved by leaving the second argument an empty array.
   // for more information on the effect hook, please see https://reactjs.org/docs/hooks-effect.html
+  useEffect(() => {
+    let timer = setTimeout(() => syncActiveTime(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => logout(),  60000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => setAlertOpen(true),  50000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
   useEffect(() => {
     async function fetchMyUser(){
       try{
@@ -135,7 +195,30 @@ const ScoreBoard = (props) => {
   }
 
   return (
-    <BaseContainer className="scoreboard container">{content}</BaseContainer>
+    <div>
+      <Collapse in={alertOpen}>
+        <Alert
+          severity="warning"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setAlertOpen(false);
+                setAnyOperation(true);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          If you are still there, please do some operation. Otherwise, we'll log you out!
+        </Alert>
+      </Collapse>
+      <BaseContainer className="scoreboard container">{content}</BaseContainer>
+    </div>
   );
 };
 
