@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import BaseContainer from "components/ui/BaseContainer";
 import "styles/views/ScoreBoard.scss";
 import { Link } from "react-router-dom";
+import { Alert, IconButton, Collapse, } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 // use useEffect to update users, use userLocation to pass paras
 const ScoreBoard = (props) => {
@@ -18,6 +20,7 @@ const ScoreBoard = (props) => {
   // more information can be found under https://reactjs.org/docs/hooks-state.html
   const [users, setUsers] = useState(null);
   const [anyOperation, setAnyOperation] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
   const myuser = JSON.parse(localStorage.getItem('user'));
 
   const back = async () => {
@@ -46,7 +49,8 @@ const ScoreBoard = (props) => {
         await api.put(`/status/${localStorage.getItem("token")}`);
         localStorage.clear();
         alert("Since you did not do any operation in about 1 min, so you are forced to log out!");
-        history.push('/login')
+        history.push('/login');
+        window.location.reload();
       } catch (error) {
         alert(
           `Something went wrong during updating the logged_out status: \n${handleError(
@@ -70,7 +74,14 @@ const ScoreBoard = (props) => {
   }, [anyOperation]);
 
   useEffect(() => {
-    let timer = setTimeout(() => logout(),  10000);
+    let timer = setTimeout(() => logout(),  60000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => setAlertOpen(true),  50000);
     return () => {
       clearTimeout(timer);
     };
@@ -184,7 +195,30 @@ const ScoreBoard = (props) => {
   }
 
   return (
-    <BaseContainer className="scoreboard container">{content}</BaseContainer>
+    <div>
+      <Collapse in={alertOpen}>
+        <Alert
+          severity="warning"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setAlertOpen(false);
+                setAnyOperation(true);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          If you are still there, please do some operation. Otherwise, we'll log you out!
+        </Alert>
+      </Collapse>
+      <BaseContainer className="scoreboard container">{content}</BaseContainer>
+    </div>
   );
 };
 
