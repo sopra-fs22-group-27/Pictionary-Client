@@ -41,10 +41,12 @@ const Game = () => {
   const [openModal, setOpenModal] = useState(false);
   const [word, setWord] = useState(null);  
   const [drawingClassification, setDrawingClassification] = useState(null);
+  const [aiDrawingRating, setAIDrawingRating] = useState(null);
   const [ticking, setTicking] = useState(false);
   const [canDraw, setCanDraw] = useState(true);
   const [drawer, setDrawer] = useState(false); //If true then you are the drawer
   const [drawerToken, setDrawerToken] = useState(null); //Token of the drawer
+  const [imageIsTransparent, setImageIsTransparent] = useState(true);
   const [guessedWord, setGuessedWord] = useState(""); 
   const [roundLength, setRoundLength] = useState(null); //How long the round should be
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
@@ -150,10 +152,21 @@ const Game = () => {
   // Every second --> getting image from backend if guesser
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchClassification();
       if (!drawer){
         getImage();
       }
+      
+    if(imageIsTransparent){
+      const canvas = document.getElementById("canvas");
+      if(!isCanvasTransparent(canvas)){
+        setImageIsTransparent(false);
+        fetchClassification();
+      }
+    }
+    else{
+      fetchClassification();
+    }
+    
     }, 1000);
     return () => clearInterval(interval);
   });
@@ -170,6 +183,7 @@ const Game = () => {
     const interval = setInterval(() => {
       if(drawer && localStorage.getItem('selectedWord') !== 'null' && localStorage.getItem('selectedWord') !== null){
         setTicking(true);
+        fetchAIDrawingRating();
       }
       if(!drawer && !ticking){
         fetchRound();
@@ -204,17 +218,32 @@ const Game = () => {
       const response = await api.get('/vision/' + gameToken);
       if (response !== null){
         var arr = [];
-      var username_array = [];
-      for (const [key, value] of Object.entries(response.data.annotations)) {
-        arr.push(`${key}: ${value}`)
-        username_array.push(key);
-      }
+        var username_array = [];
+        for (const [key, value] of Object.entries(response.data.annotations)) {
+          arr.push(`${key}: ${value}`)
+          username_array.push(key);
+        }
         setDrawingClassification(arr);
       }
     }
     catch (error) {
       console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
       console.error("Details:", error);
+    }
+  }
+
+  const fetchAIDrawingRating = async() =>{
+    try{
+      const response = await api.get('/vision/' + gameToken + '/drawerPoints');
+      if(response !== null){
+        setAIDrawingRating(response.data);
+      }
+    }
+    catch (error) {
+      console.error(`Something went wrong while getting the AI Drawing Rating: \n${handleError(error)}`);
+      console.error("Details:", error);
+      // Don't alert, because this is called every second
+      //alert("Something went wrong while sending the images! See the console for details.");
     }
   }
 
@@ -251,6 +280,14 @@ const Game = () => {
     console.error("Details:", error);
     //alert("Something went wrong while fetching the images! See the console for details.");
     }
+  }
+
+  function isCanvasTransparent(canvas) { // true if all pixels Alpha equals to zero
+    var ctx=canvas.getContext("2d");
+    var imageData=ctx.getImageData(0,0,canvas.offsetWidth,canvas.offsetHeight);
+    for(var i=0;i<imageData.data.length;i+=4)
+      if(imageData.data[i+3]!==0)return false;
+    return true;
   }
 
   const draw = useCallback((x, y) => {
@@ -475,30 +512,30 @@ const Game = () => {
   }
 
   const pickWord1 = async() => {
+    await api.put('/nextRound/' + gameToken);
     setOpenModal(false);
     setWord(word1)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1);
     localStorage.setItem('ticking', true);
     setTicking(true)
-    await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord2 = async() => {
+    await api.put('/nextRound/' + gameToken);
     setOpenModal(false);
     setWord(word2)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2);
     localStorage.setItem('ticking', true);
     setTicking(true)
-    await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord3 = async() => {
+    await api.put('/nextRound/' + gameToken);
     setOpenModal(false);
     setWord(word3)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3);
     localStorage.setItem('ticking', true);
     setTicking(true)
-    await api.put('/nextRound/' + gameToken);
   }  
 
   const makeGuess = async(e) =>{
@@ -678,6 +715,14 @@ const Game = () => {
       </div>
       :null
       }
+
+      <br />
+      {
+      drawer?
+      <h4>{aiDrawingRating}</h4> 
+      :null
+      }
+
       <div className="drawing scores">
         <h4>Points:</h4>  
         {score} 
