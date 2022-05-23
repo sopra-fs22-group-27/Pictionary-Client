@@ -20,9 +20,10 @@ import Chatbox from "./Chatbox";
 
 var randomPictionaryWords = require('word-pictionary-list');
 
-
-
 const Game = () => {
+  const gameToken = window.location.pathname.split("/")[2];
+  const userToken = localStorage.getItem("token");
+
   const canvasRef = useRef(null);
   const ctx = useRef(null);
 
@@ -39,14 +40,8 @@ const Game = () => {
   const [isSelectingColor, setIsSelectingColor] = useState("outset");
   const [isSelectingWidth, setIsSelectingWidth] = useState("outset");
   const [openModal, setOpenModal] = useState(false);
-  const [word, setWord] = useState(null);  
   const [drawingClassification, setDrawingClassification] = useState(null);
-  const [ticking, setTicking] = useState(false);
-  const [canDraw, setCanDraw] = useState(true);
-  const [drawer, setDrawer] = useState(false); //If true then you are the drawer
-  const [drawerToken, setDrawerToken] = useState(null); //Token of the drawer
   const [guessedWord, setGuessedWord] = useState(""); 
-  const [roundLength, setRoundLength] = useState(null); //How long the round should be
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [users, setUsers] = useState(null); //for the score during the game
   const [usernames, setUsernames] = useState([]); // for the usernames of chatbox
@@ -54,80 +49,92 @@ const Game = () => {
     x: 0,
     y: 0
   });
-
   const [undoIndex, setUndoIndex] = useState(-1);
   const [redoIndex, setRedoIndex] = useState(-1);
   const [undoArray, setUndoArray] = useState([]);
   const [redoArray, setRedoArray] = useState([]);
-  const [word1, setWord1] = useState(null);
-  const [word2, setWord2] = useState(null);
-  const [word3, setWord3] = useState(null);
+  const [game, setGame] = useState(null);
+  const [gameRound, setGameRound] = useState(null);
+  const [words, setWords] = useState(JSON.parse(localStorage.getItem("words")));
+  const [selectedWord, setSelectedWord] = useState(localStorage.getItem("selectedWord"));
 
-  const gameToken = window.location.pathname.split("/")[2];
- 
-  
-  const history = useHistory();
+  const isDrawer = !!gameRound && gameRound.drawerToken === userToken;
 
   useEffect(() => {
+    if (selectedWord === null) {
+      localStorage.removeItem('selectedWord');
+    } else {
+      localStorage.setItem('selectedWord', selectedWord);
+    }
+  }, [selectedWord]);
 
-  }, [undoArray, redoArray, undoIndex, redoIndex])
+  useEffect(() => {
+    if (words === null) {
+      localStorage.removeItem('words');
+    } else {
+      localStorage.setItem('words', JSON.stringify(words));
+    }
+  }, [words]);
 
-  // Only if the page mounts
+  const secondsPassed = !gameRound 
+    ? null
+    : gameRound.roundStartingTime === 0
+    ? null
+    : Math.floor((Date.now() - gameRound.roundStartingTime) / 1000)
+  const secondsRemaining = !!game && !!secondsPassed && Math.max(0, game.roundLength - secondsPassed);
+  const isTicking = secondsRemaining !== null && secondsRemaining !== false;
+  const canDraw = isDrawer && !!selectedWord && secondsRemaining > 0;
+
+  useEffect(() => {
+    if (!isDrawer) return;
+    const wordsStr = localStorage.getItem("words");
+    if (wordsStr) {
+      setWords(JSON.parse(wordsStr));
+      return
+    }
+    const nrOfWords = 3;
+    const newWords = [];
+    for (let i = 0; i < nrOfWords; i++) {
+      newWords.push( randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()}));
+    }
+    setWords(newWords);
+    localStorage.setItem('words', JSON.stringify(newWords));
+  }, [game?.currentGameRound, isDrawer]);
+
+  useEffect(() => {
+    if (isDrawer && gameRound?.roundStartingTime === 0) {
+      setSelectedWord(null)
+    }
+    if (gameRound?.roundStartingTime === 0) {
+      ctx.current.clearRect(0, 0, ctx.current.canvas.width, ctx.current.canvas.height)
+    }
+  }, [isDrawer, gameRound?.roundStartingTime]);
+
+  useEffect(() => {
+    setOpenModal(isDrawer && !selectedWord);
+  }, [isDrawer, selectedWord]);
+
+  const history = useHistory();
+
   useEffect(async() => {
-    if (localStorage.getItem("words") !== 'null' && localStorage.getItem("words") !== null) {
-      setWord1(localStorage.getItem("words").split(",")[0]);
-      setWord2(localStorage.getItem("words").split(",")[1]);
-      setWord3(localStorage.getItem("words").split(",")[2]);
-    } else {
-      const nrOfWords = 3;
-      const randomWords = [];
-      for (let i = 0; i < nrOfWords; i++) {
-        randomWords.push( randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()}));
-      }
-      setWord1(randomWords[0]);
-      setWord2(randomWords[1]);
-      setWord3(randomWords[2]);
-      localStorage.setItem("words", randomWords);
-     
-    }
-
-    if (localStorage.getItem("roundLength") !== null && localStorage.getItem("roundLength") !== 'null' && localStorage.getItem("roundLength") > 0) {
-      setRoundLength(localStorage.getItem("roundLength"));
-    } else {
-      const game = await api.get('/games/'+window.location.pathname.split("/")[2]); //for the round_length
-      setRoundLength(game.data.roundLength)
-      localStorage.setItem("roundLength", game.data.roundLength);
-    }
+    // if (localStorage.getItem("words") !== 'null' && localStorage.getItem("words") !== null && localStorage.getItem("words") !== '[]') {
+    //   console.log("words from local storage");
+    //   setWords(JSON.parse(localStorage.getItem("words")));
+    // } else {
+      // const nrOfWords = 3;
+      // const randomWords = [];
+      // for (let i = 0; i < nrOfWords; i++) {
+      //   randomWords.push( randomPictionaryWords({exactly:1, wordsPerString:1, formatter: (word)=> word.toLowerCase()}));
+      // }
+      // setWords(randomWords);
+      // localStorage.setItem('words', JSON.stringify(words));
+    // } 
 
     if (canvasRef.current) {
       ctx.current = canvasRef.current.getContext('2d');
     }
 
-
-    if (localStorage.getItem("drawerToken") == 'null' || localStorage.getItem("drawerToken") == null) {
-      const response = await api.get('/gameRound/' + window.location.pathname.split("/")[2]);
-      
-      setDrawerToken(response.data.drawerToken);
-      localStorage.setItem("drawerToken", response.data.drawerToken);
-
-      if (localStorage.getItem("selectedWord") === null || localStorage.getItem("selectedWord") === 'null') {
-        if (localStorage.getItem("token") === response.data.drawerToken){ 
-          setOpenModal(true)
-          setDrawer(true);
-        }
-      }
-    } else {
-      setDrawerToken(localStorage.getItem("drawerToken")); 
-      setWord(localStorage.getItem("selectedWord"));
-      if (localStorage.getItem("token") === localStorage.getItem("drawerToken")){
-
-        if (localStorage.getItem("selectedWord") == 'null' || localStorage.getItem("selectedWord") == null) {
-          setOpenModal(true)
-        }
-        setDrawer(true);
-      }
-    }
-    const user_score = await api.get("/games/"+window.location.pathname.split("/")[2]+"/scoreboard")
+    const user_score = await api.get("/games/"+gameToken+"/scoreboard")
     var arr = [];
     var username_array = [];
     for (const [key, value] of Object.entries(user_score.data)) {
@@ -136,68 +143,47 @@ const Game = () => {
     }
     setUsers(arr);
     setUsernames(username_array);
-
   }, []);
 
-  useEffect(() => {  
-
-  }, [usernames]);
-
-  useEffect(() => {  
-    localStorage.setItem('selectedWord', word);
-  }, [word]);
-
-  // Every second --> getting image from backend if guesser
   useEffect(() => {
+    fetchClassification();
+    if (!isDrawer){
+      getImage();
+    }
     const interval = setInterval(() => {
       fetchClassification();
-      if (!drawer){
+      if (!isDrawer){
         getImage();
       }
     }, 1000);
     return () => clearInterval(interval);
-  });
+  }, [isDrawer]);
 
   // Always if there is a change in the drawing --> sending image to backend
   useEffect(() => {
-    if(drawer){
+    if(isDrawer){
       sendImage();
     }
   });
 
-  // get current round
   useEffect(() => {
+    updateGame();
+    updateGameRound();
     const interval = setInterval(() => {
-      if(drawer && localStorage.getItem('selectedWord') !== 'null' && localStorage.getItem('selectedWord') !== null){
-        setTicking(true);
-      }
-      if(!drawer && !ticking){
-        fetchRound();
-      }
-    }, 100);
+      updateGame();
+      updateGameRound();
+    }, 500);
     return () => clearInterval(interval);
-  });
-
-  const fetchRound = async() => {
-    try{
+    
+    async function updateGame() {
       const response = await api.get('/games/' + gameToken);
-      const game = response.data;
-      const round = game.currentGameRound;
-      if(localStorage.getItem('currentGameRound')===null){
-        localStorage.setItem('currentGameRound', 0);
-      }
-
-      if(!drawer && localStorage.getItem('currentGameRound') !== round.toString() && round != 0){
-        setTicking(true);
-      }         
-
+      setGame(response.data)
     }
-    catch (error) {
-      console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
-      console.error("Details:", error);
-      alert("Something went wrong while fetching the round! See the console for details.");
+    async function updateGameRound() {
+      const response = await api.get('/gameRound/' + gameToken);
+      setGameRound(response.data)
     }
-  }
+  }, []);
 
   const fetchClassification = async() => {
     try{
@@ -229,8 +215,6 @@ const Game = () => {
     catch (error) {
       console.error(`Something went wrong while sending the images: \n${handleError(error)}`);
       console.error("Details:", error);
-      // Don't alert, because this is called every second
-      //alert("Something went wrong while sending the images! See the console for details.");
     }
   }
 
@@ -249,7 +233,6 @@ const Game = () => {
     catch (error) {
     console.error(`Something went wrong while fetching the images: \n${handleError(error)}`);
     console.error("Details:", error);
-    //alert("Something went wrong while fetching the images! See the console for details.");
     }
   }
 
@@ -275,36 +258,10 @@ const Game = () => {
     setSelectedWidth(e)
   }
 
-  // const startRound = async() => {
-  //   try{
-  //     await api.put('/nextRound/' + gameToken);
-      
-  //   }
-  //   catch (error) {
-  //     console.error(`Something went wrong while going to other GameRound: \n${handleError(error)}`);
-  //     console.error("Details:", error);
-  //     alert("Something went wrong while going to other GameRound! See the console for details.");
-  //   }
-  // }
-
-  // Finish round
   const finishDrawing = async() => {
-    setCanDraw(false)
-    localStorage.setItem('words', null);
-    localStorage.setItem('drawerToken', null);
-    localStorage.setItem('selectedWord', null);
-    localStorage.setItem('ticking', false);
-    localStorage.setItem('timePassed', 0);
     try{
-      const response = await api.get('/games/' + gameToken);
-      const game = response.data;
-      const round = game.currentGameRound;
-
-      localStorage.setItem('currentGameRound', round);
-      console.log(game.numberOfRounds);
-
-      if(round === game.numberOfRounds){
-        if(drawer){
+      if(game.currentGameRound + 1 === game.numberOfRounds){
+        if(isDrawer){
           try{
             await api.put(`/games/${gameToken}/updateStatus`);
           } catch(error) {
@@ -314,32 +271,21 @@ const Game = () => {
           }
         }
         alert("This game is over");
-        localStorage.removeItem('currentGameRound');
         history.push({pathname: "/homepage",});
       }
       // If someone left the game
       else if (game.gameStatus === "finished"){
         try {
-          await api.put(`/games/${localStorage.getItem("token")}/points?points=`+ 2)
+          await api.put(`/games/${userToken}/points?points=`+ 2)
         } catch(error) {
           console.error(`Something went wrong while updating game status: \n${handleError(error)}`);
           console.error("Details:", error);
         }
         alert("This game is over because one player left the game. This player gets -100p and all others gets +2p");
-        localStorage.removeItem('currentGameRound');
         history.push({pathname: "/homepage",});
       } 
-      else{
-        //alert("This Round is finished")
-        //refresh because of timer
-        //also statement because the backend makes 409 if there arent rounds left! we should recognize in the fronted beforehand
-      
-        //wait for three seconds and refresh
-        setInterval(() => {
-          console.log("wait for three seconds");
-          window.location.reload();
-          window.location.reload();
-    }, 3000);
+      else if (isDrawer) {
+        await api.put('/nextRound/' + gameToken);
       }
     }
     catch (error) {
@@ -375,9 +321,8 @@ const Game = () => {
     ctx.current.globalCompositeOperation = 'source-over'
   }
 
-
   const onMouseDown = (e) => {
-    if (drawer){
+    if (isDrawer){
       setPosition({
         x: e.nativeEvent.offsetX,
         y: e.nativeEvent.offsetY
@@ -389,7 +334,7 @@ const Game = () => {
   }
 
   const onMouseUp = (e) => {
-    if (drawer){
+    if (isDrawer){
       setMouseDown(false)
       if (e.type !== 'mouseleave'){
         setUndoArray([...undoArray, ctx.current.getImageData(0, 0, ctx.current.canvas.width, ctx.current.canvas.height)]);
@@ -400,7 +345,7 @@ const Game = () => {
   }
 
   const undoLast = (e) => {
-    if(drawer){
+    if(isDrawer){
       if(undoIndex <= 0){
         setUndoIndex(-1);
         setUndoArray([]);
@@ -425,7 +370,7 @@ const Game = () => {
   }
 
   const redoLast = (e) => {
-    if(drawer){
+    if(isDrawer){
       if(redoIndex >= 0){
         
         ctx.current.putImageData(redoArray[redoIndex], 0, 0);
@@ -441,7 +386,7 @@ const Game = () => {
   }
 
   const onMouseMove = (e) => {
-    if (drawer){
+    if (isDrawer){
       draw(e.nativeEvent.offsetX, e.nativeEvent.offsetY)
     }
   }
@@ -450,12 +395,6 @@ const Game = () => {
     setSelectedColor(e.hex)
     
   }
-
-  // const changeColor_ColorPicker = (e) => {
-  //   setSelectedColor(e)
-  //   setOpenColorPicker(false)
-  //   ctx.current.globalCompositeOperation = 'source-over'
-  // }
 
   const closeColorPicker = (event, reason) => {
     if (reason && reason === "backdropClick") 
@@ -474,37 +413,23 @@ const Game = () => {
     return '#' + (Number(`0x1${hex}`) ^ 0xFFFFFF).toString(16).substring(1).toUpperCase()
   }
 
-  const pickWord1 = async() => {
-    setOpenModal(false);
-    setWord(word1)
-    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1);
-    localStorage.setItem('ticking', true);
-    setTicking(true)
-    await api.put('/nextRound/' + gameToken);
+  const pickWord = (word) => async () => {
+    await api.put('/games/'+gameToken+"/word/"+word);
+    setSelectedWord(word);
+    setWords(null)
   }  
 
-  const pickWord2 = async() => {
-    setOpenModal(false);
-    setWord(word2)
-    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2);
-    localStorage.setItem('ticking', true);
-    setTicking(true)
-    await api.put('/nextRound/' + gameToken);
-  }  
-
-  const pickWord3 = async() => {
-    setOpenModal(false);
-    setWord(word3)
-    await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3);
-    localStorage.setItem('ticking', true);
-    setTicking(true)
-    await api.put('/nextRound/' + gameToken);
-  }  
+  useEffect(async () => {
+    if (secondsRemaining === 0) {
+      await finishDrawing();
+    }
+  }, [secondsRemaining])
 
   const makeGuess = async(e) =>{
     e.preventDefault();
     try{
-      const response = await api.get('/games/'+window.location.pathname.split("/")[2]+"/user/"+localStorage.getItem("token")+"/word/"+guessedWord);
+      const response = await api.get('/games/'+gameToken+"/user/"+userToken+"/word/"+guessedWord);
+      console.log("makeGuess response:", typeof(response.data), response.data);
       if (response.data){
         alert("Your guess is correct! You get 10p")
         setGuessed(true);
@@ -517,7 +442,6 @@ const Game = () => {
       console.error("Details:", error);
       alert("Something went wrong while sending the guessword! See the console for details.");
     }
-    console.log(users)
   }
 
   let score = <Spinner />;
@@ -538,15 +462,10 @@ const Game = () => {
     );
   };
 
-
-
-  return (
-    
-    // Modal where the Word gets picked from the drawer
+  return (    
     <BaseContainer className="drawing container">
     <Modal
         open={openModal}
-        //onClose={handleCloseModal} //would close if you click outside of the modal
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -554,53 +473,36 @@ const Game = () => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Choose one word:
           </Typography>
-          <Button variant="text" color="secondary" onClick={pickWord1}>
-            {word1}
+          {words && words.map((word) => (
+            <Button key={word} variant="text" color="secondary" onClick={pickWord(word)}>
+            {word}
           </Button>
-          <Button  variant="text" color="secondary" onClick={pickWord2}>
-            {word2}
-          </Button>
-          <Button  variant="text" color="secondary" onClick={pickWord3}>
-            {word3}
-          </Button>
+          ))}
         </Box>
     </Modal>
 
-
-  {/* The timer */}
     <div className="drawing timer">
-        {/* referred from https://www.npmjs.com/package/react-countdown-circle-timer */}
-       {roundLength != null && <CountdownCircleTimer
+       {game && isTicking && <CountdownCircleTimer
           size="150"
           strokeWidth="10"
-          isPlaying={ticking}
-          duration={roundLength} //here we can add the time which is selected
+          isPlaying={isTicking}
+          initialRemainingTime={secondsRemaining}
+          duration={game.roundLength} //here we can add the time which is selected
           colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[roundLength, ~~(roundLength/2), ~~(roundLength/4), 0]}
-          // need to implement further
-          onComplete= {() => {
-            setTicking(false);
-            if(localStorage.getItem("roundLength") == 0){
-            finishDrawing();
-            setRoundLength(null);
-            }
-          }}>
-          {({ remainingTime }) => {
-            localStorage.setItem("roundLength", remainingTime)
-            return (remainingTime)
-          }}       
+          colorsTime={[game.roundLength, ~~(game.roundLength/2), ~~(game.roundLength/4), 0]}
+          >
+          {() => {return secondsRemaining;}}       
         </CountdownCircleTimer>}
     </div>
     
-
-    {drawer ?
+    {isDrawer ?
       <div>
-        {word !== 'null' && <div className="drawing h1">Draw the Word: <div className="drawing h2">{word}</div></div>}
+        {selectedWord !== null && <div className="drawing h1">Draw the Word: <div className="drawing h2">{selectedWord}</div></div>}
         <div className="drawing settings">      
         <div className="drawing icons">
-          <FaUndo display={drawer} className="drawing undo"  title="click to undo last stroke" style={{border:isUndoing}} size={"2.2em"} onClick={undoLast}/>
-          <FaRedo display={drawer} className="drawing redo"  title="click to redo last stroke" style={{border:isRedoing}} size={"2.2em"} onClick={redoLast}/>
-          <FaTrashAlt display={drawer} className="drawing trash"  title="click to erase all" style={{border:isDeleting}} size={"2.2em"} onClick={clear}/>
+          <FaUndo display={isDrawer} className="drawing undo"  title="click to undo last stroke" style={{border:isUndoing}} size={"2.2em"} onClick={undoLast}/>
+          <FaRedo display={isDrawer} className="drawing redo"  title="click to redo last stroke" style={{border:isRedoing}} size={"2.2em"} onClick={redoLast}/>
+          <FaTrashAlt display={isDrawer} className="drawing trash"  title="click to erase all" style={{border:isDeleting}} size={"2.2em"} onClick={clear}/>
           <FaPen className="drawing pen" title="click to draw" style={{color:selectedColor, border:isDrawing}} size={"2.2em"} onClick={paint}/>
           <BsBorderWidth className="drawing pen" title="click to change linewidth" style={{border:isSelectingWidth}} size={"2.2em"} onClick={() => {setOpenWidthPicker(true); setIsSelectingWidth("inset")}}/>
          
@@ -656,14 +558,14 @@ const Game = () => {
             onMouseLeave={onMouseUp}
             onMouseMove={onMouseMove}
           />
-       {usernames && ticking && <div className="drawing chatbox">
+       {usernames && isTicking && <div className="drawing chatbox">
          <Chatbox user={JSON.parse(localStorage.getItem('user'))} usernames={usernames} gameToken={gameToken} />
        </div>}
     </div>
         
      <br />
      {
-      !drawer?
+      !isDrawer?
       <div align="center">
         <form onSubmit={makeGuess}>
           <label>Enter your guess:
@@ -687,8 +589,6 @@ const Game = () => {
         {classification} 
       </div>
     </BaseContainer>
-   
-
   );
 }
 
