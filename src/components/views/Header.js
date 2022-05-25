@@ -20,8 +20,7 @@ const logout = async (props) => {
   if (props.currentUser != null) {
     try {
       await api.put(`/status/${localStorage.getItem("token")}`);
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      localStorage.clear();
       window.location.reload();
     } catch (error) {
       alert(
@@ -31,8 +30,7 @@ const logout = async (props) => {
       );
     }
   } else {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.clear();
   }
 };
 
