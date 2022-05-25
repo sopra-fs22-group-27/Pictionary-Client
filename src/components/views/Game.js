@@ -205,7 +205,7 @@ const Game = () => {
   const fetchAIDrawingRating = async() =>{
     try{
       const response = await api.get('/vision/' + gameToken + '/drawerPoints');
-      if(response !== null){
+      if(response !== null && !imageIsTransparent){
         setAIDrawingRating(response.data);
       }
     }
@@ -501,30 +501,30 @@ const Game = () => {
   }
 
   const pickWord1 = async() => {
+    await api.put('/nextRound/' + gameToken);
     setOpenModal(false);
     setWord(word1)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word1);
     localStorage.setItem('ticking', true);
     setTicking(true)
-    await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord2 = async() => {
+    await api.put('/nextRound/' + gameToken);
     setOpenModal(false);
     setWord(word2)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word2);
     localStorage.setItem('ticking', true);
     setTicking(true)
-    await api.put('/nextRound/' + gameToken);
   }  
 
   const pickWord3 = async() => {
+    await api.put('/nextRound/' + gameToken);
     setOpenModal(false);
     setWord(word3)
     await api.put('/games/'+window.location.pathname.split("/")[2]+"/word/"+word3);
     localStorage.setItem('ticking', true);
     setTicking(true)
-    await api.put('/nextRound/' + gameToken);
   }  
 
   const makeGuess = async(e) =>{
