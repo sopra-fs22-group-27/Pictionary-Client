@@ -40,6 +40,8 @@ const Game = () => {
   const [openModal, setOpenModal] = useState(false);
   const [word, setWord] = useState(null);  
   const [drawingClassification, setDrawingClassification] = useState(null);
+  const [aiDrawingRating, setAIDrawingRating] = useState(null);
+  const [imageIsTransparent, setImageIsTransparent] = useState(true);
   const [ticking, setTicking] = useState(false);
   const [canDraw, setCanDraw] = useState(true);
   const [drawer, setDrawer] = useState(false); //If true then you are the drawer
@@ -141,9 +143,18 @@ const Game = () => {
   // Every second --> getting image from backend if guesser
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchClassification();
       if (!drawer){
         getImage();
+      }
+      if(imageIsTransparent){
+        const canvas = document.getElementById("canvas");
+        if(!isCanvasTransparent(canvas)){
+          setImageIsTransparent(false);
+          fetchClassification();
+        }
+      }
+      else{
+        fetchClassification();
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -161,6 +172,7 @@ const Game = () => {
     const interval = setInterval(() => {
       if(drawer && localStorage.getItem('selectedWord') !== 'null' && localStorage.getItem('selectedWord') !== null){
         setTicking(true);
+        fetchAIDrawingRating();
       }
       if(!drawer && !ticking){
         fetchRound();
@@ -187,6 +199,21 @@ const Game = () => {
       console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
       console.error("Details:", error);
       alert("Something went wrong while fetching the round! See the console for details.");
+    }
+  }
+
+  const fetchAIDrawingRating = async() =>{
+    try{
+      const response = await api.get('/vision/' + gameToken + '/drawerPoints');
+      if(response !== null){
+        setAIDrawingRating(response.data);
+      }
+    }
+    catch (error) {
+      console.error(`Something went wrong while getting the AI Drawing Rating: \n${handleError(error)}`);
+      console.error("Details:", error);
+      // Don't alert, because this is called every second
+      //alert("Something went wrong while sending the images! See the console for details.");
     }
   }
 
@@ -242,6 +269,14 @@ const Game = () => {
     console.error("Details:", error);
     //alert("Something went wrong while fetching the images! See the console for details.");
     }
+  }
+
+  function isCanvasTransparent(canvas) { // true if all pixels Alpha equals to zero
+    var ctx=canvas.getContext("2d");
+    var imageData=ctx.getImageData(0,0,canvas.offsetWidth,canvas.offsetHeight);
+    for(var i=0;i<imageData.data.length;i+=4)
+      if(imageData.data[i+3]!==0)return false;
+    return true;
   }
 
   const draw = useCallback((x, y) => {
@@ -662,6 +697,12 @@ const Game = () => {
           <Button type="submit" disabled={guessed || !guessedWord} >submit</Button>         
           </form>
       </div>
+      :null
+      }
+      <br />
+      {
+      drawer?
+      <h4>{aiDrawingRating}</h4> 
       :null
       }
       <div className="drawing scores">
