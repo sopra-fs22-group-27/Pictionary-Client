@@ -16,7 +16,6 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { FaUndo, FaRedo, FaPen, FaEraser, FaTrashAlt, FaPalette } from 'react-icons/fa';
 import "styles/views/Game.scss";
-import Chatbox from "./Chatbox";
 
 var randomPictionaryWords = require('word-pictionary-list');
 
@@ -64,7 +63,6 @@ const Game = () => {
   const [guessedWord, setGuessedWord] = useState(""); 
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [users, setUsers] = useState(null); //for the score during the game
-  const [usernames, setUsernames] = useState([]); // for the usernames of chatbox
   const [lastPosition, setPosition] = useState({
     x: 0,
     y: 0
@@ -125,10 +123,8 @@ const Game = () => {
   useEffect(async() => {
     const user_score = await api.get("/games/"+gameToken+"/scoreboard")
     var arr = [];
-    var username_array = [];
     for (const [key, value] of Object.entries(user_score.data)) {
       arr.push(`${key}: ${value}`)
-      username_array.push(key);
     }
     setUsers(arr);
     setUsernames(username_array);
@@ -170,6 +166,21 @@ const Game = () => {
       setGameRound(response.data)
     }
   }, []);
+
+  const fetchAIDrawingRating = async() =>{
+    try{
+      const response = await api.get('/vision/' + gameToken + '/drawerPoints');
+      if(response !== null && !imageIsTransparent){
+        setAIDrawingRating(response.data);
+      }
+    }
+    catch (error) {
+      console.error(`Something went wrong while getting the AI Drawing Rating: \n${handleError(error)}`);
+      console.error("Details:", error);
+      // Don't alert, because this is called every second
+      //alert("Something went wrong while sending the images! See the console for details.");
+    }
+  }
 
   const fetchClassification = async() => {
     try{
@@ -217,6 +228,14 @@ const Game = () => {
     console.error(`Something went wrong while fetching the images: \n${handleError(error)}`);
     console.error("Details:", error);
     }
+  }
+
+  function isCanvasTransparent(canvas) { // true if all pixels Alpha equals to zero
+    var ctx=canvas.getContext("2d");
+    var imageData=ctx.getImageData(0,0,canvas.offsetWidth,canvas.offsetHeight);
+    for(var i=0;i<imageData.data.length;i+=4)
+      if(imageData.data[i+3]!==0)return false;
+    return true;
   }
 
   const draw = useCallback((x, y) => {

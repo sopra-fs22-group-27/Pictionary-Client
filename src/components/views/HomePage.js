@@ -10,6 +10,8 @@ import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
+import { Alert, IconButton, Collapse, } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 const HomePage = (props) => {  
   const history = useHistory();
@@ -20,7 +22,9 @@ const HomePage = (props) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [gameToken, setGameToken] = useState(null);
   const [seeAllGames, setSeeAllGames] = useState(true);
-  
+  const [anyOperation, setAnyOperation] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+
   const myuser = JSON.parse(localStorage.getItem("user"));
 
   const fetchGames = async () => {
@@ -52,6 +56,22 @@ const HomePage = (props) => {
       );
     }
   };
+
+  const syncActiveTime = async () => {
+    if (anyOperation) {
+      try {
+        await api.put(`/synctime/${localStorage.getItem("token")}`);
+        console.log("sync");
+        setAnyOperation(false);
+      } catch (error) {
+        alert(
+          `Something went wrong during fetching the active time: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+  }
 
   const joinGame = async (gameToken) => {
     try {
@@ -109,6 +129,25 @@ const HomePage = (props) => {
           ))
   }
 
+  const logout = async () => {
+    if(!anyOperation){
+      try {
+        await api.put(`/status/${localStorage.getItem("token")}`);
+        localStorage.clear();
+        alert("Since you did not do any operation in about 1 min, so you are forced to log out!");
+        history.push('/login');
+        window.location.reload();
+      } catch (error) {
+        alert(
+          `Something went wrong during updating the logged_out status: \n${handleError(
+            error
+          )}`
+        );
+      }
+    }
+    
+  };
+
   useEffect(() => {
     let timer = setTimeout(() => fetchGames(),  1000);
     return () => {
@@ -124,6 +163,27 @@ const HomePage = (props) => {
   }, [joinableGames]);
 
   useEffect(() => {
+    let timer = setTimeout(() => syncActiveTime(),  1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => logout(),  60000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
+    let timer = setTimeout(() => setAlertOpen(true),  50000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [anyOperation]);
+
+  useEffect(() => {
     if (performance.navigation.type === 1) {
       props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
     }
@@ -131,6 +191,27 @@ const HomePage = (props) => {
 
   return (
     <div>
+      <Collapse in={alertOpen}>
+        <Alert
+          severity="warning"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setAlertOpen(false);
+                setAnyOperation(true);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          If you are still there, please do some operation. Otherwise, we'll log you out!
+        </Alert>
+      </Collapse>
       <BaseContainer>
         <div className="create-game-container">
           <div className="create-game-banner">
@@ -159,9 +240,9 @@ const HomePage = (props) => {
       <div className='games-container'>
         <div className='game-title-container'>
           <div className='games-title'>Join a game</div>
-          <button className="select-gametype-button" onClick={() => setSeeAllGames(!seeAllGames)}>{seeAllGames? "All Games" : "Joinable Games"}</button>
+          <button className="select-gametype-button" onClick={() => {setSeeAllGames(!seeAllGames); setAnyOperation(true);}}>{seeAllGames? "All Games" : "Joinable Games"}</button>
           <input label='gameName' className='games-input' placeholder='Search Game' 
-            onChange={(e) => setGameName(e.target.value)} value={gameName}></input>
+            onChange={(e) => {setGameName(e.target.value); setAnyOperation(true);}} value={gameName}></input>
         </div>
         {seeAllGames? display(games): display(joinableGames)}
       </div>}
