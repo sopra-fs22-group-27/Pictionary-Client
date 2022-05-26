@@ -78,7 +78,7 @@ const HomePage = (props) => {
     }
     return filteredGames.map((game) => (
             <div
-              className="game-container"
+              className="game-container-home-page"
               key={`game${game.gameToken}`}
               onClick={() => {
                 setGameToken(game.gameToken);

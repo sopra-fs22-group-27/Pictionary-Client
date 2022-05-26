@@ -5,108 +5,75 @@
       text-align:center;
       font-size: 60px;
       font-weight:700;
-  
     }
     &.container {
-      margin-top: 2%;
       padding: 1.5em;
       border-radius: $borderRadius;
       display: flex;
       flex-direction: column;
-      // align-items: center;
     }
     #canvas{
-      // flex: 3;
       border: 1px solid #9489DB;
       border-radius: 25px;  
-      // align-self: center;
+      min-width: 35em;
+      min-height: 30em;
     }
-    &.settings {
-      align-self: center;
-      width: 50vw;
-      text-align: center;
-    }
-    &.circles {
-      // float: right;
-      
-    }
-    &.undo{
-      color: #000;
-    }
-    &.redo{
-      color: #000;
-    }
-    &.eraser {
-      color: black;
-    }
-    &.trash {
-      color: black;
-      // float: left;
-    }
-    &.pen{
-      color: black;
-    }
-    &.palette{
-      color: black;
+    &.icon{
+      color: #9489db !important;
+      border: #9489db solid 1px !important;
+      padding: .8em;
+      border-radius: 15px;
+      width: 3.5em;
+      height: 3.5em;   
+      margin-right: 1em;
     }
     &.dialog{
       flex-direction: column;
       align-items: center;
       justify-content: center;
     }
-    &.dialogtitle{
+    &.dialog-title{
       text-align: center;
       color: black;
     }
-
     &.h1{
       text-align: center;
       margin-bottom: 70px;
       margin-top: 5px;
     }
-    &.h2{
+    &.underline{
       text-align: center;
       text-decoration: underline;
+      text-transform: uppercase;
     }
     &.icons{
-      height:1.4em;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
+      align-items: center;
+      justify-content: center;
+
     }
     &.timer{
-      position:absolute;
-      right: 5%;
-      top: 10%;
+      margin-bottom: 1em;
+      margin-left: 3.5em;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em;
+      
     }
     &.canvas-chatbox {
       display: flex;
       flex-direction: row;
       align-content: space-between;
     }
-    &.chatbox {
-      // flex: 1;
-    }
-
-    &.bubble {
-      width: 120px; 
-      height: 80px; 
-      background: #5ac4ed;
-      position: absolute;
-      left:100px;
-      -moz-border-radius: 10px; 
-      -webkit-border-radius: 10px; 
-      border-radius: 10px;
-   }
-
-    &.scores {
+    &.boxes {
+      margin-bottom: 1em;
+      margin-left: 1em;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      padding: 18px;
-      position: absolute;
-      left: 5%;
-      top: 10%;
       padding: 1.5em;
       border: 1px solid transparent;
       border-radius: 10px;
@@ -125,39 +92,84 @@
             #37d1e5 101.91%,
             #5acfb9 131.52%
           )
-          border-box;    
-      
+          border-box;     
     }
-    &.classification {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px;
-      position: absolute;
-      left: 80%;
-      top: 40%;
-      padding: 1.5em;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      background: linear-gradient(
-            96.78deg,
-            #fef7f8 -6.3%,
-            #fbf6fa 35.9%,
-            #e9f2f5 100.12%
-          )
-          padding-box,
-        linear-gradient(
-            114.59deg,
-            #f06464 1.6%,
-            #f277d0 32.79%,
-            #9489db 71.64%,
-            #37d1e5 101.91%,
-            #5acfb9 131.52%
-          )
-          border-box;    
-      
-    }
-
-    
 }
 
+.game-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.guessing-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.drawing-guess {
+  min-height: 2em;
+  border: 1px solid #9489DB;
+  border-radius: 25px;
+  margin-left: 1em;
+}
+
+.submit-button {
+  margin-left: 2em !important;
+  background-color: #9489DB !important;
+  color: white !important;
+  border-radius: 25px !important;
+}
+
+.word-to-guess {
+  background-color: #9489DB !important;
+  padding: 1em !important;
+  padding-right: 2em !important;
+  padding-left: 2em !important;
+  margin-left: 1em !important;
+  margin-bottom: 1em !important;
+  color: white !important;
+  border-radius: 25px !important;
+}
+
+.word-to-guess-wrapper {
+  border: 1px solid transparent;
+  padding: 1.5em;
+  border-radius: 10px;
+  background: linear-gradient(
+            96.78deg,
+            #fef7f8 -6.3%,
+            #fbf6fa 35.9%,
+            #e9f2f5 100.12%
+          )
+          padding-box,
+        linear-gradient(
+            114.59deg,
+            #f06464 1.6%,
+            #f277d0 32.79%,
+            #9489db 71.64%,
+            #37d1e5 101.91%,
+            #5acfb9 131.52%
+          )
+          border-box;     
+    }
+  
+.word-to-guess-title {
+  text-align: center;
+  color: #9489db;
+  font-size: 30px !important;
+  margin-bottom: 1em !important;
+}
+
+.timer {
+  display: flex;
+  z-index: -1;
+}

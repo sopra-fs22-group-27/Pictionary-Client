@@ -123,10 +123,6 @@ const Game = () => {
   const history = useHistory();
 
   useEffect(async() => {
-    // if (canvasRef.current) {
-    //   ctx.current = canvasRef.current.getContext('2d');
-    // }
-
     const user_score = await api.get("/games/"+gameToken+"/scoreboard")
     var arr = [];
     var username_array = [];
@@ -136,7 +132,7 @@ const Game = () => {
     }
     setUsers(arr);
     setUsernames(username_array);
-  }, []);
+  }, [guessed]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -245,6 +241,8 @@ const Game = () => {
   }
 
   const finishDrawing = async() => {
+    setGuessed(false);
+    setGuessedWord('');
     try{
         canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height)
         await sendImage();
@@ -417,6 +415,7 @@ const Game = () => {
       if (response.data){
         alert("Your guess is correct! You get 10p")
         setGuessed(true);
+
       }
       else{
         alert("Wrong! Try again...")
@@ -428,14 +427,15 @@ const Game = () => {
     }
   }
 
-  let score = <Spinner />;
-
+  const [score, setScore] = useState(<Spinner />);
+  useEffect (() => {
   if (users!==null) {
-    score = (
+    setScore(
       users.map((item) =>
       <p>{item}</p>)
     );
   };
+  }, [guessed, users]);
 
   let classification = <Spinner />;
 
@@ -453,46 +453,37 @@ const Game = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box textAlign='center' sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "25vw", bgcolor: 'background.paper', boxShadow: 24, p: 5,}}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Box textAlign='center' className="word-to-guess-wrapper" sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "35vw", boxShadow: 24, p: 5,}}>
+          <Typography id="modal-modal-title" className="word-to-guess-title" variant="h6" component="h2">
             Choose one word:
           </Typography>
           {words && words.map((word) => (
-            <Button key={word} variant="text" color="secondary" onClick={pickWord(word)}>
+            <Button key={word} variant="text" color="secondary" className="word-to-guess" onClick={pickWord(word)}>
             {word}
           </Button>
           ))}
         </Box>
     </Modal>
-
-    <div className="drawing timer">
-       {isLoaded && isTicking && <CountdownCircleTimer
-          size="150"
-          strokeWidth="10"
-          isPlaying={isTicking}
-          initialRemainingTime={secondsRemaining}
-          duration={game.roundLength} //here we can add the time which is selected
-          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[game.roundLength, ~~(game.roundLength/2), ~~(game.roundLength/4), 0]}
-          >
-          {() => {return secondsRemaining;}}       
-        </CountdownCircleTimer>}
-    </div>
     
-    {isDrawer ?
-      <div>
-        {selectedWord !== null && <div className="drawing h1">Draw the Word: <div className="drawing h2">{selectedWord}</div></div>}
-        <div className="drawing settings">      
+    <div className="game-container">
+      <div className="canvas-container">
+      {isDrawer && selectedWord !== null ? (
+        <div className="drawing h1">Draw the Word: <span className="drawing underline">{selectedWord}</span></div>
+      ) : (
+     <div className="drawing h1">Guess the Word:</div>
+      )}
+        {isDrawer &&
+        <>
         <div className="drawing icons">
-          <FaUndo display={isDrawer} className="drawing undo"  title="click to undo last stroke" style={{border:isUndoing}} size={"2.2em"} onClick={undoLast}/>
-          <FaRedo display={isDrawer} className="drawing redo"  title="click to redo last stroke" style={{border:isRedoing}} size={"2.2em"} onClick={redoLast}/>
-          <FaTrashAlt display={isDrawer} className="drawing trash"  title="click to erase all" style={{border:isDeleting}} size={"2.2em"} onClick={clear}/>
-          <FaPen className="drawing pen" title="click to draw" style={{color:selectedColor, border:isDrawing}} size={"2.2em"} onClick={paint}/>
-          <BsBorderWidth className="drawing pen" title="click to change linewidth" style={{border:isSelectingWidth}} size={"2.2em"} onClick={() => {setOpenWidthPicker(true); setIsSelectingWidth("inset")}}/>
-         
-          {/* <StrokeWidthSelection onChange={changeWidth}  title="click to change linewidth" selectedWidth={selectedWidth}/> */}
-          <FaEraser className="drawing eraser" title="click to erase" style={{border:isErasing}} size={"2.2em"} onClick={erase}/>
-          <FaPalette className="drawing palette" style={{color:selectedColor, border:isSelectingColor}} title="click to choose color" size={"2.2em"} onClick={() => {setOpenColorPicker(true); setIsSelectingColor("inset")}}/>
+            <FaUndo display={isDrawer} className="drawing icon"  title="click to undo last stroke" style={{border:isUndoing}} size={"2.2em"} onClick={undoLast}/>
+            <FaRedo display={isDrawer} className="drawing icon"  title="click to redo last stroke" style={{border:isRedoing}} size={"2.2em"} onClick={redoLast}/>
+            <FaTrashAlt display={isDrawer} className="drawing icon"  title="click to erase all" style={{border:isDeleting}} size={"2.2em"} onClick={clear}/>
+            <FaPen className="drawing icon" title="click to draw" style={{color:selectedColor, border:isDrawing}} size={"2.2em"} onClick={paint}/>
+            <BsBorderWidth className="drawing icon" title="click to change linewidth" style={{border:isSelectingWidth}} size={"2.2em"} onClick={() => {setOpenWidthPicker(true); setIsSelectingWidth("inset")}}/>
+          
+            {/* <StrokeWidthSelection onChange={changeWidth}  title="click to change linewidth" selectedWidth={selectedWidth}/> */}
+            <FaEraser className="drawing icon" title="click to erase" style={{border:isErasing}} size={"2.2em"} onClick={erase}/>
+            <FaPalette className="drawing icon" style={{color:selectedColor, border:isSelectingColor}} title="click to choose color" size={"2.2em"} onClick={() => {setOpenColorPicker(true); setIsSelectingColor("inset")}}/>
         </div>
       
        <Dialog 
@@ -500,7 +491,7 @@ const Game = () => {
           open={openColorPicker}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"> 
-          <DialogTitle id="alert-dialog-title" className="drawing dialogtitle">Choose your preferred color</DialogTitle>
+          <DialogTitle id="alert-dialog-title" className="drawing dialog-title">Choose your preferred color</DialogTitle>
           <Typography align='center'>
           <CirclePicker className="drawing circles" title="change color" onChange={ changeColor_CirclePicker } width="600px" colors={ ["#FFFF00", "#FF0000", "#008000", "#0000FF", "#AB149E", "#000000", "#cddc39", "#ffeb3b", "#ffc107", "#ff9800", "#ff5722", "#795548", "#607d8b", "#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4", "#009688", "#4caf50", "#8bc34a", "#cddc39"] }/>
           </Typography>
@@ -523,52 +514,60 @@ const Game = () => {
           <Typography align='center'><Button variant="outlined" onClick={() => {setOpenWidthPicker(false); setIsSelectingWidth("outset")}}>Confirm</Button></Typography>
           <br />
         </Dialog>
-      </div>
-      <br />
+        <br /></>
+        }
+        <div className="drawing canvas-chatbox">
+            <canvas id="canvas"
+            
+                width={window.innerWidth/2}
+                height={window.innerHeight/2}
+                ref={canvasRef}
+                title="draw here"
 
-      </div>
-      :<h1 className="drawing h1">Guess the Word <h2 className="drawing h2">from the drawing</h2></h1> //hide if not drawer
-    }
-    <div className="drawing canvas-chatbox">
-    
-        <canvas id="canvas"
-            width={window.innerWidth/2}
-            height={window.innerHeight/2}
-            ref={canvasRef}
-            title="draw here"
-
-            onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
-            onMouseMove={onMouseMove}
-          />
-
-    </div>
-        
-     <br />
-     {
-      !isDrawer?
-      <div align="center">
-        <form onSubmit={makeGuess}>
-          <label>Enter your guess:
-            <input 
-              type="text" 
-              value={guessedWord.toLowerCase()}
-              onChange={(e) => setGuessedWord(e.target.value)}
-            />
-          </label>
-          <Button type="submit" disabled={guessed || !guessedWord} >submit</Button>         
-          </form>
-      </div>
-      :null
-      }
-      <div className="drawing scores">
-        <h4>Points:</h4>  
-        {score} 
-      </div>
-      <div className="drawing classification">
-        <h4>I see</h4>  
-        {classification} 
+                onMouseDown={onMouseDown}
+                onMouseUp={onMouseUp}
+                onMouseLeave={onMouseUp}
+                onMouseMove={onMouseMove}
+              />
+        </div>
+        <br />
+        {!isDrawer && 
+          <form onSubmit={makeGuess} className="guessing-wrapper">
+            <label>Enter your guess:           
+              <input 
+              className="drawing-guess"
+                type="text" 
+                value={guessedWord.toLowerCase()}
+                onChange={(e) => setGuessedWord(e.target.value)}
+              />
+            </label>
+            <Button className="submit-button" type="submit" disabled={guessed || !guessedWord} >submit</Button>         
+          </form>}
+        </div>
+        <div className="sidebar-container">
+        <div className="drawing timer">
+         {isLoaded && isTicking && <CountdownCircleTimer
+            className="timer"
+            size="100"
+            strokeWidth="10"
+            isPlaying={isTicking}
+            initialRemainingTime={secondsRemaining}
+            duration={game.roundLength} //here we can add the time which is selected
+            colors={['#f06464', '#f277d0', '#9489db', '#37d1e5']}
+            colorsTime={[game.roundLength, ~~(game.roundLength/2), ~~(game.roundLength/4), 0]}
+            >
+            {() => {return secondsRemaining;}}       
+          </CountdownCircleTimer>}
+        </div>
+          <div className="drawing boxes">
+            <h4>Points:</h4>  
+            {score} 
+          </div>
+          <div className="drawing boxes">
+            <h4>I see</h4>  
+            {classification} 
+          </div>
+        </div>
       </div>
     </BaseContainer>
   );
