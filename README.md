@@ -82,7 +82,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ## Roadmap
 
 - Add a different game mode  where the users can play some kind of drinking game.
-- Implement our ![Chat](https://github.com/sopra-fs22-group-27/Pictionary-Client/tree/chatbox) it works locally but not on Heroku due to http/https issues.
+- Implement our [Chat](https://github.com/sopra-fs22-group-27/Pictionary-Client/tree/chatbox) it works locally but not on Heroku due to http/https issues.
 - Create shapes which could be used by drag & drop during drawing.
 - Make the application more secure. 
 
