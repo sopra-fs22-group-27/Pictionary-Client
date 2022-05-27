@@ -34,11 +34,8 @@ const CreateGame = () => {
       setTotalPlayers(response.data.numberOfPlayersRequired);
 
       if (full.data) {
-        //const players = response.data.playerTokens;
-        localStorage.setItem("drawerToken", null);
-        localStorage.setItem("selectedWord", null);
-        localStorage.setItem("roundLength", null);
-        localStorage.setItem("ticking", false);
+        localStorage.removeItem("selectedWord");
+        localStorage.removeItem("words");
         history.push({ pathname: `/game/${gameToken}` });
         //const firstDrawer = Math.floor(Math.random() * players.length);
         //history.push({ pathname: `/game/${gameToken}/drawer/${players[firstDrawer]}`});
