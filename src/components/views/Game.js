@@ -87,6 +87,7 @@ const Game = () => {
   const secondsRemaining = isLoaded ? Math.max(0, game.roundLength - secondsPassed) : null;
   const isTicking = isLoaded ? gameRound.roundStartingTime !== 0 : null;
   const canDraw = isLoaded ? isDrawer && !!selectedWord && secondsRemaining > 0 : null;
+  const canFetchClassifications = isLoaded ? !isCanvasBlank() : null;
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -133,12 +134,12 @@ const Game = () => {
   useEffect(() => {
     if (!isLoaded) return;
     fetchClassification();
-    if (isDrawer){
-      sendImage();
-      fetchAIDrawingRating();
-    } else {
-      getImage();
-    }
+      if (isDrawer){
+        sendImage();
+        fetchAIDrawingRating();
+      } else {
+        getImage();
+      }
     const interval = setInterval(() => {
       fetchClassification();
       if (isDrawer){
@@ -170,38 +171,41 @@ const Game = () => {
   }, []);
 
   const fetchAIDrawingRating = async() =>{
-    try{
-      const response = await api.get('/vision/' + gameToken + '/drawerPoints');
-      if(response !== null){
-        setAIDrawingRating(response.data);
+    if(canFetchClassifications && !!selectedWord){
+      try{
+        const response = await api.get('/vision/' + gameToken + '/drawerPoints');
+        if(response !== null){
+          setAIDrawingRating(response.data);
+        }
       }
-    }
-    catch (error) {
-      console.error(`Something went wrong while getting the AI Drawing Rating: \n${handleError(error)}`);
-      console.error("Details:", error);
-      // Don't alert, because this is called every second
-      //alert("Something went wrong while sending the images! See the console for details.");
+      catch (error) {
+        console.error(`Something went wrong while getting the AI Drawing Rating: \n${handleError(error)}`);
+        console.error("Details:", error);
+        // Don't alert, because this is called every second
+        //alert("Something went wrong while sending the images! See the console for details.");
+      }
     }
   }
 
   const fetchClassification = async() => {
-    try{
-      const response = await api.get('/vision/' + gameToken);
-      if (response !== null){
-        var arr = [];
-      var username_array = [];
-      for (const [key, value] of Object.entries(response.data.annotations)) {
-        arr.push(`${key}: ${value}`)
-        username_array.push(key);
+    if(canFetchClassifications){
+      try{
+        const response = await api.get('/vision/' + gameToken);
+        if (response !== null){
+          var arr = [];
+        var username_array = [];
+        for (const [key, value] of Object.entries(response.data.annotations)) {
+          arr.push(`${key}: ${value}`)
+          username_array.push(key);
+        }
+          setDrawingClassification(arr);
+        }
       }
-        setDrawingClassification(arr);
+      catch (error) {
+        console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
+        console.error("Details:", error);
       }
     }
-    catch (error) {
-      console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
-      console.error("Details:", error);
-    }
-    
   }
 
   const sendImage = async() => {
@@ -234,7 +238,7 @@ const Game = () => {
   }
 
   //returns true if blank
-  const isCanvasBlank = () => {
+  function isCanvasBlank() {
     return !canvasContext()
       .getImageData(0,0, canvas()?.width, canvas()?.height).data
       .some(channel => channel !==0);
