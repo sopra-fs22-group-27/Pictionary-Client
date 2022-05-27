@@ -133,6 +133,7 @@ const Game = () => {
 
   useEffect(() => {
     if (!isLoaded) return;
+    console.log(canFetchClassifications)
     fetchClassification();
       if (isDrawer){
         sendImage();
@@ -150,7 +151,7 @@ const Game = () => {
       }
     }, 500);
     return () => clearInterval(interval);
-  }, [isLoaded, isDrawer]);
+  }, [isLoaded, isDrawer, canFetchClassifications]);
   useEffect(() => {
     updateGame();
     updateGameRound();
@@ -464,7 +465,7 @@ const Game = () => {
 
   let classification = <Spinner />;
 
-  if (drawingClassification!==null) {
+  if (drawingClassification!==null && canFetchClassifications) {
     classification = (
       drawingClassification.map((item) =>
       <p>{item}</p>)
@@ -557,7 +558,7 @@ const Game = () => {
         </div>
         <br />
         {
-          isDrawer?
+          canFetchClassifications && isDrawer?
           <div className="drawing h1">{aiDrawingRating}</div>
           :null
         }
