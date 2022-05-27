@@ -60,6 +60,7 @@ const Game = () => {
   const [isSelectingWidth, setIsSelectingWidth] = useState("outset");
   const [openModal, setOpenModal] = useState(false);
   const [drawingClassification, setDrawingClassification] = useState(null);
+  const [aiDrawingRating, setAIDrawingRating] = useState(null);
   const [guessedWord, setGuessedWord] = useState(""); 
   const [guessed, setGuessed] = useState(null); //if true the guesser guessed the correct word
   const [users, setUsers] = useState(null); //for the score during the game
@@ -127,7 +128,6 @@ const Game = () => {
       arr.push(`${key}: ${value}`)
     }
     setUsers(arr);
-    setUsernames(username_array);
   }, [guessed]);
 
   useEffect(() => {
@@ -135,6 +135,7 @@ const Game = () => {
     fetchClassification();
     if (isDrawer){
       sendImage();
+      fetchAIDrawingRating();
     } else {
       getImage();
     }
@@ -142,6 +143,7 @@ const Game = () => {
       fetchClassification();
       if (isDrawer){
         sendImage();
+        fetchAIDrawingRating();
       } else {
         getImage();
       }
@@ -170,7 +172,7 @@ const Game = () => {
   const fetchAIDrawingRating = async() =>{
     try{
       const response = await api.get('/vision/' + gameToken + '/drawerPoints');
-      if(response !== null && !imageIsTransparent){
+      if(response !== null){
         setAIDrawingRating(response.data);
       }
     }
@@ -199,6 +201,7 @@ const Game = () => {
       console.error(`Something went wrong while fetching the round: \n${handleError(error)}`);
       console.error("Details:", error);
     }
+    
   }
 
   const sendImage = async() => {
@@ -230,12 +233,11 @@ const Game = () => {
     }
   }
 
-  function isCanvasTransparent(canvas) { // true if all pixels Alpha equals to zero
-    var ctx=canvas.getContext("2d");
-    var imageData=ctx.getImageData(0,0,canvas.offsetWidth,canvas.offsetHeight);
-    for(var i=0;i<imageData.data.length;i+=4)
-      if(imageData.data[i+3]!==0)return false;
-    return true;
+  //returns true if blank
+  const isCanvasBlank = () => {
+    return !canvasContext()
+      .getImageData(0,0, canvas()?.width, canvas()?.height).data
+      .some(channel => channel !==0);
   }
 
   const draw = useCallback((x, y) => {
@@ -550,6 +552,11 @@ const Game = () => {
               />
         </div>
         <br />
+        {
+          isDrawer?
+          <div className="drawing h1">{aiDrawingRating}</div>
+          :null
+        }
         {!isDrawer && 
           <form onSubmit={makeGuess} className="guessing-wrapper">
             <label>Enter your guess:           
