@@ -158,7 +158,7 @@ const Game = () => {
       } else {
         getImage();
       }
-    }, 500);
+    }, 1000);
     return () => clearInterval(interval);
   }, [isLoaded, isDrawer, canFetchClassifications]);
   useEffect(() => {
