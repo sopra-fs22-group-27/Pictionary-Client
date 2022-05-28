@@ -167,7 +167,7 @@ const Game = () => {
     const interval = setInterval(() => {
       updateGame();
       updateGameRound();
-    }, 500);
+    }, 1000);
     return () => clearInterval(interval);
     
     async function updateGame() {
@@ -282,6 +282,7 @@ const Game = () => {
         canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height)
         await sendImage();
     } catch(error) {
+      console.log("error");
     }
     try{
       if(game.currentGameRound + 1 === game.numberOfRounds){
