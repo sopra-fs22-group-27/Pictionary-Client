@@ -142,22 +142,21 @@ const Game = () => {
 
   useEffect(() => {
     if (!isLoaded) return;
-    console.log(canFetchClassifications)
-    fetchClassification();
       if (isDrawer){
         sendImage();
         fetchAIDrawingRating();
       } else {
         getImage();
       }
-    const interval = setInterval(() => {
       fetchClassification();
+    const interval = setInterval(() => {
       if (isDrawer){
         sendImage();
         fetchAIDrawingRating();
       } else {
         getImage();
       }
+      fetchClassification();
     }, 1000);
     return () => clearInterval(interval);
   }, [isLoaded, isDrawer, canFetchClassifications]);
