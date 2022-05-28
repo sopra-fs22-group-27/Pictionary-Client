@@ -3,7 +3,7 @@
 
 ## Infromation about the project
 
-https://pictionary-client-22.herokuapp.com/login
+https://pictionary-client-22.herokuapp.com/
 
 ## Current project status
 
