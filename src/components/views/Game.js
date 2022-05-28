@@ -467,7 +467,7 @@ const Game = () => {
 
   if (drawingClassification!==null && canFetchClassifications) {
     classification = (
-      drawingClassification.map((item) =>
+      drawingClassification.slice(0,5).map((item) =>
       <p>{item}</p>)
     );
   };
