@@ -150,7 +150,6 @@ const Game = () => {
   useEffect(() => {
     canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height);
   },[selectedWord])
-
   useEffect(() => {
     const interval = setInterval(async() => {
       if(openModal && (Math.ceil(10 + (localStorage.getItem("currentTime") - Date.now())/1000)) === 0) {
@@ -167,7 +166,6 @@ const Game = () => {
     if (!isLoaded) return;
       if (isDrawer){
         sendImage();
-        fetchAIDrawingRating();
       } else {
         getImage();
       }
@@ -175,12 +173,20 @@ const Game = () => {
     const interval = setInterval(() => {
       if (isDrawer){
         sendImage();
-        fetchAIDrawingRating();
       } else {
         getImage();
       }
       fetchClassification();
     }, 500);
+    return () => clearInterval(interval);
+  }, [isLoaded, isDrawer, canFetchClassifications, selectedWord, isTicking]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+      if (isDrawer)fetchAIDrawingRating();
+    const interval = setInterval(() => {
+      if (isDrawer)fetchAIDrawingRating();
+    }, 5000);
     return () => clearInterval(interval);
   }, [isLoaded, isDrawer, canFetchClassifications, selectedWord, isTicking]);
   useEffect(() => {
@@ -302,10 +308,11 @@ const Game = () => {
   const finishDrawing = async() => {
     setGuessed(false);
     setGuessedWord('');
+    setAIDrawingRating(null);
     localStorage.removeItem("currentTime");
     try{
-        await canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height);
-        if(isDrawer) sendImage();
+        canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height);
+        await sendImage();
     } catch(error) {
       console.log("error");
     }
