@@ -39,7 +39,8 @@ const CreateGame = () => {
       if (full.data) {
         localStorage.removeItem("selectedWord");
         localStorage.removeItem("words");
-        localStorage.removeItem("createdGame")
+        localStorage.removeItem("createdGame");
+        localStorage.removeItem("currentTime");
         history.push({ pathname: `/game/${gameToken}` });
         //const firstDrawer = Math.floor(Math.random() * players.length);
         //history.push({ pathname: `/game/${gameToken}/drawer/${players[firstDrawer]}`});

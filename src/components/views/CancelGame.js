@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
 import { Nav, Navbar, NavDropdown, Button } from "react-bootstrap";
@@ -7,7 +7,6 @@ import { Link, BrowserRouter } from "react-router-dom";
 import { api, handleError } from "helpers/api";
 import { useHistory } from "react-router-dom";
 
-const gameToken = window.location.pathname.split("/")[2];
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
@@ -19,55 +18,77 @@ const gameToken = window.location.pathname.split("/")[2];
  */
 
 
- const deleteGame = async() => {
+ const deleteGame = async(gameToken, createdGame, userToken) => {
 
-  const gameToken = window.location.pathname.split("/")[2];
+  if (gameToken === createdGame) {
+    try {
+      await api.delete(`/games/${gameToken}`);
+      localStorage.removeItem("createdGame");
+    } catch (error) {
+  
+      alert(
+        `Something went wrong during the lobby deletion: \n${handleError(error)}`
+      );
+      localStorage.removeItem("createdGame");
+    }
+  } else {
+    try {
+      await api.put(`/games/${gameToken}/leave/${userToken}`);
+    } catch (error) {
+      alert(
+        `Something went wrong during the lobby leaving: \n${handleError(error)}`
+      );
 
-
-  try {
-    await api.delete(`/games/${gameToken}`);
-    localStorage.removeItem("createdGame");
-  } catch (error) {
-
-    alert(
-      `Something went wrong during the game deletion: \n${handleError(error)}`
-    );
-    localStorage.removeItem("createdGame");
+    }
   }
+
+  
 }
 
-const CancelGame = (props) => (
-  <div className="header">
-    <Navbar
-      bg="transparent"
-      variant="dark"
-      sticky="top"
-      expand="lg"
-      collapseOnSelect
-    >
-      <Navbar.Brand>Pictionary</Navbar.Brand>
+const CancelGame = (props) => { 
+  const [gameToken, setGameToken] = useState('');
+  const [userToken, setUserToken] = useState('');
+  const [createdGame, setCreatedGame] = useState('');
 
-      <Navbar.Toggle />
-      <Navbar.Collapse>
-        {/* <div>{JSON.parse(localStorage.getItem("user")).username}</div> */}
-        <Nav className="ms-auto">
-          <Button
-            variant="outline-light"
-            style={{bg:"blue"}}
-            as={Link}
-            onClick={deleteGame}
-            to={{
-              pathname: "/homepage",
-              state: { myuser: JSON.parse(localStorage.getItem("user")) },
-            }}
-          >
-            Cancel Game
-          </Button>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
-  </div>
-);
+  useEffect(() => {
+    setGameToken(window.location.pathname.split("/")[2]);
+    setCreatedGame(localStorage.getItem("createdGame"));
+    setUserToken(localStorage.getItem("token"));
+  }, [])
+
+  return (
+    <div className="header">
+      <Navbar
+        bg="transparent"
+        variant="dark"
+        sticky="top"
+        expand="lg"
+        collapseOnSelect
+      >
+        <Navbar.Brand>Pictionary</Navbar.Brand>
+  
+        <Navbar.Toggle />
+        <Navbar.Collapse>
+          {/* <div>{JSON.parse(localStorage.getItem("user")).username}</div> */}
+          <Nav className="ms-auto">
+            <Button
+              variant="outline-light"
+              style={{bg:"blue"}}
+              as={Link}
+              onClick={() => deleteGame(gameToken, createdGame, userToken)}
+              to={{
+                pathname: "/homepage",
+                state: { myuser: JSON.parse(localStorage.getItem("user")) },
+              }}
+            >
+              {createdGame === gameToken? "Cancel Game": "Leave Game"}
+            </Button>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </div>
+  );
+}
 
 CancelGame.propTypes = {
   height: PropTypes.string,
