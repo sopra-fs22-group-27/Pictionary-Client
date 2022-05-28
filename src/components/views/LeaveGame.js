@@ -31,6 +31,9 @@ const removePoints = async() => {
     console.error("Details:", error);
     alert("Something went wrong while updating game status! See the console for details.");
   }
+  localStorage.removeItem("words");
+  localStorage.removeItem("selectedWord");
+  localStorage.removeItem("currentTime");
 } 
 
 const LeaveGame = (props) => (

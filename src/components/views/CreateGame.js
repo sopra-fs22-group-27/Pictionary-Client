@@ -290,8 +290,10 @@ const CreateGame = () => {
               className="form-button-start"
               onClick={() => {
                 if (
+                  roundLength * numberOfRounds <= 1200 &&
                   gameName.length > 0 &&
-                  numberOfPlayersRequired > 0 &&
+                  numberOfPlayersRequired > 0 && 
+                  numberOfPlayersRequired !== 1 && numberOfPlayersRequired !== '1' &&
                   roundLength > 0 &&
                   numberOfRounds > 0 &&
                   (isPublic || (!isPublic && password !== ""))
@@ -301,6 +303,11 @@ const CreateGame = () => {
                   alert(
                     "Password can't be empty"
                   );
+                // limit game time to 20 mins
+                } else if (roundLength * numberOfRounds > 1200) {
+                  alert("Please make sure the total game time do not exceed 20 mins");
+                } else if (numberOfPlayersRequired === 1 || numberOfPlayersRequired === '1') {
+                  alert("One player can't start the game");
                 } else {
                   alert(
                     "Please fill all fields and make sure all numbers are positive"
