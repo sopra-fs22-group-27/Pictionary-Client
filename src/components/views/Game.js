@@ -122,13 +122,22 @@ const Game = () => {
 
   const history = useHistory();
 
-  useEffect(async() => {
-    const user_score = await api.get("/games/"+gameToken+"/scoreboard")
-    var arr = [];
-    for (const [key, value] of Object.entries(user_score.data)) {
-      arr.push(`${key}: ${value}`)
+  useEffect(() => {
+    updateScoreboard();
+    const interval = setInterval(() => {
+      updateScoreboard();
+    },1000);
+    return () => clearInterval(interval);
+
+    async function updateScoreboard(){
+      const user_score = await api.get("/games/"+gameToken+"/scoreboard")
+      var arr = [];
+      for (const [key, value] of Object.entries(user_score.data)) {
+        arr.push(`${key}: ${value}`)
+      }
+      setUsers(arr);
     }
-    setUsers(arr);
+    
   }, [guessed]);
 
   useEffect(() => {
