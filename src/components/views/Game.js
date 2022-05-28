@@ -29,7 +29,7 @@ const Game = () => {
   
   const [words, setWords] = useState(JSON.parse(localStorage.getItem("words")));
   const [selectedWord, setSelectedWord] = useState(localStorage.getItem("selectedWord"));
-
+  // localStorage.setItem("currentTime", Date.now());
   useEffect(() => {
     if (selectedWord === null) {
       localStorage.removeItem('selectedWord');
@@ -45,6 +45,7 @@ const Game = () => {
       localStorage.setItem('words', JSON.stringify(words));
     }
   }, [words]);
+
   
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [selectedWidth, setSelectedWidth] = useState(5);
@@ -89,6 +90,7 @@ const Game = () => {
   const canDraw = isLoaded ? isDrawer && !!selectedWord && secondsRemaining > 0 : null;
   const canFetchClassifications = isLoaded ? !isCanvasBlank() : null;
 
+  
   useEffect(() => {
     if (!isLoaded) return;
     if (!isDrawer) {
@@ -117,8 +119,14 @@ const Game = () => {
 
   useEffect(() => {
     if (!isLoaded) return;
+    if(isDrawer && (openModal || !localStorage.getItem("currentTime"))) localStorage.setItem("currentTime", Date.now());
     setOpenModal(isDrawer && !selectedWord);
+    
   }, [isLoaded, isDrawer, selectedWord]);
+
+  // useEffect(() => {
+  //   if(openModal || !localStorage.getItem("currentTime")) localStorage.setItem("currentTime", Date.now());
+  // }, [openModal])
 
   const history = useHistory();
 
@@ -139,6 +147,18 @@ const Game = () => {
     }
     
   }, [guessed]);
+
+  useEffect(() => {
+    const interval = setInterval(async() => {
+      if(openModal && (Math.ceil(10 + (localStorage.getItem("currentTime") - Date.now())/1000)) === 0) {
+        await api.put('/games/'+gameToken+"/word/"+words[0]);
+        setSelectedWord(words[0]);
+        setOpenModal(false);
+        
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [openModal]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -277,6 +297,7 @@ const Game = () => {
   const finishDrawing = async() => {
     setGuessed(false);
     setGuessedWord('');
+    localStorage.removeItem("currentTime");
     try{
         canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height)
         await sendImage();
@@ -294,6 +315,8 @@ const Game = () => {
             alert("Something went wrong while updating game status! See the console for details.");
           }
         }
+        localStorage.removeItem("words");
+        localStorage.removeItem("selectedWord");
         alert("This game is over");
         history.push("/homepage");
       }
@@ -440,6 +463,7 @@ const Game = () => {
   const pickWord = (word) => async () => {
     await api.put('/games/'+gameToken+"/word/"+word);
     setSelectedWord(word);
+    setOpenModal(false);
   }  
 
   const makeGuess = async(e) =>{
@@ -481,6 +505,9 @@ const Game = () => {
     );
   };
 
+
+  
+
   return (    
     <BaseContainer className="drawing container">
     <Modal
@@ -490,8 +517,9 @@ const Game = () => {
       >
         <Box textAlign='center' className="word-to-guess-wrapper" sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "35vw", boxShadow: 24, p: 5,}}>
           <Typography id="modal-modal-title" className="word-to-guess-title" variant="h6" component="h2">
-            Choose one word:
+            You have {Math.ceil(10 + (localStorage.getItem("currentTime") - Date.now())/1000)}s to choose one word:
           </Typography>
+          
           {words && words.map((word) => (
             <Button key={word} variant="text" color="secondary" className="word-to-guess" onClick={pickWord(word)}>
             {word}
