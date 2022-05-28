@@ -109,7 +109,6 @@ const Game = () => {
     setWords(newWords);
   }, [isLoaded, isDrawer, words]);
 
-
   useEffect(async () => {
     if (!isLoaded) return;
     if (secondsRemaining === 0) {
@@ -149,6 +148,10 @@ const Game = () => {
   }, [guessed]);
 
   useEffect(() => {
+    canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height);
+  },[selectedWord])
+
+  useEffect(() => {
     const interval = setInterval(async() => {
       if(openModal && (Math.ceil(10 + (localStorage.getItem("currentTime") - Date.now())/1000)) === 0) {
         await api.put('/games/'+gameToken+"/word/"+words[0]);
@@ -177,16 +180,16 @@ const Game = () => {
         getImage();
       }
       fetchClassification();
-    }, 1000);
+    }, 500);
     return () => clearInterval(interval);
-  }, [isLoaded, isDrawer, canFetchClassifications]);
+  }, [isLoaded, isDrawer, canFetchClassifications, selectedWord, isTicking]);
   useEffect(() => {
     updateGame();
     updateGameRound();
     const interval = setInterval(() => {
       updateGame();
       updateGameRound();
-    }, 1000);
+    }, 100);
     return () => clearInterval(interval);
     
     async function updateGame() {
@@ -200,7 +203,7 @@ const Game = () => {
   }, []);
 
   const fetchAIDrawingRating = async() =>{
-    if(canFetchClassifications && !!selectedWord){
+    if(canFetchClassifications && !!selectedWord && isTicking){
       try{
         const response = await api.get('/vision/' + gameToken + '/drawerPoints');
         if(response !== null){
@@ -217,7 +220,7 @@ const Game = () => {
   }
 
   const fetchClassification = async() => {
-    if(canFetchClassifications){
+    if(canFetchClassifications && isTicking){
       try{
         const response = await api.get('/vision/' + gameToken);
         if (response !== null){
@@ -238,7 +241,7 @@ const Game = () => {
   }
 
   const sendImage = async() => {
-    const img = canvasRef.current.toDataURL();
+    const img = canvas()?.toDataURL();
 
     const requestBody = JSON.stringify({img});
     try{
@@ -251,6 +254,7 @@ const Game = () => {
   }
 
   const getImage = async() => {
+    if(isTicking && secondsRemaining !== 0){
     var img = new Image();
     try{
     const img2 = await api.get("games/drawing?gameToken=" + gameToken) 
@@ -264,6 +268,7 @@ const Game = () => {
     console.error(`Something went wrong while fetching the images: \n${handleError(error)}`);
     console.error("Details:", error);
     }
+  }
   }
 
   //returns true if blank
@@ -299,8 +304,8 @@ const Game = () => {
     setGuessedWord('');
     localStorage.removeItem("currentTime");
     try{
-        canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height)
-        await sendImage();
+        await canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height);
+        if(isDrawer) sendImage();
     } catch(error) {
       console.log("error");
     }
@@ -498,7 +503,7 @@ const Game = () => {
 
   let classification = <Spinner />;
 
-  if (drawingClassification!==null && canFetchClassifications) {
+  if (drawingClassification!==null && canFetchClassifications && isTicking) {
     classification = (
       drawingClassification.slice(0,5).map((item) =>
       <p>{item}</p>)
@@ -595,7 +600,7 @@ const Game = () => {
         </div>
         <br />
         {
-          canFetchClassifications && isDrawer?
+          canFetchClassifications && isTicking && isDrawer?
           <div className="drawing h1">{aiDrawingRating}</div>
           :null
         }
