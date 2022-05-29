@@ -312,6 +312,10 @@ const Game = () => {
     localStorage.removeItem("currentTime");
     try{
         canvasContext()?.clearRect(0, 0, canvas()?.width, canvas()?.height);
+        setUndoArray([]);
+        setUndoArray([]);
+        setUndoIndex(-1);
+        setRedoIndex(-1);
         await sendImage();
     } catch(error) {
       console.log("error");
