@@ -558,7 +558,7 @@ const Game = () => {
             <FaRedo display={isDrawer} className="drawing icon"  title="click to redo last stroke" style={{border:isRedoing}} size={"2.2em"} onClick={redoLast}/>
             <FaTrashAlt display={isDrawer} className="drawing icon"  title="click to erase all" style={{border:isDeleting}} size={"2.2em"} onClick={clear}/>
             <FaPen className="drawing icon" title="click to draw" style={{color:selectedColor, border:isDrawing}} size={"2.2em"} onClick={paint}/>
-            <BsBorderWidth className="drawing icon" title="click to change linewidth" style={{border:isSelectingWidth}} size={"2.2em"} onClick={() => {setOpenWidthPicker(true); setIsSelectingWidth("inset")}}/>
+            {/* <BsBorderWidth className="drawing icon" title="click to change linewidth" style={{border:isSelectingWidth}} size={"2.2em"} onClick={() => {setOpenWidthPicker(true); setIsSelectingWidth("inset")}}/> */}
           
             {/* <StrokeWidthSelection onChange={changeWidth}  title="click to change linewidth" selectedWidth={selectedWidth}/> */}
             <FaEraser className="drawing icon" title="click to erase" style={{border:isErasing}} size={"2.2em"} onClick={erase}/>
